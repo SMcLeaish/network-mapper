@@ -8,7 +8,7 @@ exports.up = function(knex) {
         return knex.schema.createTable('event', table => {
             table.increments('id');
             table.string('date', 250);
-            table.specificType('location', 'integer[]');
+            table.specificType('location', 'float[]');
             table.integer('event_type_id');
             table.foreign('event_type_id').references('event_type.id').deferrable('deferred')
         })

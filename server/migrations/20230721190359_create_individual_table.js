@@ -9,7 +9,7 @@ exports.up = function(knex) {
             table.increments('id');
             table.string('name', 250);
             table.string('phone_number', 250);
-            table.specificType('location', 'integer[]')
+            table.specificType('location', 'float[]')
         })
     }
   })
