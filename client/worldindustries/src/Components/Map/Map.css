@@ -1,0 +1,68 @@
+.Container {
+    display: flex;
+  }
+
+.leaflet-container {
+    width: 100vw;
+    height: 100vw;
+    z-index: 1;
+  }
+
+.ManageSearch{
+    z-index: 2;
+    position: absolute;
+    top: 70px;
+    right: 10px;
+    height: 35px;
+    width: 47px;
+    background-color: white;
+    border-radius: 5px;
+    padding-top:10px;
+    border-color: lightgrey;
+}
+
+  .filterContainer{
+    background-color: lightgrey;
+    border: black;
+    width: 300px;
+    height: 500px;
+    z-index: 2;
+    position: absolute;
+    bottom: 40px;
+    right: 30px;
+    border-radius: 5px;
+    padding:7px;
+    border-style: solid;
+    border-color: black;
+  }
+
+
+  .SearchContainer{
+    background-color: lightgreen;
+    width: 400px;
+    height: 60px;
+    z-index: 2;
+    position: absolute;
+    bottom: 40px;
+    left: 30px;
+    border-radius: 15px;
+  }
+
+  .filterHeader{
+    display: flex;
+    background-color: darkgrey;
+
+  }
+
+  .closeIcon {
+    width: 40px;
+    padding-top: 15px;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: blue;
+    border-radius: 5px;
+  }
+  .secondSearch{
+    margin-top: 5px;
+    background-color: darkgrey;
+  }
