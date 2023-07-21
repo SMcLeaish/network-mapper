@@ -1,4 +1,6 @@
-import { faker } from '@faker-js/faker';
+require = require('esm')(module /*, options*/);
+const faker = require('@faker-js/faker').faker;
+
 
 exports.seed = function(knex) {
   return knex('organization').del()
