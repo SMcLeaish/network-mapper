@@ -6,34 +6,71 @@ import MarkerClusterGroup from 'react-leaflet-cluster';
 import './Map.css';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import CloseIcon from '@mui/icons-material/Close';
-import { Autocomplete } from '@mui/material';
+import { Autocomplete, FormLabel } from '@mui/material';
 import TextField from '@mui/material/TextField';
+import { ScaleControl } from 'react-leaflet';
+import { MapController } from '../MapController/MapController';
+import PersonSearchIcon from '@mui/icons-material/PersonSearch'
+
+
 
 function Map() {
     const options = [
-        { label: 'Individual', id: 1 },
-        { label: 'Organization', id: 2 },
-        { label: 'Event', id: 3 },
+        { label: 'Individual', location: [30,48] },
+        { label: 'Organization', location: [31,48] },
+        { label: 'Event', location: [32,48]},
       ];
     //   // or
     //   const options = ['Individual', 'Organization', 'Event'];
-      const individualData = ['Fred Smith', 'Susan Woe', 'William Hunt'];
-      const OrganizationData = ['NASA', 'Global Communication', 'Sprint'];
-      const EventData = ['Sprint Conference', 'Comicon', 'SecurityCom'];
+    //   const individualData = ['Fred Smith', 'Susan Woe', 'William Hunt'];
+
+    const individualData = [
+        {label: 'Fred Smith', location: [30.587, 114.228] },
+        {label: 'Susan Woe',  location: [32.998, 112.529] },
+        {label: 'William Hunt',location: [30.25, 120.167]}
+    ];
+
+    // console.log(individualData[2].location)
+
+      const OrganizationData = [
+        {label: 'NASA', location: [31.1667, 121.4667] },
+        {label: 'Global Communication', location: [39.904, 116.407] },
+        {label: 'Sprint', location: [22.5350, 114.0633]}
+    ];
+
+      const EventData = [
+        {label: 'Sprint Conference', location: [30.660, 104.0633]},
+        {label: 'Comicon', location:[34.2667, 108.9]},
+        {label: 'SecurityCom', location:[29.55, 106.50]}
+      ];
 
 
-    const location = [29.304, 103.312];
-    const zoom = 4;
+    // const location = [29.304, 103.312];
+    // const zoom = 4;
+    const mapRef = useRef();
+    const [coord, setCoord] = useState(null)
+    const [lat, setLat] = useState(null)
+    const [long, setLong] = useState(null)
     const { BaseLayer } = LayersControl;
     const [searchbox, setSearchBox] = useState(false)
     const [inputValue, setInputValue] = useState(options[0]);
     const [targetValue, setTargetValue] = useState('');
+    
+    console.log(lat , long)
 
     const handleSearch = () => {
         setSearchBox(true)
     }
 
-
+    // const handleCoord = (e) => {
+    //     const latNum = parseFloat(lat)
+    //     const longNum = parseFloat(long)
+    //     const goTo = [latNum,longNum]
+    //     setCoord(goTo)
+    //     setNewPoint(goTo)
+    //     // console.log(goTo);
+    //   }
+    
     return (
 
         <div className="Map">
@@ -66,9 +103,10 @@ function Map() {
                                 {(inputValue === 'Individual') ?
                                     <Autocomplete
                                         inputValue={targetValue}
-                                            onInputChange={(event, targetValue) => {
-                                                setTargetValue(targetValue);
-                                                }}
+                                            onInputChange={(event, newtargetValue) => {
+                                                setTargetValue(newtargetValue);
+                                                individualData.find(info => (info.label === targetValue) ?  setCoord(info.location) : console.log(info.location))}
+                                                }
                                                 disablePortal
                                                 id="combo-box-demo"
                                                 options={individualData}
@@ -79,7 +117,10 @@ function Map() {
                                     ( (inputValue === 'Organization')  ? 
                                         <Autocomplete
                                             inputValue={targetValue}
-                                                onInputChange={(event, targetValue) => {setTargetValue(targetValue);}}
+                                                onInputChange={(event, newtargetValue) => {
+                                                    setTargetValue(newtargetValue);
+                                                    OrganizationData.find(info => (info.label === targetValue) ?  setCoord(info.location) : console.log(info.location))}
+                                                }
                                                 disablePortal
                                                 id="combo-box-demo"
                                                 options={OrganizationData}
@@ -88,7 +129,11 @@ function Map() {
                                     :
                                         <Autocomplete
                                             inputValue={targetValue}
-                                            onInputChange={(event, targetValue) => {setTargetValue(targetValue);}}
+                                            onInputChange={(event, newtargetValue) => {
+                                                setTargetValue(newtargetValue);
+                                                EventData.find(info => (info.label === targetValue) ?  setCoord(info.location) : console.log(info.location))}
+
+                                            }
                                             disablePortal
                                             id="combo-box-demo"
                                             options={EventData}
@@ -96,9 +141,19 @@ function Map() {
                                             renderInput={(params) => <TextField {...params} label="Search Event" />}/>                         
                                     )}
                             </div>
-                        </div>
-                        <div className='SearchContainer'>
-                             <p>Search bar/button here</p>
+                            <div className='latLongSearch'>
+                                <form className='latLongSearch'>
+                                    <div className='searchfield'>
+                                        <TextField label='Latitude' onChange={ (e) => setLat(e.target.value)}/>
+                                    </div>
+                                    <div className='searchfield'>
+                                        <TextField label='Longitude' onChange={ (e) => setLong(e.target.value)}/>
+                                    </div>
+                                    <div className='locationSearch'>
+                                        <PersonSearchIcon onClick={() => {setCoord([lat, long])}}/>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </>
                     :
@@ -107,7 +162,7 @@ function Map() {
                 </div>
                 <div>
                     <div>
-                        <MapContainer center={location} zoom={zoom}>
+                        <MapContainer center={[29.304, 103.312]} zoom={4} ref={mapRef} id='map'>
                             <LayersControl>
                                 <BaseLayer checked name="OpenStreetMap">
                                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; <a href=&quot;https://www.openstreetmap.org/copyright&quot;>OpenStreetMap</a> contributors" />
@@ -129,6 +184,8 @@ function Map() {
                                     />
                                 </BaseLayer>
                             </LayersControl>
+                            <MapController coord={coord}/>
+                            <ScaleControl position='topleft' />    
                         </MapContainer>
                     </div>
                 </div>
