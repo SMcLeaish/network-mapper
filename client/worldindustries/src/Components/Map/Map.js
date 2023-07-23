@@ -49,6 +49,7 @@ function Map() {
     // const zoom = 4;
     const mapRef = useRef();
     const [coord, setCoord] = useState(null)
+    const [zoom, setZoom] = useState(4)
     const [lat, setLat] = useState(null)
     const [long, setLong] = useState(null)
     const { BaseLayer } = LayersControl;
@@ -105,6 +106,8 @@ function Map() {
                                         inputValue={targetValue}
                                             onInputChange={(event, newtargetValue) => {
                                                 setTargetValue(newtargetValue);
+                                                setCoord([29.304, 103.312]);
+                                                setZoom(7)
                                                 individualData.find(info => (info.label === targetValue) ?  setCoord(info.location) : console.log(info.location))}
                                                 }
                                                 disablePortal
@@ -119,6 +122,8 @@ function Map() {
                                             inputValue={targetValue}
                                                 onInputChange={(event, newtargetValue) => {
                                                     setTargetValue(newtargetValue);
+                                                    setCoord([29.304, 103.312]);
+                                                    setZoom(7)
                                                     OrganizationData.find(info => (info.label === targetValue) ?  setCoord(info.location) : console.log(info.location))}
                                                 }
                                                 disablePortal
@@ -131,6 +136,8 @@ function Map() {
                                             inputValue={targetValue}
                                             onInputChange={(event, newtargetValue) => {
                                                 setTargetValue(newtargetValue);
+                                                setCoord([29.304, 103.312]);
+                                                setZoom(7)
                                                 EventData.find(info => (info.label === targetValue) ?  setCoord(info.location) : console.log(info.location))}
 
                                             }
@@ -162,7 +169,7 @@ function Map() {
                 </div>
                 <div>
                     <div>
-                        <MapContainer center={[29.304, 103.312]} zoom={4} ref={mapRef} id='map'>
+                        <MapContainer center={[29.304, 103.312]} zoom={zoom} ref={mapRef} id='map'>
                             <LayersControl>
                                 <BaseLayer checked name="OpenStreetMap">
                                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; <a href=&quot;https://www.openstreetmap.org/copyright&quot;>OpenStreetMap</a> contributors" />
