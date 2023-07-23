@@ -8,17 +8,21 @@ const app = express();
 
 const port = 3443;
 const options = {
-  key: fs.readFileSync(process.env.SSL_KEY_PATH),
-  cert: fs.readFileSync(process.env.SSL_CERT_PATH),
-  requestCert: true, 
-  rejectUnauthorized: false 
+    key: fs.readFileSync(process.env.SSL_KEY_PATH),
+    cert: fs.readFileSync(process.env.SSL_CERT_PATH),
+    ca: [
+      fs.readFileSync(process.env.SSL_CA_ROOT_PATH), 
+//      fs.readFileSync(process.env.SSL_LETSENCRYPT_CA_PATH)
+    ],
+    requestCert: true, 
+    rejectUnauthorized: true 
 };
 
 app.use(cors());
 app.use(express.json())
 app.use((req, res, next) => {
   const cert = req.socket.getPeerCertificate();
-  if (cert.subject) {
+  if (cert && cert.subject && cert.subject.CN) {
     const cn = cert.subject.CN;
     const edipi = cn.split('.')[0]; 
     if (edipi) {
@@ -29,8 +33,12 @@ app.use((req, res, next) => {
       res.status(401).send("Invalid EDIPI");
       return;
     }
+  } else {
+    res.status(401).send("No valid client certificate provided");
+    return;
   }
 });
+  
 app.get('/', (req, res) => {
   res.send('Hello, HTTPS world!');
 });
