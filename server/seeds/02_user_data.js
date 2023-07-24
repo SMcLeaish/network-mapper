@@ -33,5 +33,8 @@ exports.seed = function(knex) {
                     cac_approved: true,
                 },
             ]);
+        })
+        .then(function(){
+            return knex.raw("SELECT setval('user_data_id_seq', (SELECT MAX(id) from user_data))");
         });
-};
+}

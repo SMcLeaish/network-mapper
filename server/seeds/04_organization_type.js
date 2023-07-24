@@ -6,6 +6,8 @@ exports.seed = function(knex) {
           {type: 'corporation'},
           {type: 'military'}
         ]);
-      });
-  };
+      }).then(function(){
+        return knex.raw("SELECT setval('organization_type_id_seq', (SELECT MAX(id) from organization_type))");
+    });
+}
   

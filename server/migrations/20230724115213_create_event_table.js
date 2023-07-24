@@ -10,6 +10,7 @@ exports.up = function(knex) {
             table.string('event_name', 250)
             table.string('date', 250);
             table.specificType('location', 'float[]');
+            table.string('mgrs', 20);
             table.integer('event_type_id');
             table.foreign('event_type_id').references('event_type.id').deferrable('deferred')
             table.integer('id_user_data');
