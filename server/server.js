@@ -57,3 +57,20 @@ app.post('/users/login', (req, res) => {
     })
     .catch(err => res.status(500).send(err))
 });
+
+app.get('/entity/:id', (req, res) => {
+  knex.select('*')
+    .from('position')
+})
+
+app.get('/entities1', (req, res) => {
+  knex.select('*')
+    .from('entity')
+    .join('organization', () => {
+      this
+      .on('organization')
+    })
+    .then((data) => res.status(200).json(data))
+})
+
+app.listen(port, () => console.log(`Server running on port: ${port}`));
