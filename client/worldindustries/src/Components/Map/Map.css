@@ -14,11 +14,12 @@
     top: 70px;
     right: 10px;
     height: 35px;
-    width: 47px;
+    width: 44px;
     background-color: white;
     border-radius: 5px;
     padding-top:10px;
-    border-color: lightgrey;
+    border: 2px solid rgb(202, 200, 200);
+
 }
 
   .filterContainer{
@@ -32,20 +33,24 @@
     right: 30px;
     border-radius: 5px;
     padding:7px;
-    border-style: solid;
-    border-color: black;
+    border: 1px solid black;
+
   }
 
 
   .SearchContainer{
+    display: flex;
+    flex-direction: row;
     background-color: lightgreen;
-    width: 400px;
-    height: 60px;
+    width: 600px;
+    height: 40px;
     z-index: 2;
     position: absolute;
     bottom: 40px;
     left: 30px;
     border-radius: 15px;
+    padding-top: 15px;
+    padding-left: 10px;
   }
 
   .filterHeader{
@@ -59,10 +64,33 @@
     padding-top: 15px;
     padding-left: 5px;
     padding-right: 5px;
-    background-color: blue;
+    background-color: tan;
     border-radius: 5px;
+    border: 2px solid rgb(202, 200, 200);
+
   }
   .secondSearch{
     margin-top: 5px;
     background-color: darkgrey;
   }
+
+ .latLongSearch {
+    padding-top: 15px;
+    display: flex;
+    flex-direction: row;
+ }
+
+ .locationSearch {
+    width: 55px;
+    padding-top: 15px;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: tan;
+    border-radius: 5px;
+    border: 2px solid rgb(202, 200, 200);
+
+  }
+
+ /* .searchfield {
+    max-width: 80px;
+ } */
