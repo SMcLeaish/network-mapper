@@ -87,5 +87,30 @@ app.get('/narratives/:id', (req, res) => {
     .then((data) => res.status(200).json(data))
 })
 
+app.get('/position/:id', (req, res) => {
+  let { id } = req.params;
+  knex.select('position.id AS position_id', 'organization.name AS org_name', 'organization_type.type AS org_type','individual.name AS individual_name', 'role.title AS role_title', 'responsibilities.name AS responsibilities')
+    .from('position')
+    .where({'individual_id': id})
+    .join('individual', 'position.individual_id', 'individual.id')
+    .join('organization', 'position.organization_id', 'organization.id')
+    .join('organization_type', 'organization.organization_type_id', 'organization_type.id')
+    .join('role', 'position.role_id', 'role.id')
+    .join('responsibilities', 'role.responsibilities_id', 'responsibilities.id')
+    .then((data) => {
+      if (data.length !== 0) {
+        res.status(200).json(data)
+      } else {
+        knex.select('position.id AS position_id', 'individual.name AS individual_name', 'role.title AS role_title', 'responsibilities.name AS responsibilities')
+          .from('position')
+          .where({'individual_id': id})
+          .join('individual', 'position.individual_id', 'individual.id')
+          .join('role', 'position.role_id', 'role.id')
+          .join('responsibilities', 'role.responsibilities_id', 'responsibilities.id')
+          .then(otherData => res.status(200).json(otherData))
+      }
+    })
+})
+
 
 app.listen(port, () => console.log(`Server running on port: ${port}`));
