@@ -9,7 +9,6 @@ exports.seed = function(knex) {
             // Inserts seed entries
             return knex('user_data').insert([
                 {
-                    id: 1,
                     username: 'joe.schmoe.mil@mail.mil',
                     hashed_password: '5f4dcc3b5aa765d61d8327deb882cf99', // password
                     user_organization: 'Army-1st_Brigade_82nd_Airborne',
@@ -17,7 +16,6 @@ exports.seed = function(knex) {
                     cac_approved: true,
                 },
                 {
-                    id: 2,
                     username: 'jane.doe.af@mail.mil',
                     hashed_password: '5f4dcc3b5aa765d61d8327deb882cf99', // password
                     user_organization: 'Airforce-99th_Wing',
@@ -25,11 +23,24 @@ exports.seed = function(knex) {
                     cac_approved: true,
                 },
                 {
-                    id: 3,
                     username: 'john.doe.af@mail.mil',
                     hashed_password: '5f4dcc3b5aa765d61d8327deb882cf99', // password
                     user_organization: 'Airforce-57th_Wing',
                     distinguished_name: 'CN=John Doe,OU=USA,O=DoD,C=US,DODID=3456789012',
+                    cac_approved: true,
+                },
+                {
+                    username: 'mark.milley@mail.mil',
+                    hashed_password: '5f4dcc3b5aa765d61d8327deb882cf99', // password
+                    user_organization: 'Navy-Seal_Team_Six',
+                    distinguished_name: 'CN=Mark Military,OU=USA,O=DoD,C=US,DODID=4567890123',
+                    cac_approved: true,
+                },
+                {
+                    username: 'mary.mariner@mail.mil',
+                    hashed_password: '5f4dcc3b5aa765d61d8327deb882cf99', // password
+                    user_organization: 'MarineCorps-1st_Marine_Division',
+                    distinguished_name: 'CN=Mary Marine,OU=USA,O=DoD,C=US,DODID=5678901234',
                     cac_approved: true,
                 },
             ]);

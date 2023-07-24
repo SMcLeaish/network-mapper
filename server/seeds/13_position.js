@@ -5,7 +5,7 @@ exports.seed = function(knex) {
         const roles = Array.from({length: 10}, (_, i) => i + 1);
         const militaryRoles = [1, 2, 10];
         const otherRoles = roles.filter(role => !militaryRoles.includes(role));
-        return knex('organization').select('id', 'type')
+        return knex('organization_type').select('id', 'type')
           .then(organizations => {
             const militaryOrganizations = organizations.filter(org => org.type === 3).map(org => org.id);
             const otherOrganizations = organizations.filter(org => org.type !== 3).map(org => org.id);
