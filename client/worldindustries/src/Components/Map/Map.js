@@ -12,6 +12,7 @@ import { ScaleControl } from 'react-leaflet';
 import { MapController } from '../MapController/MapController';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch'
 import { red } from '@mui/material/colors';
+import { useMap } from 'react-leaflet';
 
 
 const cityList = require('./Chinacities.json')
@@ -20,7 +21,6 @@ function Map() {
     const filterstyle = {
         color: red,
     } 
-
 
 
     const options = [
@@ -92,7 +92,7 @@ function Map() {
 
     const handleSearch = () => {
         setSearchBox(true)
-    }
+        }
 
     
     return (
@@ -130,8 +130,8 @@ function Map() {
                                                 // setTargetValue('')
                                                 setTargetValue(newtargetValue);
                                                 setDetailsSelect(newtargetValue);
-                                                setCoord([29.304, 103.312]);
-                                                setZoom(7)
+                                                // setCoord([29.304, 103.312]);
+                                                // setZoom(7)
                                                 individualData.find(info => (info.label === newtargetValue) ?  setCoord(info.location) : console.log(info.location))}
                                                 }
                                                 disablePortal
@@ -147,9 +147,8 @@ function Map() {
                                                 onInputChange={(event, newtargetValue) => {
                                                     setTargetValue(newtargetValue);
                                                     setDetailsSelect(newtargetValue);
-                                                    setCoord([29.304, 103.312]);
-                                                    
-                                                    setZoom(7)
+                                                    // setCoord([29.304, 103.312]);
+                                                    // setZoom(7)
                                                     OrganizationData.find(info => (info.label === newtargetValue) ?  setCoord(info.location) : console.log(info.location))}
                                                 }
                                                 disablePortal
@@ -163,8 +162,8 @@ function Map() {
                                             onInputChange={(event, newtargetValue) => {
                                                 setTargetValue(newtargetValue);
                                                 setDetailsSelect(newtargetValue);
-                                                setCoord([29.304, 103.312]);
-                                                setZoom(7)
+                                                // setCoord([29.304, 103.312]);
+                                                // setZoom(7)
                                                 EventData.find(info => (info.label === newtargetValue) ?  setCoord(info.location) : console.log(info.location))}
 
                                             }
