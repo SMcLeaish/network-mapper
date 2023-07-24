@@ -11,10 +11,18 @@ import TextField from '@mui/material/TextField';
 import { ScaleControl } from 'react-leaflet';
 import { MapController } from '../MapController/MapController';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch'
+import { red } from '@mui/material/colors';
 
 
+const cityList = require('./Chinacities.json')
 
 function Map() {
+    const filterstyle = {
+        color: red,
+    } 
+
+
+
     const options = [
         { label: 'Individual', location: [30,48] },
         { label: 'Organization', location: [31,48] },
@@ -30,8 +38,6 @@ function Map() {
         {label: 'William Hunt',location: [30.25, 120.167]}
     ];
 
-    // console.log(individualData[2].location)
-
       const OrganizationData = [
         {label: 'NASA', location: [31.1667, 121.4667] },
         {label: 'Global Communication', location: [39.904, 116.407] },
@@ -44,6 +50,30 @@ function Map() {
         {label: 'SecurityCom', location:[29.55, 106.50]}
       ];
 
+      const customIcon = new Icon({
+        iconUrl: require('../../img/location.png'),
+        iconSize: [38, 38]
+    })
+
+
+    const individualsIcon = new Icon({
+        iconUrl: require('../../img/user.png'),
+        iconSize: [38, 38]
+    })
+
+    const createCustomClusterIcon = (cluster) => {
+        return new divIcon({
+            html: `<div class='cluster-icon'>${cluster.getChildCount()}</div`,
+            className: 'custom-marker-cluster',
+        });
+    }
+
+    const createCustomClusterIcon2 = (cluster) => {
+        return new divIcon({
+            html: `<div class='cluster-icon2'>${cluster.getChildCount()}</div`,
+            className: 'custom-marker-cluster',
+        });
+    }
 
     // const location = [29.304, 103.312];
     // const zoom = 4;
@@ -56,21 +86,14 @@ function Map() {
     const [searchbox, setSearchBox] = useState(false)
     const [inputValue, setInputValue] = useState(options[0]);
     const [targetValue, setTargetValue] = useState('');
+    const [detailsSelect, setDetailsSelect] = useState('')
     
-    console.log(lat , long)
+    console.log(detailsSelect)
 
     const handleSearch = () => {
         setSearchBox(true)
     }
 
-    // const handleCoord = (e) => {
-    //     const latNum = parseFloat(lat)
-    //     const longNum = parseFloat(long)
-    //     const goTo = [latNum,longNum]
-    //     setCoord(goTo)
-    //     setNewPoint(goTo)
-    //     // console.log(goTo);
-    //   }
     
     return (
 
@@ -83,6 +106,7 @@ function Map() {
                     {searchbox ? 
                     <>
                         <div className='filterContainer'>
+                            <CloseIcon className='closeIcon' onClick={() => {setSearchBox(false)}}/>
                             <div className='filterHeader'>
                                 <Autocomplete
                                     inputValue={inputValue}
@@ -92,23 +116,23 @@ function Map() {
                                     disablePortal
                                     id="combo-box-demo"
                                     options={options}
-                                    sx={{ width: 300 }}
-                                    renderInput={(params) => <TextField {...params} label="Search Focus" />}/>
-                                <div className='closeIcon'>
-                                    <CloseIcon onClick={() => {setSearchBox(false)}}/>
-                                </div>
+                                    sx={{ width: 300  }}
+                                    renderInput={(params) => <TextField {...params} label="Search Focus"  />}/>
+                                
                             </div>
 
                             <div className='secondSearch'>
                                 {/* <FindDetails inputValue={inputValue}/> */}
                                 {(inputValue === 'Individual') ?
-                                    <Autocomplete
+                                    <Autocomplete style={filterstyle}
                                         inputValue={targetValue}
                                             onInputChange={(event, newtargetValue) => {
+                                                // setTargetValue('')
                                                 setTargetValue(newtargetValue);
+                                                setDetailsSelect(newtargetValue);
                                                 setCoord([29.304, 103.312]);
                                                 setZoom(7)
-                                                individualData.find(info => (info.label === targetValue) ?  setCoord(info.location) : console.log(info.location))}
+                                                individualData.find(info => (info.label === newtargetValue) ?  setCoord(info.location) : console.log(info.location))}
                                                 }
                                                 disablePortal
                                                 id="combo-box-demo"
@@ -122,9 +146,11 @@ function Map() {
                                             inputValue={targetValue}
                                                 onInputChange={(event, newtargetValue) => {
                                                     setTargetValue(newtargetValue);
+                                                    setDetailsSelect(newtargetValue);
                                                     setCoord([29.304, 103.312]);
+                                                    
                                                     setZoom(7)
-                                                    OrganizationData.find(info => (info.label === targetValue) ?  setCoord(info.location) : console.log(info.location))}
+                                                    OrganizationData.find(info => (info.label === newtargetValue) ?  setCoord(info.location) : console.log(info.location))}
                                                 }
                                                 disablePortal
                                                 id="combo-box-demo"
@@ -136,29 +162,29 @@ function Map() {
                                             inputValue={targetValue}
                                             onInputChange={(event, newtargetValue) => {
                                                 setTargetValue(newtargetValue);
+                                                setDetailsSelect(newtargetValue);
                                                 setCoord([29.304, 103.312]);
                                                 setZoom(7)
-                                                EventData.find(info => (info.label === targetValue) ?  setCoord(info.location) : console.log(info.location))}
+                                                EventData.find(info => (info.label === newtargetValue) ?  setCoord(info.location) : console.log(info.location))}
 
                                             }
                                             disablePortal
                                             id="combo-box-demo"
                                             options={EventData}
+                                           
                                             sx={{ width: 300 }}
                                             renderInput={(params) => <TextField {...params} label="Search Event" />}/>                         
                                     )}
                             </div>
                             <div className='latLongSearch'>
-                                <form className='latLongSearch'>
+                                <form className='latLongSearch' autocomplete="off">
                                     <div className='searchfield'>
-                                        <TextField label='Latitude' onChange={ (e) => setLat(e.target.value)}/>
+                                        <TextField label='Latitude'  onChange={ (e) => setLat(e.target.value) }/>
                                     </div>
                                     <div className='searchfield'>
-                                        <TextField label='Longitude' onChange={ (e) => setLong(e.target.value)}/>
+                                        <TextField label='Longitude'  onChange={ (e) => setLong(e.target.value)}/>
                                     </div>
-                                    <div className='locationSearch'>
-                                        <PersonSearchIcon onClick={() => {setCoord([lat, long])}}/>
-                                    </div>
+                                    <PersonSearchIcon className='locationSearch' onClick={() => {setCoord([lat, long])}}/>
                                 </form>
                             </div>
                         </div>
@@ -190,6 +216,70 @@ function Map() {
                                     maxNativeZoom={8}
                                     />
                                 </BaseLayer>
+                            </LayersControl>
+                        <LayersControl position='topright' id='custom-icon'>
+                                <LayersControl.Overlay name ="Cities">
+                                    <LayerGroup>
+                                        <MarkerClusterGroup
+                                            chunkedLoading
+                                            iconCreateFunction={createCustomClusterIcon}>
+                                            {cityList.map(feature =>
+                                                <Marker position={[feature.lat, feature.lng]} icon={customIcon}>
+                                                    <Popup>{feature.name}</Popup>
+                                                </Marker>
+                                            )},
+                                        </MarkerClusterGroup>
+                                    </LayerGroup>
+                                </LayersControl.Overlay>
+
+                                <LayersControl.Overlay name ="Individuals">
+                                    <LayerGroup>
+                                        <MarkerClusterGroup
+                                            chunkedLoading
+                                            iconCreateFunction={createCustomClusterIcon2}>
+                                            {individualData.map(feature =>
+                                                <Marker position={feature.location} icon={individualsIcon} eventHandlers={{
+                                                    click: () => {setCoord(feature.location)},
+                                                  }}>
+                                                    <Popup>{feature.label}</Popup>
+                                                </Marker>
+                                            )},
+                                        </MarkerClusterGroup>
+                                    </LayerGroup>
+                                </LayersControl.Overlay>
+
+                                <LayersControl.Overlay name ="Organizations">
+                                    <LayerGroup>
+                                        <MarkerClusterGroup
+                                            chunkedLoading
+                                            iconCreateFunction={createCustomClusterIcon2}>
+                                            {OrganizationData.map(feature =>
+                                                <Marker position={feature.location} icon={individualsIcon} eventHandlers={{
+                                                    click: () => {setCoord(feature.location)},
+                                                  }}>
+                                                    <Popup>{feature.label}</Popup>
+                                                </Marker>
+                                            )},
+                                        </MarkerClusterGroup>
+                                    </LayerGroup>
+                                </LayersControl.Overlay>
+
+                                <LayersControl.Overlay name ="Events">
+                                    <LayerGroup>
+                                        <MarkerClusterGroup
+                                            chunkedLoading
+                                            iconCreateFunction={createCustomClusterIcon2}>
+                                            {EventData.map(feature =>
+                                                <Marker position={feature.location} icon={individualsIcon} eventHandlers={{
+                                                    click: () => {setCoord(feature.location)},
+                                                  }}>
+                                                    <Popup>{feature.label}</Popup>
+                                                </Marker>
+                                            )},
+                                        </MarkerClusterGroup>
+                                    </LayerGroup>
+                                </LayersControl.Overlay>
+
                             </LayersControl>
                             <MapController coord={coord}/>
                             <ScaleControl position='topleft' />    
