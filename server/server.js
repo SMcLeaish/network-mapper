@@ -58,19 +58,26 @@ app.post('/users/login', (req, res) => {
     .catch(err => res.status(500).send(err))
 });
 
-app.get('/entity/:id', (req, res) => {
-  knex.select('*')
-    .from('position')
-})
-
-app.get('/entities1', (req, res) => {
-  knex.select('*')
-    .from('entity')
-    .join('organization', () => {
-      this
-      .on('organization')
+app.get('/entity/:name', (req, res) => {
+  let { name } = req.params
+  knex.select('entity.id AS individual_entity_id', 'individual.name', 'individual.location AS individual_location', 'interaction.weight', 
+  'interaction.id_entity_1', 'interaction.id_entity_2', 'interaction.id_event', 'event.event_name', 
+  'event.location AS event_location', 'event.date AS event_date', 'event_type.type AS event_type', 'user_data.username', 'user_data.user_organization')
+    .from('individual')
+    .where({'individual.name': name})
+    .join('entity', 'individual.id', 'entity.id_individual')
+    .join('interaction', function() {
+      this 
+        .on('id_entity_1', '=', 'entity.id')
+        .orOn('id_entity_2', '=', 'entity.id')
     })
+    .join('event', 'interaction.id_event', 'event.id')
+    .join('event_type', 'event_type_id', 'event_type.id')
+    .join('user_data', 'individual.id_user_data', 'user_data.id')
     .then((data) => res.status(200).json(data))
 })
+
+app.get('/narratives/:id')
+
 
 app.listen(port, () => console.log(`Server running on port: ${port}`));

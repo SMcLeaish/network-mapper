@@ -2,16 +2,16 @@ exports.seed = function(knex) {
   return knex('individual').del()
     .then(function () {
       return knex('individual').insert([
-        { name: 'John Doe', location: [15.55376, 102.18753], phone_number: '1234567890' },
-        { name: 'Jane Doe', location: [15.55381, 102.18758], phone_number: '2345678901' },
-        { name: 'Robert Smith', location: [15.55386, 102.18763], phone_number: '3456789012' },
-        { name: 'Sophia Johnson', location: [15.55391, 102.18768], phone_number: '4567890123' },
-        { name: 'William Brown', location: [15.55396, 102.18773], phone_number: '5678901234' },
-        { name: 'Olivia Garcia', location: [15.55401, 102.18778], phone_number: '6789012345' },
-        { name: 'James Davis', location: [15.55406, 102.18783], phone_number: '7890123456' },
-        { name: 'Emily Miller', location: [15.55411, 102.18788], phone_number: '8901234567' },
-        { name: 'Benjamin Wilson', location: [15.55416, 102.18793], phone_number: '9012345678' },
-        { name: 'Emma Moore', location: [15.55421, 102.18798], phone_number: '0123456789' },
+        { name: 'John Doe', location: [15.55376, 102.18753], phone_number: '1234567890', id_user_data: Math.floor(Math.random() * 5) + 1 },
+        { name: 'Jane Doe', location: [15.55381, 102.18758], phone_number: '2345678901', id_user_data: Math.floor(Math.random() * 5) + 1 },
+        { name: 'Robert Smith', location: [15.55386, 102.18763], phone_number: '3456789012', id_user_data: Math.floor(Math.random() * 5) + 1 },
+        { name: 'Sophia Johnson', location: [15.55391, 102.18768], phone_number: '4567890123', id_user_data: Math.floor(Math.random() * 5) + 1 },
+        { name: 'William Brown', location: [15.55396, 102.18773], phone_number: '5678901234', id_user_data: Math.floor(Math.random() * 5) + 1 },
+        { name: 'Olivia Garcia', location: [15.55401, 102.18778], phone_number: '6789012345', id_user_data: Math.floor(Math.random() * 5) + 1 },
+        { name: 'James Davis', location: [15.55406, 102.18783], phone_number: '7890123456', id_user_data: Math.floor(Math.random() * 5) + 1 },
+        { name: 'Emily Miller', location: [15.55411, 102.18788], phone_number: '8901234567', id_user_data: Math.floor(Math.random() * 5) + 1 },
+        { name: 'Benjamin Wilson', location: [15.55416, 102.18793], phone_number: '9012345678', id_user_data: Math.floor(Math.random() * 5) + 1 },
+        { name: 'Emma Moore', location: [15.55421, 102.18798], phone_number: '0123456789', id_user_data: Math.floor(Math.random() * 5) + 1 },
       ]);
     })
     .then(function(){
