@@ -3,9 +3,9 @@
  * @returns { Promise<void> }
  */
 exports.up = function(knex) {
-    return knex.schema.hasTable('event_type').then((exists) => {
+    return knex.schema.hasTable('cytoscape_layout_type').then((exists) => {
     if (!exists) {
-        return knex.schema.createTable('event_type', table => {
+        return knex.schema.createTable('cytoscape_layout_type', table => {
             table.increments('id');
             table.string('type', 250);
         })
@@ -18,5 +18,5 @@ exports.up = function(knex) {
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-  return knex.schema.dropTableIfExists('event_type')
+  return knex.schema.dropTableIfExists('cytoscape_layout_type')
 };

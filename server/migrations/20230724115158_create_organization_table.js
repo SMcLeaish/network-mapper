@@ -16,6 +16,8 @@ exports.up = function(knex) {
             table.specificType('location', 'float[]');
             table.integer('organization_type_id');
             table.foreign('organization_type_id').references('organization_type.id').deferrable('deferred')
+            table.integer('id_user_data');
+            table.foreign('id_user_data').references('user_data.id').deferrable('deffered');
         })
     }
   })

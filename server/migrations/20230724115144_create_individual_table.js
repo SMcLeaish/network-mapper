@@ -10,6 +10,8 @@ exports.up = function(knex) {
             table.string('name', 250);
             table.string('phone_number', 250);
             table.specificType('location', 'float[]')
+            table.integer('id_user_data');
+            table.foreign('id_user_data').references('user_data.id').deferrable('deffered');
         })
     }
   })
