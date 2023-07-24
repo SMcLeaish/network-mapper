@@ -8,89 +8,163 @@
     z-index: 1;
   }
 
+.css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root{
+  background-color: #2D2D2A !important;
+}
+
 .ManageSearch{
     z-index: 2;
     position: absolute;
-    top: 70px;
-    right: 10px;
+    top: 15px;
+    right: 50%;
     height: 35px;
     width: 44px;
     background-color: white;
     border-radius: 5px;
     padding-top:10px;
-    border: 2px solid rgb(202, 200, 200);
-
 }
 
-  .filterContainer{
-    background-color: lightgrey;
-    border: black;
-    width: 300px;
-    height: 500px;
-    z-index: 2;
-    position: absolute;
-    bottom: 40px;
-    right: 30px;
-    border-radius: 5px;
-    padding:7px;
-    border: 1px solid black;
 
-  }
+.leaflet-control-layers {
+  border: none !important;
+}
+
+.filterContainer{ 
+  /* background-color: #F8F4E3; */
+  background-color: #2D2D2A;
+  border: black;
+  width: 300px;
+  height: 500px;
+  z-index: 2;
+  position: absolute;
+  bottom: 40px;
+  right: 30px;
+  border-radius: 5px;
+  padding: 30px;
+  border: 1px solid black;
+}
+
+.MuiAutocomplete-listbox{
+  background-color: #F8F4E3;
+}
+
+/* .css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+  border: 5px solid red;
+} */
+.MuiOutlinedInput-notchedOutline{
+  border: 2px solid #F8F4E3 !important;
+}
 
 
-  .SearchContainer{
+.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
+  color: #F8F4E3 !important;
+}
+
+.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root {
+  color: #F8F4E3 !important;
+}
+
+.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root {
+  color: #F8F4E3 !important;
+}
+
+.css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
+  color: #F8F4E3 !important;
+}
+
+.SearchContainer{
+  display: flex;
+  flex-direction: row;
+  background-color: lightgreen;
+  width: 600px;
+  height: 40px;
+  z-index: 2;
+  position: absolute;
+  bottom: 40px;
+  left: 30px;
+  border-radius: 15px;
+  padding-top: 15px;
+  padding-left: 10px;
+}
+
+.closeIcon {
+  width: 27.5px;
+  background-color: #F8F4E3;
+  border-radius: 100px;
+  position: relative;
+  left: 150px;
+  bottom: 10px;
+  margin-bottom: 15px;
+  padding: 5px;
+  cursor: pointer;
+}
+.secondSearch{
+  margin-top: 25px;
+  /* background-color: darkgrey; */
+}
+
+.latLongSearch {
+  padding-top: 15px;
+  display: flex;
+  flex-direction: row;
+}
+
+.locationSearch {
+  width: 55px;
+  height: 56px;
+  background-color: #F8F4E3;
+  border-radius: 100px;
+  padding: 5px;
+  margin: auto 5px;
+  cursor: pointer;
+}
+
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+color: #F8F4E3 !important;
+}
+
+.css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root {
+color: red !important;
+}
+
+input:-internal-autofill-selected {
+background-color: red !important;
+color: red !important;
+}
+
+
+/* .searchfield {
+  max-width: 80px;
+} */
+
+.cluster-icon {
+  height: 3rem;
+  width: 3rem;
+  border-radius: 50%;
+  background-color: #3F88C5;  
+  color: black;
+  transform: translate(-25%, -25%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 900;
+  font-size: 1.5rem;
+}
+
+.leaflet-retina .leaflet-control-layers:nth-child(2) .leaflet-control-layers-toggle {
+  background-image: url('./icons/people-group-solid.svg');
+}
+
+.cluster-icon2 {
+    height: 3rem;
+    width: 3rem;
+    border-radius: 50%;
+    background-color: green;  
+    color: black;
+    transform: translate(-25%, -25%);
     display: flex;
-    flex-direction: row;
-    background-color: lightgreen;
-    width: 600px;
-    height: 40px;
-    z-index: 2;
-    position: absolute;
-    bottom: 40px;
-    left: 30px;
-    border-radius: 15px;
-    padding-top: 15px;
-    padding-left: 10px;
+    justify-content: center;
+    align-items: center;
+    font-weight: 900;
+    font-size: 1.5rem;
   }
-
-  .filterHeader{
-    display: flex;
-    background-color: darkgrey;
-
-  }
-
-  .closeIcon {
-    width: 40px;
-    padding-top: 15px;
-    padding-left: 5px;
-    padding-right: 5px;
-    background-color: tan;
-    border-radius: 5px;
-    border: 2px solid rgb(202, 200, 200);
-
-  }
-  .secondSearch{
-    margin-top: 5px;
-    background-color: darkgrey;
-  }
-
- .latLongSearch {
-    padding-top: 15px;
-    display: flex;
-    flex-direction: row;
- }
-
- .locationSearch {
-    width: 55px;
-    padding-top: 15px;
-    padding-left: 5px;
-    padding-right: 5px;
-    background-color: tan;
-    border-radius: 5px;
-    border: 2px solid rgb(202, 200, 200);
-
-  }
-
- /* .searchfield {
-    max-width: 80px;
- } */

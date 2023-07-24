@@ -7,7 +7,7 @@ const MapController = (props) => {
     console.log(props.coord);
 
   const flyTo = () => {
-    map.flyTo(props.coord, 10, {
+    map.flyTo(props.coord, 13, {
       animate: true,
       duration: flyToDuration,
     });
