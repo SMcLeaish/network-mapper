@@ -77,7 +77,15 @@ app.get('/entity/:name', (req, res) => {
     .then((data) => res.status(200).json(data))
 })
 
-app.get('/narratives/:id')
+app.get('/narratives/:id', (req, res) => {
+  let { id } = req.params;
+  knex.select('*')
+    .from('narrative')
+    .where(function() {
+      this.where({'id_entity': id}).orWhere({'id_event': id})
+    })
+    .then((data) => res.status(200).json(data))
+})
 
 
 app.listen(port, () => console.log(`Server running on port: ${port}`));
