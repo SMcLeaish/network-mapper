@@ -3,14 +3,14 @@
  * @returns { Promise<void> }
  */
 exports.up = function(knex) {
-    return knex.schema.hasTable('event').then((exists) => {
+    return knex.schema.hasTable('entity').then((exists) => {
     if (!exists) {
-        return knex.schema.createTable('event', table => {
+        return knex.schema.createTable('entity', table => {
             table.increments('id');
+            table.integer('id_organization');
+            table.foreign('id_organization').references('organization.id').deferrable('deferred')
             table.integer('id_individual');
-            table.foreign('id_individual').references('individual.id').deferrable('deferred')
-            table.integer('id_');
-            table.foreign('id_user_data').references('user_data.id').deferrable('deffered');
+            table.foreign('id_individual').references('individual.id').deferrable('deferred');
         })
     }
   })
@@ -21,5 +21,5 @@ exports.up = function(knex) {
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-  return knex.schema.dropTableIfExists('event')
+  return knex.schema.dropTableIfExists('entity')
 };

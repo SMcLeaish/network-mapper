@@ -7,17 +7,13 @@ exports.up = function(knex) {
     if (!exists) {
         return knex.schema.createTable('interaction', table => {
             table.increments('id');
-            table.integer('individual_id')
-            table.foreign('individual_id').references('individual.id').deferrable('deferred')
-            table.integer('organization_id')
-            table.foreign('organization_id').references('organization.id').deferrable('deferred')
-            table.integer('event_id')
-            table.foreign('event_id').references('event.id').deferrable('deferred')
-            table.integer('individual2_id')
-            table.foreign('individual2_id').references('individual.id').deferrable('deferred')
-            table.integer('organization2_id')
-            table.foreign('organization2_id').references('organization.id').deferrable('deferred')
-            table.integer('weight')
+            table.integer('weight');
+            table.integer('id_entity_1');
+            table.foreign('id_entity_1').references('entity.id').deferrable('deferred');
+            table.integer('id_entity_2');
+            table.foreign('id_entity_2').references('entity.id').deferrable('deferred');
+            table.integer('id_event');
+            table.foreign('id_event').references('event.id').deferrable('deferred');
         })
     }
   })

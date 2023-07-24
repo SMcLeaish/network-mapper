@@ -17,7 +17,7 @@ exports.up = function(knex) {
             table.integer('organization_type_id');
             table.foreign('organization_type_id').references('organization_type.id').deferrable('deferred')
             table.integer('id_user_data');
-            table.foreign('id_user_data').references('user_data.id').deferrable('deffered');
+            table.foreign('id_user_data').references('user_data.id').deferrable('deferred');
         })
     }
   })

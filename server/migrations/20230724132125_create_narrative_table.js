@@ -11,6 +11,12 @@ exports.up = function(knex) {
             table.foreign('user_data_id').references('user_data.id').deferrable('deferred')
             table.string('date', 250)
             table.string('narrative_string', 2000)
+            table.integer('id_organization');
+            table.foreign('id_organization').references('organization.id').deferrable('deferred')
+            table.integer('id_individual');
+            table.foreign('id_individual').references('individual.id').deferrable('deferred');
+            table.integer('id_event');
+            table.foreign('id_event').references('event.id').deferrable('deferred');
         })
     }
   })
