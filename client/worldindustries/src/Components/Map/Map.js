@@ -13,6 +13,7 @@ import { MapController } from '../MapController/MapController';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch'
 import { red } from '@mui/material/colors';
 import { useMap } from 'react-leaflet';
+import { useNavigate } from 'react-router';
 
 
 const cityList = require('./Chinacities.json')
@@ -87,7 +88,6 @@ function Map() {
               setEventData(EventData2)
           },[individualData2])
 
-          console.log(EventData)
 
       const customIcon = new Icon({
         iconUrl: require('../../img/location.png'),
@@ -117,6 +117,7 @@ function Map() {
     // const location = [29.304, 103.312];
     // const zoom = 4;
     const mapRef = useRef();
+    const navigate = useNavigate()
     const [coord, setCoord] = useState(null)
     const [zoom, setZoom] = useState(4)
     const [lat, setLat] = useState(null)
@@ -135,7 +136,6 @@ function Map() {
     console.log(inputValue)
     
     return (
-
         <div className="Map">
             <div className='Container'>
                 <div className='ManageSearch'>
@@ -171,7 +171,7 @@ function Map() {
                                                 setDetailsSelect(newtargetValue);
                                                 // setCoord([29.304, 103.312]);
                                                 // setZoom(7)
-                                                individualData.find(info => (info.label === newtargetValue) ?  setCoord(info.location) : console.log(info.location))}
+                                                individualData.find(info => (info.label === newtargetValue) ?  setCoord(info.location) : console.log())}
                                                 }
                                                 disablePortal
                                                 id="combo-box-demo"
@@ -188,7 +188,7 @@ function Map() {
                                                     setDetailsSelect(newtargetValue);
                                                     // setCoord([29.304, 103.312]);
                                                     // setZoom(7)
-                                                    OrganizationData.find(info => (info.label === newtargetValue) ?  setCoord(info.location) : console.log(info.location))}
+                                                    OrganizationData.find(info => (info.label === newtargetValue) ?  setCoord(info.location) : console.log())}
                                                 }
                                                 disablePortal
                                                 id="combo-box-demo"
@@ -203,7 +203,7 @@ function Map() {
                                                 setDetailsSelect(newtargetValue);
                                                 // setCoord([29.304, 103.312]);
                                                 // setZoom(7)
-                                                EventData.find(info => (info.label === newtargetValue) ?  setCoord(info.location) : console.log(info.location))}
+                                                EventData.find(info => (info.label === newtargetValue) ?  setCoord(info.location) : console.log())}
 
                                             }
                                             disablePortal
@@ -276,7 +276,7 @@ function Map() {
                         </div>
                     </>
                     :
-                    console.log(searchbox)
+                    console.log()
                     }
                 </div>
                 <div>
@@ -327,7 +327,13 @@ function Map() {
                                                 <Marker position={feature.location} icon={individualsIcon} eventHandlers={{
                                                     click: () => {setCoord(feature.location)},
                                                   }}>
-                                                    <Popup>{feature.label}</Popup>
+                                                    <Popup>
+                                                        <h3>Name: {feature.name}</h3> 
+                                                        <p>Phone: {feature.phone_number}</p>
+                                                        <p>Location: {JSON.stringify(feature.location)}</p>
+                                                        <PersonSearchIcon className='' onClick={(e) => navigate(`/details`,{ state: feature.name})}/>
+
+                                                    </Popup>
                                                 </Marker>
                                             )},
                                         </MarkerClusterGroup>
@@ -343,7 +349,12 @@ function Map() {
                                                 <Marker position={feature.location} icon={individualsIcon} eventHandlers={{
                                                     click: () => {setCoord(feature.location)},
                                                   }}>
-                                                    <Popup>{feature.label}</Popup>
+                                                     <Popup>
+                                                        <h3>Name: {feature.name}</h3> 
+                                                        <p>Location: {JSON.stringify(feature.location)}</p>
+                                                        <PersonSearchIcon className='' onClick={(e) => navigate(`/details`,{ state: feature.name})}/>
+
+                                                    </Popup>
                                                 </Marker>
                                             )},
                                         </MarkerClusterGroup>
@@ -359,7 +370,12 @@ function Map() {
                                                 <Marker position={feature.location} icon={individualsIcon} eventHandlers={{
                                                     click: () => {setCoord(feature.location)},
                                                   }}>
-                                                    <Popup>{feature.label}</Popup>
+                                                    <Popup>
+                                                        <h3>Name: {feature.event_name}</h3> 
+                                                        <p>Phone: {feature.date}</p>
+                                                        <p>Location: {JSON.stringify(feature.location)}</p>
+                                                        <PersonSearchIcon className='' onClick={(e) => navigate(`/details`,{ state: feature.event_name})}/>
+                                                    </Popup>
                                                 </Marker>
                                             )},
                                         </MarkerClusterGroup>
