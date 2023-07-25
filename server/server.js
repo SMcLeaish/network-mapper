@@ -102,22 +102,6 @@ app.get('/narratives/:id', (req, res) => {
     .then((data) => res.status(200).json(data))
   })
 
-app.get('/entity/:name', (req, res) => {
-  let { name } = req.params
-  knex.select('entity.id AS individual_entity_id', 'individual.name', 'individual.location AS individual_location', 'interaction.weight', 
-  'interaction.id_entity_1', 'interaction.id_entity_2', 'interaction.id_event', 'event.event_name', 
-  'event.location AS event_location', 'event.date AS event_date', 'event_type.type AS event_type', 'user_data.username', 'user_data.user_organization')
-    .from('individual')
-    .where({'individual.name': name})
-    .join('entity', 'individual.id', 'entity.id_individual')
-    .join('interaction', function() {
-      this 
-        .on('id_entity_1', '=', 'entity.id')
-        .orOn('id_entity_2', '=', 'entity.id')
-    })
-    .then((data) => res.status(200).json(data))
-})
-
 app.get('/individuals', (req, res) => {
   knex.select('*')
     .from('individual')
@@ -176,11 +160,11 @@ app.get('/entity/:name', (req, res) => {
           .join('entity', 'individual.id', 'entity.id_individual')
           .join('interaction', function() {
             this 
-              .on('id_entity_1', '=', 'entity.id')
-              .orOn('id_entity_2', '=', 'entity.id')
+              .on('interaction.id_entity_1', '=', 'entity.id')
+              .orOn('interaction.id_entity_2', '=', 'entity.id')
           })
           .join('event', 'interaction.id_event', 'event.id')
-          .join('event_type', 'event_type_id', 'event_type.id')
+          .join('event_type', 'event.event_type_id', 'event_type.id')
           .join('user_data', 'individual.id_user_data', 'user_data.id')
           .then((data) => res.status(200).json(data))
       } else {
@@ -202,6 +186,8 @@ app.get('/entity/:name', (req, res) => {
       }
     })
 })
+
+
 
 https.createServer(options, app).listen(port, () => {
   console.log('HTTPS server running on port 3001');
