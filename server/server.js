@@ -229,6 +229,14 @@ app.get('/entity/:name', (req, res) => {
     })
 })
 
+app.get('/entity', (req, res) => {
+  let { array } = req.body
+  knex.select('*')
+    .from('individual')
+    .whereIn('name', array)
+    .then(data => res.status(200).json(data))
+})
+
 app.get('/entity/id/:id', (req, res) => {
   let { id } = req.params
   knex.select('*')
@@ -246,6 +254,14 @@ app.get('/entity/id/:id', (req, res) => {
           .then(data => res.status(200).json(data))
       }
     })
+})
+
+app.get('/array', (req, res) => {
+    let array = ['John Doe', 'Jane Doe']
+    knex.select('*')
+      .from('individual')
+      .whereIn('name', array)
+      .then(data => res.status(200).json(data))
 })
 
 https.createServer(options, app).listen(port, () => {
