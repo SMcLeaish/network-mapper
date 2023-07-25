@@ -99,7 +99,9 @@ app.get('/narratives/:id', (req, res) => {
     .where(function() {
       this.where({'id_entity': id}).orWhere({'id_event': id})
     })
+    .then((data) => res.status(200).json(data))
   })
+
 app.get('/entity/:name', (req, res) => {
   let { name } = req.params
   knex.select('entity.id AS individual_entity_id', 'individual.name', 'individual.location AS individual_location', 'interaction.weight', 
