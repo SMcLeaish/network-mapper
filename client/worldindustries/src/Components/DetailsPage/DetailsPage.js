@@ -4,7 +4,15 @@ const DetailsPage = () => {
 
     return(
         <div className='details-container'>
-            You are on the details page!
+            <div className='entity-details'>
+                these are entity details
+            </div>
+            <div className='image'>
+                this is the entity's image
+            </div>
+            <div className='map'>
+                this is the smol map
+            </div>
         </div>
     )
 }

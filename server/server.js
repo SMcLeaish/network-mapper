@@ -248,7 +248,6 @@ app.get('/entity/id/:id', (req, res) => {
     })
 })
 
-
 https.createServer(options, app).listen(port, () => {
   console.log('HTTPS server running on port 3001');
 });

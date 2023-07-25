@@ -1,6 +1,24 @@
 .details-container {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
     border: 2px solid red;
-    min-height: 25vh;
-    min-width: 30vw;
+    min-height: 80vh;
+}
+
+.entity-details {
+    border: 2px solid black;
+    grid-row: 1 / 4;
+    grid-column: 2;
+}
+
+.image {
+    border: 2px solid turquoise;
+    grid-column: 1 / 2;
+    height: 30;
+}
+
+.map {
+    border: 2px solid purple;
+    grid-row: 2 / 4;
 }
