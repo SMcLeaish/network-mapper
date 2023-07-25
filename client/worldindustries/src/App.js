@@ -1,5 +1,5 @@
 import './App.css';
-import LoginPage from './components/LoginPage';
+import LoginPage from './Components/LoginPage';
 import Map from './Components/Map/Map';
 import { Routes, Route } from 'react-router-dom';
 
@@ -8,8 +8,8 @@ function App() {
     <div className="App">
       <Routes>
         <Route path='/login' element={<LoginPage />} />
+        <Route path='/map' element={<Map />}/>
       </Routes>
-      <Map />
     </div>
   );
 }
