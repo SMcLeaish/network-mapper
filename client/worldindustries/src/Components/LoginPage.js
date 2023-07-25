@@ -1,37 +1,58 @@
 import React from 'react'
 import {Grid,Paper,Avatar,FormControlLabel,Checkbox,Button,TextField,Link,Typography} from '@mui/material'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useCookies } from "react-cookie"
 
 const Login = () => {
   const [username,setUsername]=useState("")
   const [password,setPassword]=useState("")
   const [email,setEmail]=useState("")
   const [newUser,setNewUser]=useState(false)
+  const [cookie, setCookie] = useCookies(["user"])
 
-  
+  const navigate=useNavigate()
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log(newUser)
-    let init={}
-    newUser===false ? fetch("http://localhost:3001/users/login",{
+    console.log("newUser",newUser," email",email," password",password," username",username)
+    
+    newUser===false ?  fetch("https://localhost:3001/users/login",{
       method:"POST",
-      Headers:{ 'Content-Type': 'application/json' },
-      body:JSON.stringify({
+      headers:{ 'Content-Type': 'application/json' },
+      body: JSON.stringify({
       username:username,
       password:password
-    })})
-    .then(res=>res.json()) 
-    : fetch("http://localhost:3001/users/",{
-      method:"POST",
-      Headers:{ 'Content-Type': 'application/json' },
-      body:JSON.stringify({
-      username:username,
-      password:password,
-      email:email
-    })})
+    })
+  })
     .then(res=>res.json())
-    console.log(init)
+    .then(data => {
+      if(data.userExists){
+        navigate("/map")
+      }
+      // if data.userExists is true, user is valid and logged in
+      // else data.userExists is false, and user is not valid
+      //navigtae("page")
+    })
+    : 
+    fetch("https://localhost:3001/users",{
+      method:"POST",
+      headers:{ 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username:username,
+        password:password,
+        email:email
+      })
+    })
+    .then(res=>{
+      console.log(res)
+      res.json()
+      })
+    .then(data => console.log(data))
+
+    .catch(err => console.log(err))
+    
+    
  
  
     
@@ -40,7 +61,7 @@ const Login = () => {
 const handleNewUser=()=>{
   setNewUser(true)
 }
-console.log(newUser)
+
   const paperStyle={padding:50,height:'80vh',width:280,margin:"20px auto"}
   return (
     <>

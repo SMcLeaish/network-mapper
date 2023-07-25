@@ -6,10 +6,14 @@ const https = require('https');
 const fs = require('fs');
 const app = express();
 const port = 3001;
+const cookieParser = require('cookie-parser')
+const uuid=require('uuid').v4
+app.use(cookieParser())
 
 app.use(cors());
-app.use(express.json());
 
+app.use(express.json());
+const sessions={}
 const options = {
     key: fs.readFileSync(process.env.SSL_KEY_PATH),
     cert: fs.readFileSync(process.env.SSL_CERT_PATH),
@@ -24,17 +28,29 @@ const options = {
 const knex = require('knex')(require('./knexfile.js')['development'])
 
 app.get('/users', (req, res) => {
-  knex('user_data')
+  const test= req.headers.cookie.split('=')[1]
+  console.log(test.split(";"))
+   const usersession=test.split(";")[0]
+  console.log(usersession)
+  if(usersession)
+    {
+      knex('user_data')
     .select('*')
     .then(data => res.status(200).send(data))
     .catch(err => res.status(404).send(err))
-});
+ 
+}});
+
+app.get('')
 
 app.post('/users', async (req, res) => {
-  console.log("here")
+  
+  
+  console.log(req.body.password)
   try {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    console.log(hashedPassword)
     const newUser = {
       username: req.body.username,
       hashed_password: hashedPassword,
@@ -43,20 +59,24 @@ app.post('/users', async (req, res) => {
       distinguished_name: req.body.distinguished_name,
       cac_approved: req.body.cac_approved
     };
-    console.log(newUser)
+    console.log("newuser",newUser)
     knex('user_data')
     .where('username',req.body.username)
     .then(data => {
-      if (data.length > 0){ // data
+      console.log("inserting")
+      if (data.length > 0) {
         res.status(404).json({userCreated: false, message: `Username: *${req.body.username}* already taken!`});
-      } else{
+      } else {
+        console.log("isnerting new user")
         knex('user_data')
           .insert(newUser)
-          .then(() => res.status(201).send({ success: true }))
+          .then(() => {
+            // set cookie any user info
+            res.status(201).send( {success: req.cookies})
+          })
           .catch(err => res.status(501).send(err))
       }
     })
-      
   } 
   catch {
     res.status(500).send();
@@ -64,6 +84,14 @@ app.post('/users', async (req, res) => {
 });
 
 app.post('/users/login', (req, res) => {
+  const sessionId= uuid()
+  const username =req.username
+  const id =req.id;
+  sessions[sessionId]={username,userId:id}
+  res.cookie( 'session',sessionId,{secure:true, sameSite:"none"})
+  // res.cookie('name', 'tobi', { domain: '.example.com', path: '/admin', secure: true })
+  console.log("logging in cookie made")
+  
   knex('user_data')
     .select('*')
     .where('username', req.body.username)
@@ -78,6 +106,7 @@ app.post('/users/login', (req, res) => {
               }
               res.send(responseObj);
             } else {
+              
               let responseObj = {
                 userExists: found
               }
