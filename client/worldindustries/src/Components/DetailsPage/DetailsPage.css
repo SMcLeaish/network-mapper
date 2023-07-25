@@ -1,0 +1,6 @@
+.details-container {
+    display: flex;
+    border: 2px solid red;
+    min-height: 25vh;
+    min-width: 30vw;
+}
