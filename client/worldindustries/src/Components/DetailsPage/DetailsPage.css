@@ -15,10 +15,11 @@
 .image {
     border: 2px solid turquoise;
     grid-column: 1 / 2;
+    grid-row: 1 / 3;
     height: 30;
 }
 
 .map {
     border: 2px solid purple;
-    grid-row: 2 / 4;
+    grid-row: 3 / 4;
 }
