@@ -22,33 +22,70 @@ function Map() {
         color: red,
     } 
 
-
     const options = [
         { label: 'Individual', location: [30,48] },
         { label: 'Organization', location: [31,48] },
         { label: 'Event', location: [32,48]},
       ];
-    //   // or
-    //   const options = ['Individual', 'Organization', 'Event'];
-    //   const individualData = ['Fred Smith', 'Susan Woe', 'William Hunt'];
 
-    const individualData = [
-        {label: 'Fred Smith', location: [30.587, 114.228] },
-        {label: 'Susan Woe',  location: [32.998, 112.529] },
-        {label: 'William Hunt',location: [30.25, 120.167]}
-    ];
+    const [individualData2, setIndividualData2] = useState([])
+    const [individualData, setIndividualData] = useState([])
 
-      const OrganizationData = [
-        {label: 'NASA', location: [31.1667, 121.4667] },
-        {label: 'Global Communication', location: [39.904, 116.407] },
-        {label: 'Sprint', location: [22.5350, 114.0633]}
-    ];
+      useEffect(() => {
+        fetch('https://localhost:3001/individuals')
+          .then((res) => res.json())
+          .then(data => {
+            setIndividualData2(data)
+          })
+          .catch(error=>console.log('i am not getting the data'))
+      },[])
 
-      const EventData = [
-        {label: 'Sprint Conference', location: [30.660, 104.0633]},
-        {label: 'Comicon', location:[34.2667, 108.9]},
-        {label: 'SecurityCom', location:[29.55, 106.50]}
-      ];
+
+      const [OrganizationData2, setOrganizationData2] = useState([])
+      const [OrganizationData, setOrganizationData] = useState([])
+  
+        useEffect(() => {
+          fetch('https://localhost:3001/organizations')
+            .then((res) => res.json())
+            .then(data => {
+                setOrganizationData2(data)
+            })
+            .catch(error=>console.log('i am not getting the data for organizations'))
+        },[])
+
+
+        const [EventData2, setEventData2] = useState([])
+        const [EventData, setEventData] = useState([])
+    
+          useEffect(() => {
+            fetch('https://localhost:3001/events')
+              .then((res) => res.json())
+              .then(data => {
+                setEventData2(data)
+              })
+              .catch(error=>console.log('i am not getting the data for event'))
+          },[])
+
+
+        useEffect(() => {
+            for (let i = 0; i < individualData2.length; i++) {
+                const nameValue = individualData2[i].name;
+                individualData2[i].label = nameValue;
+              }
+              setIndividualData(individualData2)
+    
+              for (let i = 0; i < OrganizationData2.length; i++) {
+                const nameValue = OrganizationData2[i].name;
+                OrganizationData2[i].label = nameValue;
+              }
+              setOrganizationData(OrganizationData2)
+    
+              for (let i = 0; i < EventData2.length; i++) {
+                const nameValue = EventData2[i].event_name;
+                EventData2[i].label = nameValue;
+              }
+              setEventData(EventData2)
+          },[individualData2])
 
       const customIcon = new Icon({
         iconUrl: require('../../img/location.png'),
@@ -88,7 +125,7 @@ function Map() {
     const [targetValue, setTargetValue] = useState('');
     const [detailsSelect, setDetailsSelect] = useState('')
     
-    console.log(detailsSelect)
+    // console.log(detailsSelect)
 
     const handleSearch = () => {
         setSearchBox(true)
