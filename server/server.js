@@ -99,6 +99,12 @@ app.get('/organizations', (req, res) => {
     .then((data) => res.status(200).json(data))
 })
 
+app.get('/events', (req, res) => {
+  knex.select('*')
+    .from('event')
+    .then((data) => res.status(200).json(data))
+})
+
 app.get('/position/:id', (req, res) => {
   let { id } = req.params;
   knex.select('position.id AS position_id', 'organization.name AS org_name', 'organization_type.type AS org_type','individual.name AS individual_name', 'role.title AS role_title', 'responsibilities.name AS responsibilities')
