@@ -87,6 +87,8 @@ function Map() {
               setEventData(EventData2)
           },[individualData2])
 
+          console.log(EventData)
+
       const customIcon = new Icon({
         iconUrl: require('../../img/location.png'),
         iconSize: [38, 38]
@@ -125,12 +127,12 @@ function Map() {
     const [targetValue, setTargetValue] = useState('');
     const [detailsSelect, setDetailsSelect] = useState('')
     
-    // console.log(detailsSelect)
-
     const handleSearch = () => {
         setSearchBox(true)
         }
 
+    console.log(detailsSelect)
+    console.log(inputValue)
     
     return (
 
@@ -176,7 +178,7 @@ function Map() {
                                                 options={individualData}
                                                 sx={{ width: 300 }}
                                                 renderInput={(params) => <TextField {...params} label="Search Individual" />}/>
-
+                                                
                                     :
                                     ( (inputValue === 'Organization')  ? 
                                         <Autocomplete
@@ -212,6 +214,54 @@ function Map() {
                                             renderInput={(params) => <TextField {...params} label="Search Event" />}/>                         
                                     )}
                             </div>
+                                    {/* this is for the small details area */}
+                            <div className='MapSummary'>
+                                {inputValue === 'Individual' ? 
+                                    <div> 
+                                        {individualData.map((person) => person.name === detailsSelect ? 
+                                        <>
+                                            <h1> Search Summary </h1>
+                                            <p>Name: {person.name}</p> 
+                                            <p>Phone: {person.phone_number}</p>
+                                            <p>Location: {JSON.stringify(person.location)}</p>
+
+                                        </>
+                                        : console.log(`member not found`)
+                                         )}
+                                    </div>
+                                :
+                                ( inputValue === 'Organization' ?
+                                    <div> 
+                                    {OrganizationData.map((org) => org.name === detailsSelect ? 
+                                    <>
+                                        <h1> Search Summary </h1>
+                                        <p>Name: {org.name}</p> 
+                                        <p>Location: {JSON.stringify(org.location)}</p>
+
+                                    </>
+                                    : console.log(`member not found`)
+                                    )}
+                                    </div>
+                                :
+                                (inputValue === 'Event' ? 
+                                <div> 
+                                {EventData.map((org) => org.event_name === detailsSelect ? 
+                                <>
+                                    <h1> Search Summary </h1>
+                                    <p>Name: {org.event_name}</p> 
+                                    <p>Phone: {org.date}</p>
+                                    <p>Location: {JSON.stringify(org.location)}</p>
+
+                                </>
+                                : console.log(`member not found`)
+                                )}
+                                </div>
+                                :
+                                console.log('none of them match')
+                                ))}
+                            </div>
+
+
                             <div className='latLongSearch'>
                                 <form className='latLongSearch' autocomplete="off">
                                     <div className='searchfield'>
@@ -268,7 +318,7 @@ function Map() {
                                     </LayerGroup>
                                 </LayersControl.Overlay>
 
-                                <LayersControl.Overlay name ="Individuals">
+                                <LayersControl.Overlay checked name ="Individuals">
                                     <LayerGroup>
                                         <MarkerClusterGroup
                                             chunkedLoading
@@ -284,7 +334,7 @@ function Map() {
                                     </LayerGroup>
                                 </LayersControl.Overlay>
 
-                                <LayersControl.Overlay name ="Organizations">
+                                <LayersControl.Overlay checked name ="Organizations">
                                     <LayerGroup>
                                         <MarkerClusterGroup
                                             chunkedLoading
@@ -300,7 +350,7 @@ function Map() {
                                     </LayerGroup>
                                 </LayersControl.Overlay>
 
-                                <LayersControl.Overlay name ="Events">
+                                <LayersControl.Overlay checked name ="Events">
                                     <LayerGroup>
                                         <MarkerClusterGroup
                                             chunkedLoading
