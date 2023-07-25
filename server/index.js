@@ -14,30 +14,30 @@ const options = {
       fs.readFileSync(process.env.SSL_CA_ROOT_PATH), 
 //      fs.readFileSync(process.env.SSL_LETSENCRYPT_CA_PATH)
     ],
-    requestCert: true, 
-    rejectUnauthorized: true 
+    //requestCert: true, 
+    //rejectUnauthorized: true 
 };
 
 app.use(cors());
-app.use(express.json())
-app.use((req, res, next) => {
-  const cert = req.socket.getPeerCertificate();
-  if (cert && cert.subject && cert.subject.CN) {
-    const cn = cert.subject.CN;
-    const edipi = cn.split('.')[0]; 
-    if (edipi) {
-      console.log(`Authenticated user with EDIPI: ${edipi}`);
-      req.user = { edipi };
-      next();
-    } else {
-      res.status(401).send("Invalid EDIPI");
-      return;
-    }
-  } else {
-    res.status(401).send("No valid client certificate provided");
-    return;
-  }
-});
+// app.use(express.json())
+// app.use((req, res, next) => {
+//   const cert = req.socket.getPeerCertificate();
+//   if (cert && cert.subject && cert.subject.CN) {
+//     const cn = cert.subject.CN;
+//     const edipi = cn.split('.')[0]; 
+//     if (edipi) {
+//       console.log(`Authenticated user with EDIPI: ${edipi}`);
+//       req.user = { edipi };
+//       next();
+//     } else {
+//       res.status(401).send("Invalid EDIPI");
+//       return;
+//     }
+//   } else {
+//     res.status(401).send("No valid client certificate provided");
+//     return;
+//   }
+// });
   
 app.get('/', (req, res) => {
   res.send('Hello, HTTPS world!');

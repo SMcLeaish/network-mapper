@@ -14,23 +14,25 @@ const Login = () => {
     e.preventDefault();
     console.log(newUser)
     let init={}
-    newUser===false ?  init={
+    newUser===false ? fetch("http://localhost:3001/users/login",{
       method:"POST",
       Headers:{ 'Content-Type': 'application/json' },
       body:JSON.stringify({
       username:username,
       password:password
-    })} :init={
+    })})
+    .then(res=>res.json()) 
+    : fetch("http://localhost:3001/users/",{
       method:"POST",
       Headers:{ 'Content-Type': 'application/json' },
       body:JSON.stringify({
       username:username,
       password:password,
       email:email
-    })}
+    })})
+    .then(res=>res.json())
     console.log(init)
- fetch("http://localhost:3001/users/login",init)
- .then(res=>res.json())
+ 
  
     
     // fetch and set body to the parameters
