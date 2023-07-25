@@ -3,7 +3,7 @@
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
     border: 2px solid red;
-    min-height: 80vh;
+    min-height: 99vh;
 }
 
 .entity-details {
