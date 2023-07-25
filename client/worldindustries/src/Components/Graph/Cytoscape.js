@@ -15,11 +15,12 @@ function Graph() {
 
 	const [currentMetric, setCurrentMetric] = useState('degreeCentrality');  
   const [loading, setLoading] = useState(true);
-
+//temporary value for search
+	let searchValue='John Doe'
 
 
 	useEffect(() => {
-		fetch('/sourcebook.json')
+		fetch(`https://localhost:3001/entity/${searchValue}`)
 			.then(response => response.json())
 			.then(data => {
 				console.log('Data fetched:', data);
