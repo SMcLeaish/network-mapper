@@ -12,11 +12,13 @@ const DetailsPage = () => {
   let { id } = useParams();
   const [ associates, setAssociates ] = useState([])
   const [ narratives, setNarratives ] = useState([])
+  const [ entity, setEntity ] = useState([])
+  const [ biography, setBiography ] = useState([])
 
   useEffect(() => {
     fetch(`https://localhost:3001/relationships/${id}`)
       .then(res => res.json())
-      .then(data => {console.log(data); setAssociates(data)})
+      .then(data => {setAssociates(data)})
   }, [])
 
   useEffect(() => {
@@ -25,8 +27,24 @@ const DetailsPage = () => {
       .then(res => res.json())
       .then(data => {
         narrativesToAdd = data.filter(e => e.id_entity === parseInt(id))
-        console.log(narrativesToAdd)
         setNarratives(narrativesToAdd)
+      })
+  }, [])
+
+  useEffect(() => {
+    fetch(`https://localhost:3001/entity/id/${id}`)
+      .then(res => res.json())
+      .then(data => {
+        fetch(`https://localhost:3001/entity/${data[0].name}`)
+          .then(res => res.json())
+          .then(data => {
+            setEntity(data)
+            fetch(`https://localhost:3001/position/${data[0].org_id}`)
+              .then(res => res.json())
+              .then(data1 => {
+                setBiography(data1)
+            })
+          })
       })
   }, [])
 
@@ -64,6 +82,32 @@ const DetailsPage = () => {
      })
    }
 
+   const returnEvents = (data) => {
+    return data.map((e) => {
+       return (
+        <Chip key={e.interaction_id}
+            label={e.event_name}
+        />
+       )
+     })
+   }
+
+   const returnBiography = (data) => {
+    if(data.length > 0) {
+      let bio = data[0]
+      return (
+       <div>
+        <Chip key={bio.position_id}
+            label={`Organization: ${bio.org_name}`}
+        />
+        <Chip key={bio.org_type}
+            label={`Organization type: ${bio.org_type}`}
+        />
+       </div>
+      )
+    }
+   }
+
   return (
       <Container maxWidth='xl' className='details-page-container'>
         <Grid container>
@@ -72,7 +116,10 @@ const DetailsPage = () => {
               <img src={placeholderImg} alt="user" className='details-image' />
             </Grid>
             <Grid item xs={7} className='details-item-container'>
-              Employer + Address + etc
+                <Typography variant='h4' gutterBottom>
+                  Biography
+                </Typography>
+                {returnBiography(biography)}
             </Grid>
             <Grid item xs={12} className='details-item-container'>
               <img src={placeholderMap} alt="map" className='details-image' />
@@ -97,9 +144,15 @@ const DetailsPage = () => {
               </Stack>
             </Grid>
             <Grid item xs={12} className='details-item-container'>
-              Events
+                <Typography variant='h4' gutterBottom>
+                  Events
+                </Typography>
+                {returnEvents(entity)}
             </Grid>
             <Grid item xs={12} className='details-item-container'>
+                <Typography variant='h4' gutterBottom>
+                  Narratives
+                </Typography>
               {returnNarratives(narratives)}
             </Grid>
           </Grid>

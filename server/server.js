@@ -153,7 +153,7 @@ app.get('/entity/:name', (req, res) => {
     .where({'individual.name': name})
     .then(data => {
       if (data.length !== 0) {
-        knex.select('entity.id AS individual_entity_id', 'individual.name AS individual_name', 'individual.location AS individual_location', 'interaction.weight', 
+        knex.select('entity.id AS individual_entity_id', 'individual.id AS individual_id','interaction.id AS interaction_id', 'individual.name AS individual_name', 'individual.location AS individual_location', 'interaction.weight', 
         'interaction.id_entity_1', 'interaction.id_entity_2', 'interaction.id_event', 'event.event_name', 
         'event.location AS event_location', 'event.date AS event_date', 'event_type.type AS event_type', 'user_data.username', 'user_data.user_organization')
           .from('individual')
@@ -169,7 +169,7 @@ app.get('/entity/:name', (req, res) => {
           .where({'individual.name': name})
           .then((data) => res.status(200).json(data))
       } else {
-        knex.select('entity.id AS organization_entity_id', 'organization.name', 'organization.location AS organization_location', 'interaction.weight', 
+        knex.select('entity.id AS organization_entity_id', 'organization.id AS org_id', 'interaction.id AS interaction_id', 'organization.name', 'organization.location AS organization_location', 'interaction.weight', 
         'interaction.id_entity_1', 'interaction.id_entity_2', 'interaction.id_event', 'event.event_name', 
         'event.location AS event_location', 'event.date AS event_date', 'event_type.type AS event_type', 'user_data.username', 'user_data.user_organization')
           .from('organization')
