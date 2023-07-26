@@ -2,7 +2,7 @@ exports.seed = function(knex) {
   return knex('individual').del()
     .then(function () {
       return knex('individual').insert([
-        { name: 'John Doe', location: [15.55376, 102.18753], phone_number: '1234567890', id_user_data: Math.floor(Math.random() * 5) + 1 },
+        { name: 'John Doe', location: [15.55376, 102.18753], phone_number: '1234567890', id_user_data: 1}, 
         { name: 'Jane Doe', location: [15.55381, 102.18758], phone_number: '2345678901', id_user_data: Math.floor(Math.random() * 5) + 1 },
         { name: 'Robert Smith', location: [15.55386, 102.18763], phone_number: '3456789012', id_user_data: Math.floor(Math.random() * 5) + 1 },
         { name: 'Sophia Johnson', location: [15.55391, 102.18768], phone_number: '4567890123', id_user_data: Math.floor(Math.random() * 5) + 1 },

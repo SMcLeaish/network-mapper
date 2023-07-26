@@ -34,7 +34,6 @@ app.get('/network/:name', (req, res) => {
   recursiveQuery(name, entitySet, nodes, edges)
     .then(data => {
       res.json({nodes: data.nodes, edges: data.edges});
-     // res.json(data)
     })
     .catch(error => {
       res.status(500).json({ error: 'An error occurred while fetching data.' });
@@ -50,37 +49,18 @@ function buildEntitySet(data, entitySet) {
   return entitySet;
 }
 
-function buildNodes(data, entitySet, nodes, processedNodes) {
+function buildNodes(data, entitySet, nodes) {
   data.forEach(item => {
     // if (!nodes.some(node => node.id === item.id)) {
-    // Possibly breaking - this is returning every entity that's been seen as associates of the 1 node
     const associates = Array.from(entitySet);
-    let entity_name, entity_type;
-
-    if (item.orgName != null) {
-      entity_name = item.orgName;
-      entity_type = 'organization';
-    } else if (item.individualName!= null) {
-      entity_name = item.individualName;
-      entity_type = 'individual';
-    }
-    const existingNode = nodes.find(node => node.id === item.id);
-    //console.log('Existing node: ', existingNode)
-    if (existingNode) {
-      existingNode.events.push(item.event_name);
-    } else {
-      const node = {
-        id: item.id,
-        type: entity_type,
-        name: entity_name,
-        individual_location: item.individual_location,
-        associates,
-        events: [item.event_name],
-      };
-      nodes.push(node);
-      console.log('After push:', nodes)
-    }
-    processedNodes.add(item.id);
+    const node = {
+      name: item.name,
+      individual_location: item.individual_location,
+      associates,
+      events: [item.event_name],
+    };
+    nodes.push(node);
+ //} 
   });
   return nodes;
 }
@@ -120,14 +100,14 @@ async function queryNameFromID(entitySet) {
 }
 
 
-async function recursiveQuery(name, entitySet, nodes, edges, processedNodes = new Set()) {
+async function recursiveQuery(name, entitySet, nodes, edges) {
   try {
     let data = await knex.select('*')
       .from('individual')
       .where({ 'individual.name': name });
 
     if (data.length === 0) {
-      data = await knex.select('entity.id AS id', 'organization.name AS orgName', 'organization.location AS organization_location', 'interaction.weight',
+      data = await knex.select('entity.id AS organization_entity_id', 'organization.name', 'organization.location AS organization_location', 'interaction.weight',
         'interaction.id_entity_1', 'interaction.id_entity_2', 'interaction.id_event', 'event.event_name',
         'event.location AS event_location', 'event.date AS event_date', 'event_type.type AS event_type', 'user_data.username', 'user_data.user_organization')
         .from('organization')
@@ -142,7 +122,7 @@ async function recursiveQuery(name, entitySet, nodes, edges, processedNodes = ne
         .join('event_type', 'event_type_id', 'event_type.id')
         .join('user_data', 'organization.id_user_data', 'user_data.id');
     } else {
-      data = await knex.select('entity.id AS id', 'individual.name AS individualName', 'individual.location AS individual_location', 'interaction.weight',
+      data = await knex.select('entity.id AS individual_entity_id', 'individual.name', 'individual.location AS individual_location', 'interaction.weight',
         'interaction.id_entity_1', 'interaction.id_entity_2', 'interaction.id_event', 'event.event_name',
         'event.location AS event_location', 'event.date AS event_date', 'event_type.type AS event_type', 'user_data.username', 'user_data.user_organization')
         .from('individual')
@@ -162,29 +142,19 @@ async function recursiveQuery(name, entitySet, nodes, edges, processedNodes = ne
     entitySet = buildEntitySet(data, entitySet);
     const newSize = entitySet.size;
 
-     if (oldSize === newSize) {
-       return { entitySet };
-     }
-    entitySet = buildEntitySet(data, entitySet);
-    nodes = buildNodes(data, entitySet, nodes, processedNodes);
+    if (oldSize === newSize) {
+      return { entitySet };
+    }
+
+    nodes = buildNodes(data, entitySet, nodes);
     edges = buildEdges(data, edges);
-    //console.log(nodes)
-    //uncomment above and it runs 3 times... this just hangs
-   // console.log('EntitySet:', Array.from(entitySet));
-   // console.log('ProcessedNodes:', Array.from(processedNodes));
-    //console.log('data:' )
-    // if (Array.from(entitySet).every(node => processedNodes.has(node))) {
-    //   return { entitySet, nodes, edges };
-    // }
-    // // This isn't the right way to do this, it puts an undefined into the set... 
-    //processedNodes.add(data.id);
     const newData = await queryNameFromID(entitySet);
 
     const flatNewData = [].concat(...newData);
     const names = flatNewData.map(item => item.name);
     const results = [];
     for (let name of names) {
-      const result = await recursiveQuery(name, entitySet, nodes, edges, processedNodes);
+      const result = await recursiveQuery(name, entitySet, nodes, edges);
       results.push(result);
     }
 

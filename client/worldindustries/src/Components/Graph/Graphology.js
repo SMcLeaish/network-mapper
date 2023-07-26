@@ -5,21 +5,20 @@ import degreeCentrality from 'graphology-metrics/centrality/degree';
 
 function constructGraph(data) {
   let graph = new Graph();
-  
-  // Create a set to avoid duplicate nodes
+  let node = {data.name:WebGLQuery}
   let nodeSet = new Set();
   
   data.forEach(item => {
     nodeSet.add(item.id_entity_1);
     nodeSet.add(item.id_entity_2);
   });
-
-  // Create nodes
+  //fetch goes here
+  node = {[data.name]}
+  let nodes = []
   nodeSet.forEach(nodeId => {
     graph.addNode(nodeId, { label: nodeId.toString() });
   });
   
-  // Create edges
   data.forEach(edge => {
     graph.addEdge(edge.id_entity_1, edge.id_entity_2);
   });
