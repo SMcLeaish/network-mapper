@@ -1,33 +1,16 @@
-/* .details-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
-  border: 2px solid red;
-  min-height: 99vh;
-}
-
-.entity-details {
-  border: 2px solid black;
-  grid-row: 1 / 4;
-  grid-column: 2;
-}
-
-.image {
-  border: 2px solid turquoise;
-  grid-column: 1 / 2;
-  grid-row: 1 / 3;
-  height: 30;
-}
-
-.map {
-  border: 2px solid purple;
-  grid-row: 3 / 4;
-} */
-
 .details-page-container {
-  margin-top: 30px;
+  margin-top: 20px;
 }
 
-.grid-border {
+.details-item-container {
+  padding: 20px;
   border: 2px solid red;
+}
+
+.details-image {
+  width: 100%;
+}
+
+.rounded-button {
+  border-radius: 100px !important;
 }
