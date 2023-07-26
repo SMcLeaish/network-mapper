@@ -11,11 +11,23 @@ const placeholderMap = 'https://images.unsplash.com/photo-1526778548025-fa2f459c
 const DetailsPage = () => {
   let { id } = useParams();
   const [ associates, setAssociates ] = useState([])
+  const [ narratives, setNarratives ] = useState([])
 
   useEffect(() => {
     fetch(`https://localhost:3001/relationships/${id}`)
       .then(res => res.json())
       .then(data => {console.log(data); setAssociates(data)})
+  }, [])
+
+  useEffect(() => {
+    let narrativesToAdd = []
+    fetch(`https://localhost:3001/narratives/${id}`)
+      .then(res => res.json())
+      .then(data => {
+        narrativesToAdd = data.filter(e => e.id_entity === parseInt(id))
+        console.log(narrativesToAdd)
+        setNarratives(narrativesToAdd)
+      })
   }, [])
 
   const handleClickAssociate = () => {
@@ -41,6 +53,16 @@ const DetailsPage = () => {
       )
     })
   }
+
+  const returnNarratives = (data) => {
+    return data.map((e) => {
+       return (
+        <Chip key={e.id}
+            label={e.narrative_string}
+        />
+       )
+     })
+   }
 
   return (
       <Container maxWidth='xl' className='details-page-container'>
@@ -71,16 +93,6 @@ const DetailsPage = () => {
                 </Button>
               </Stack>
               <Stack direction='row' spacing={1} useFlexGap flexWrap={'wrap'}>
-                {/* <Chip
-                  label="Associate Name"
-                  onClick={handleClickAssociate}
-                  onDelete={handleDeleteAssociate}
-                />
-                <Chip
-                  label="Associate Name"
-                  onClick={handleClickAssociate}
-                  onDelete={handleDeleteAssociate}
-                /> */}
                 {returnChipsForAssociates(associates)}
               </Stack>
             </Grid>
@@ -88,7 +100,7 @@ const DetailsPage = () => {
               Events
             </Grid>
             <Grid item xs={12} className='details-item-container'>
-              Narrative
+              {returnNarratives(narratives)}
             </Grid>
           </Grid>
         </Grid>
