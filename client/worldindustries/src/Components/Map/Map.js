@@ -1,19 +1,21 @@
 import { MapContainer, TileLayer, Marker, Popup, LayersControl, LayerGroup } from 'react-leaflet'
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState } from 'react';
 import 'leaflet/dist/leaflet.css'
 import { Icon, divIcon } from "leaflet";
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import './Map.css';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import CloseIcon from '@mui/icons-material/Close';
-import { Autocomplete, FormLabel } from '@mui/material';
+import { Autocomplete } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { ScaleControl } from 'react-leaflet';
 import { MapController } from '../MapController/MapController';
-import PersonSearchIcon from '@mui/icons-material/PersonSearch'
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
+import ShareIcon from '@mui/icons-material/Share';
 import { red } from '@mui/material/colors';
 import { useMap } from 'react-leaflet';
 import { useNavigate } from 'react-router';
+import Connections from '../Connections/Connections';
 
 
 const cityList = require('./Chinacities.json')
@@ -127,14 +129,12 @@ function Map() {
     const [inputValue, setInputValue] = useState(options[0]);
     const [targetValue, setTargetValue] = useState('');
     const [detailsSelect, setDetailsSelect] = useState('')
+    const [poly, setPolyLine] = useState(false)
     
     const handleSearch = () => {
         setSearchBox(true)
         }
-
-    console.log(detailsSelect)
-    console.log(inputValue)
-    
+    console.log(`detailsSelect = ${detailsSelect}`)
     return (
         <div className="Map">
             <div className='Container'>
@@ -157,7 +157,6 @@ function Map() {
                                     options={options}
                                     sx={{ width: 300  }}
                                     renderInput={(params) => <TextField {...params} label="Search Focus"  />}/>
-                                
                             </div>
 
                             <div className='secondSearch'>
@@ -224,6 +223,8 @@ function Map() {
                                             <p>Name: {person.name}</p> 
                                             <p>Phone: {person.phone_number}</p>
                                             <p>Location: {JSON.stringify(person.location)}</p>
+                                            <ShareIcon className= {poly ? 'activelines' : 'notActiveLines'} onClick={() => {setPolyLine(!poly)}}/>
+
 
                                         </>
                                         : console.log(`member not found`)
@@ -244,18 +245,18 @@ function Map() {
                                     </div>
                                 :
                                 (inputValue === 'Event' ? 
-                                <div> 
-                                {EventData.map((org) => org.event_name === detailsSelect ? 
-                                <>
-                                    <h1> Search Summary </h1>
-                                    <p>Name: {org.event_name}</p> 
-                                    <p>Phone: {org.date}</p>
-                                    <p>Location: {JSON.stringify(org.location)}</p>
+                                    <div> 
+                                    {EventData.map((org) => org.event_name === detailsSelect ? 
+                                    <>
+                                        <h1> Search Summary </h1>
+                                        <p>Name: {org.event_name}</p> 
+                                        <p>Phone: {org.date}</p>
+                                        <p>Location: {JSON.stringify(org.location)}</p>
 
-                                </>
-                                : console.log(`member not found`)
-                                )}
-                                </div>
+                                    </>
+                                    : console.log(`member not found`)
+                                    )}
+                                    </div>
                                 :
                                 console.log('none of them match')
                                 ))}
@@ -332,7 +333,6 @@ function Map() {
                                                         <p>Phone: {feature.phone_number}</p>
                                                         <p>Location: {JSON.stringify(feature.location)}</p>
                                                         <PersonSearchIcon className='' onClick={(e) => navigate(`/details`,{ state: feature.name})}/>
-
                                                     </Popup>
                                                 </Marker>
                                             )},
@@ -353,7 +353,6 @@ function Map() {
                                                         <h3>Name: {feature.name}</h3> 
                                                         <p>Location: {JSON.stringify(feature.location)}</p>
                                                         <PersonSearchIcon className='' onClick={(e) => navigate(`/details`,{ state: feature.name})}/>
-
                                                     </Popup>
                                                 </Marker>
                                             )},
@@ -383,6 +382,8 @@ function Map() {
                                 </LayersControl.Overlay>
 
                             </LayersControl>
+                            {(poly ? <Connections details={detailsSelect}/> : console.log('no connections'))}
+
                             <MapController coord={coord}/>
                             <ScaleControl position='topleft' />    
                         </MapContainer>

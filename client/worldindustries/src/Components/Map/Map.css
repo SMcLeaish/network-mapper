@@ -173,3 +173,16 @@ color: red !important;
     background-color: #F8F4E3;
     border-radius: 5px;
   }
+
+  .activelines {
+    width: 27.5px;
+    background-color: red;
+    border-radius: 100px;
+  }
+
+  .notActiveLines {
+    width: 27.5px;
+    background-color: steelblue;
+    border-radius: 100px;
+
+  }
