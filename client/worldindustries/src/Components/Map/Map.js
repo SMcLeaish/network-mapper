@@ -16,6 +16,8 @@ import { red } from '@mui/material/colors';
 import { useMap } from 'react-leaflet';
 import { useNavigate } from 'react-router';
 import Connections from '../Connections/Connections';
+import EventConnections from '../Connections/EventConnections';
+import GroupsIcon from '@mui/icons-material/Groups'
 
 
 const cityList = require('./Chinacities.json')
@@ -121,7 +123,6 @@ function Map() {
     const mapRef = useRef();
     const navigate = useNavigate()
     const [coord, setCoord] = useState(null)
-    const [zoom, setZoom] = useState(4)
     const [lat, setLat] = useState(null)
     const [long, setLong] = useState(null)
     const { BaseLayer } = LayersControl;
@@ -130,6 +131,7 @@ function Map() {
     const [targetValue, setTargetValue] = useState('');
     const [detailsSelect, setDetailsSelect] = useState('')
     const [poly, setPolyLine] = useState(false)
+    const [eventpoly, seteventPolyLine] = useState(false)
     
     const handleSearch = () => {
         setSearchBox(true)
@@ -168,6 +170,8 @@ function Map() {
                                                 // setTargetValue('')
                                                 setTargetValue(newtargetValue);
                                                 setDetailsSelect(newtargetValue);
+                                                seteventPolyLine(false);
+                                                setPolyLine(false);
                                                 // setCoord([29.304, 103.312]);
                                                 // setZoom(7)
                                                 individualData.find(info => (info.label === newtargetValue) ?  setCoord(info.location) : console.log())}
@@ -224,6 +228,9 @@ function Map() {
                                             <p>Phone: {person.phone_number}</p>
                                             <p>Location: {JSON.stringify(person.location)}</p>
                                             <ShareIcon className= {poly ? 'activelines' : 'notActiveLines'} onClick={() => {setPolyLine(!poly)}}/>
+                                            <GroupsIcon className= {eventpoly ? 'Eventactiveline' : 'EventnotActiveLines'} onClick={() => {seteventPolyLine(!eventpoly)}}/>
+                                            <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details`,{ state: person.name})}/>
+
 
 
                                         </>
@@ -282,7 +289,7 @@ function Map() {
                 </div>
                 <div>
                     <div>
-                        <MapContainer center={[29.304, 103.312]} zoom={zoom} ref={mapRef} id='map'>
+                        <MapContainer center={[13.57406,108.18783]} zoom={6} ref={mapRef} id='map'>
                             <LayersControl>
                                 <BaseLayer checked name="OpenStreetMap">
                                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; <a href=&quot;https://www.openstreetmap.org/copyright&quot;>OpenStreetMap</a> contributors" />
@@ -383,6 +390,7 @@ function Map() {
 
                             </LayersControl>
                             {(poly ? <Connections details={detailsSelect}/> : console.log('no connections'))}
+                            {(eventpoly ? <EventConnections details={detailsSelect}/> : console.log('no connections'))}
 
                             <MapController coord={coord}/>
                             <ScaleControl position='topleft' />    

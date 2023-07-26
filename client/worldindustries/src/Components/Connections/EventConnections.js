@@ -4,7 +4,7 @@ import Map from "../Map/Map";
 import { Circle, Polyline } from 'react-leaflet'
 
 
-const Connections = (props) => {
+const EventConnections = (props) => {
   const detailsSelect = props.details
   const [individualConnect, setIndividualConnect] = useState([])
   const [entityConnect, setEntityConnect] = useState([]) 
@@ -39,16 +39,6 @@ useEffect(() => {
     // individualConnect.map((loc) =>  setPrimaryLocation(loc[0].location))
 },[entityConnect])
 
-console.log(individualConnect, primaryLocation)
-
-  useEffect(() => {
-    fetch(`https://localhost:3001/relationships/${id}`)
-      .then((res) => res.json())
-      .then(data => {
-        setConnectDetails(data)
-      })
-      .catch(error=>console.log('i am not getting the data'))
-  },[id])
 
   return (
     <>
@@ -65,4 +55,4 @@ console.log(individualConnect, primaryLocation)
 
 
 
-export default Connections;
+export default EventConnections;

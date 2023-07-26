@@ -178,11 +178,38 @@ color: red !important;
     width: 27.5px;
     background-color: red;
     border-radius: 100px;
+    margin-left: 5px;
+    margin-right:5px
   }
 
   .notActiveLines {
     width: 27.5px;
     background-color: steelblue;
     border-radius: 100px;
+    margin-left: 5px;
+    margin-right:5px
 
   }
+
+  .Eventactiveline {
+    width: 27.5px;
+    background-color: green;
+    border-radius: 100px;
+    margin-right: 5px;
+  }
+
+  .EventnotActiveLines {
+    width: 27.5px;
+    background-color: steelblue;
+    border-radius: 100px;
+    margin-left: 5px;
+    margin-right: 5px;
+
+  }
+
+.DetailsIcon {
+  width: 27.5px;
+  background-color: steelblue;
+  border-radius: 100px;
+  margin-left: 5px;
+}

@@ -6,7 +6,7 @@ exports.seed = function(knex) {
         { name: 'Jane Doe', location: [13.53381, 104.88758], phone_number: '2345678901', id_user_data: Math.floor(Math.random() * 5) + 1 },
         { name: 'Robert Smith', location: [15.52386, 108.18763], phone_number: '3456789012', id_user_data: Math.floor(Math.random() * 5) + 1 },
         { name: 'Sophia Johnson', location: [15.51391, 101.18768], phone_number: '4567890123', id_user_data: Math.floor(Math.random() * 5) + 1 },
-        { name: 'William Brown', location: [16.59396, 108.66873], phone_number: '5678901234', id_user_data: Math.floor(Math.random() * 5) + 1 },
+        { name: 'William Brown', location: [15.59396, 107.66873], phone_number: '5678901234', id_user_data: Math.floor(Math.random() * 5) + 1 },
         { name: 'Olivia Garcia', location: [17.58401, 106.18778], phone_number: '6789012345', id_user_data: Math.floor(Math.random() * 5) + 1 },
         { name: 'James Davis', location: [13.57406, 108.18783], phone_number: '7890123456', id_user_data: Math.floor(Math.random() * 5) + 1 },
         { name: 'Emily Miller', location: [11.56411, 102.98788], phone_number: '8901234567', id_user_data: Math.floor(Math.random() * 5) + 1 },
