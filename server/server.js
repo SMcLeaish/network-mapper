@@ -10,10 +10,20 @@ const cookieParser = require('cookie-parser')
 const uuid=require('uuid').v4
 app.use(cookieParser())
 
-app.use(cors());
+
+// allows our client to recieve our cookie
+let corsOptions = {
+  origin: 'http://localhost:3000',  //front end url
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  credentials: true,
+}
+
+// corsOptions goes inside of cors
+app.use(cors(corsOptions));
 
 app.use(express.json());
-const sessions={}
+
+
 const options = {
     key: fs.readFileSync(process.env.SSL_KEY_PATH),
     cert: fs.readFileSync(process.env.SSL_CERT_PATH),
@@ -27,11 +37,30 @@ const options = {
 
 const knex = require('knex')(require('./knexfile.js')['development'])
 
+app.get('/cookietest',(req,res)=>{
+  if(req.headers.cookie){
+    console.log("cookie found")
+    const test= req.headers.cookie.split('=')[1]
+    console.log(test.split(";"))
+     const usersession=test.split(";")[0]
+    
+    res.send({success:true})
+  }else{
+    console.log("cookie not found")
+    res.send({success:false})
+  }
+})
+
 app.get('/users', (req, res) => {
-  const test= req.headers.cookie.split('=')[1]
-  console.log(test.split(";"))
-   const usersession=test.split(";")[0]
-  console.log(usersession)
+  if(req.headers.cookie){
+    const test= req.headers.cookie.split('=')[1]
+    console.log(test.split(";"))
+     const usersession=test.split(";")[0]
+    console.log(usersession)
+  }else{
+    res.send({cookie:false})
+  }
+  
   if(usersession)
     {
       knex('user_data')
@@ -85,11 +114,17 @@ app.post('/users', async (req, res) => {
 
 app.post('/users/login', (req, res) => {
   const sessionId= uuid()
-  const username =req.username
-  const id =req.id;
-  sessions[sessionId]={username,userId:id}
-  res.cookie( 'session',sessionId,{secure:true, sameSite:"none"})
-  // res.cookie('name', 'tobi', { domain: '.example.com', path: '/admin', secure: true })
+  res.cookie( 'session',sessionId,{ 
+    
+    httpOnly: true,
+    secure: true,
+    sameSite: 'none',
+    path: '/',
+    expires: 0,
+    signed: false,
+}
+  
+  )
   console.log("logging in cookie made")
   
   knex('user_data')

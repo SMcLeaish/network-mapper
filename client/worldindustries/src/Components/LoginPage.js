@@ -3,21 +3,29 @@ import {Grid,Paper,Avatar,FormControlLabel,Checkbox,Button,TextField,Link,Typogr
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCookies } from "react-cookie"
-
+import "./LoginPage.css"
+import { ToastContainer, toast } from 'react-toastify';
 const Login = () => {
   const [username,setUsername]=useState("")
   const [password,setPassword]=useState("")
   const [email,setEmail]=useState("")
   const [newUser,setNewUser]=useState(false)
-  const [cookie, setCookie] = useCookies(["user"])
+  const [cookie, setCookie] = useState(false)
 
   const navigate=useNavigate()
 
   const handleLogin = async (e) => {
+
     e.preventDefault();
-    console.log("newUser",newUser," email",email," password",password," username",username)
+     fetch("https://localhost:3001/cookietest",{credentials:"include"})
+    .then(res=>res.json())
+    .then(data=>{if(data.success==true){
+        navigate('/map')
+    }})
     
-    newUser===false ?  fetch("https://localhost:3001/users/login",{
+    
+    newUser===false ?  await fetch("https://localhost:3001/users/login",{
+      credentials:"include",
       method:"POST",
       headers:{ 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -27,12 +35,11 @@ const Login = () => {
   })
     .then(res=>res.json())
     .then(data => {
+      console.log("user exists")
       if(data.userExists){
-        navigate("/map")
+        // navigate("/map")
       }
-      // if data.userExists is true, user is valid and logged in
-      // else data.userExists is false, and user is not valid
-      //navigtae("page")
+      
     })
     : 
     fetch("https://localhost:3001/users",{
@@ -45,7 +52,7 @@ const Login = () => {
       })
     })
     .then(res=>{
-      console.log(res)
+      console.log("res",res)
       res.json()
       })
     .then(data => console.log(data))
@@ -65,6 +72,7 @@ const handleNewUser=()=>{
   const paperStyle={padding:50,height:'80vh',width:280,margin:"20px auto"}
   return (
     <>
+    
     {newUser==false ?
     
     <Grid>
@@ -73,9 +81,9 @@ const handleNewUser=()=>{
           <Avatar>Pic</Avatar>
           <h1>Sign In</h1> 
         </Grid>
-        <form onSubmit={handleLogin}>
-          <TextField label='username' placeholder="Username" fullWidth required onChange={(e)=>{setUsername(e.target.value)}}/>
-          <TextField label='password' placeholder="Enter Password" type='password' fullWidth required onChange={(e)=>{setPassword(e.target.value)}} />
+        <form id="form" onSubmit={handleLogin} style={{color:"black"}}>
+          <TextField id="loginText" label='username' placeholder="Username" fullWidth required onChange={(e)=>{setUsername(e.target.value)}} sx={{color:'black !important'}}/>
+          <TextField id="loginText" label='password' placeholder="Enter Password" type='password' fullWidth required onChange={(e)=>{setPassword(e.target.value)}} />
           <FormControlLabel control={<Checkbox  />} label="Remember Me" />          
           <Button type='submit' color='primary' variant='contained' fullWidth onSubmit={handleLogin}>Sign In</Button> 
         </form>

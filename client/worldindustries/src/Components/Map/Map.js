@@ -13,11 +13,48 @@ import { MapController } from '../MapController/MapController';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch'
 import { red } from '@mui/material/colors';
 import { useMap } from 'react-leaflet';
+import { useLocation, useNavigate } from 'react-router-dom';
+import {  toast } from 'react-toastify';
 
 
 const cityList = require('./Chinacities.json')
 
 function Map() {
+    const navigate=useNavigate()
+    
+    useEffect(()=>{
+        fetch("https://localhost:3001/cookietest",{credentials:"include"})
+        .then(res=>res.json())
+        .then(data=>{
+            console.log("data",data)
+            if(data.success){
+                console.log("data",data)
+                toast('Welcome!', {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    });
+            }else{
+                toast("Please sign in", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    });
+                    navigate('/login')
+            }
+    })        
+},[])
+    
     const filterstyle = {
         color: red,
     } 
@@ -94,10 +131,12 @@ function Map() {
         setSearchBox(true)
         }
 
-    
+        
     return (
+        <>
 
         <div className="Map">
+            
             <div className='Container'>
                 <div className='ManageSearch'>
                     <ManageSearchIcon onClick={() => {handleSearch()}}/>
@@ -287,6 +326,7 @@ function Map() {
                 </div>
             </div>
         </div>
+        </>
     );
 }
 
