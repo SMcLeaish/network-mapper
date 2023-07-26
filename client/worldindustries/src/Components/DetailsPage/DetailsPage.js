@@ -33,7 +33,7 @@ const DetailsPage = () => {
   const returnChipsForAssociates = (data) => {
    return data.map((e) => {
       return (
-        <Chip
+        <Chip key={e.entity_id}
             label={e.name}
             onClick={handleClickAssociate}
             onDelete={handleDeleteAssociate}
