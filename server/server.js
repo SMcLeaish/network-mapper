@@ -194,7 +194,7 @@ app.get('/entity/:name', (req, res) => {
     .where({'individual.name': name})
     .then(data => {
       if (data.length !== 0) {
-        knex.select('entity.id AS individual_entity_id', 'individual.name', 'individual.location AS individual_location', 'interaction.weight', 
+        knex.select('entity.id AS individual_entity_id', 'individual.name AS individual_name', 'individual.location AS individual_location', 'interaction.weight', 
         'interaction.id_entity_1', 'interaction.id_entity_2', 'interaction.id_event', 'event.event_name', 
         'event.location AS event_location', 'event.date AS event_date', 'event_type.type AS event_type', 'user_data.username', 'user_data.user_organization')
           .from('individual')
@@ -256,13 +256,43 @@ app.get('/entity/id/:id', (req, res) => {
     })
 })
 
-app.get('/array', (req, res) => {
-    let array = ['John Doe', 'Jane Doe']
+app.get('/relationships/:id', (req, res) => {
+    let { id } = req.params
+    let entityIds = [];
+    let returnData = [];
     knex.select('*')
-      .from('individual')
-      .whereIn('name', array)
-      .then(data => res.status(200).json(data))
+      .from('interaction')
+      .where({'interaction.id_entity_1': id})
+      .orWhere({'interaction.id_entity_2': id})
+      .then(data => {
+        let allIds = []
+        data.forEach(e => {
+          allIds.push(e.id_entity_1)
+          allIds.push(e.id_entity_2)
+        })
+        entityIds = allIds.filter(eId => eId !== parseInt(id))
+      })
+      .then(() => {
+        knex.select('entity.id AS entity_id', '*')
+          .from('entity')
+          .join('individual', 'entity.id_individual', 'individual.id')
+          .whereIn('entity.id', entityIds)
+          .then(data => {
+            data.forEach(e => returnData.push(e))
+          })
+      })
+      .then(() => {
+        knex.select('entity.id AS entity_id', '*')
+          .from('entity')
+          .join('organization', 'entity.id_organization', 'organization.id')
+          .whereIn('entity.id', entityIds)
+          .then(data => {
+            data.forEach(e => returnData.push(e))
+            res.status(200).json(returnData)
+          })
+      })
 })
+
 
 https.createServer(options, app).listen(port, () => {
   console.log('HTTPS server running on port 3001');
