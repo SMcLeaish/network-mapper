@@ -245,6 +245,8 @@ function Map() {
                                         <h1> Search Summary </h1>
                                         <p>Name: {org.name}</p> 
                                         <p>Location: {JSON.stringify(org.location)}</p>
+                                        <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details`,{ state: org.name})}/>
+
 
                                     </>
                                     : console.log(`member not found`)
@@ -259,6 +261,8 @@ function Map() {
                                         <p>Name: {org.event_name}</p> 
                                         <p>Phone: {org.date}</p>
                                         <p>Location: {JSON.stringify(org.location)}</p>
+                                        <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details`,{ state: org.event_name})}/>
+
 
                                     </>
                                     : console.log(`member not found`)
