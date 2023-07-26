@@ -239,15 +239,15 @@ app.get('/relationships/:id', (req, res) => {
           .then(data => {
             data.forEach(e => returnData.push(e))
           })
-      })
-      .then(() => {
-        knex.select('entity.id AS entity_id', '*')
-          .from('entity')
-          .join('organization', 'entity.id_organization', 'organization.id')
-          .whereIn('entity.id', entityIds)
-          .then(data => {
-            data.forEach(e => returnData.push(e))
-            res.status(200).json(returnData)
+          .then(() => {
+            knex.select('entity.id AS entity_id', '*')
+              .from('entity')
+              .join('organization', 'entity.id_organization', 'organization.id')
+              .whereIn('entity.id', entityIds)
+              .then(data => {
+                data.forEach(e => returnData.push(e))
+                res.status(200).json(returnData)
+              })
           })
       })
 })
