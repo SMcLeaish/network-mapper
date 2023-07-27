@@ -1,26 +1,30 @@
 import Graph from 'graphology';
 import closenessCentrality from 'graphology-metrics/centrality/closeness';
 import betweennessCentrality from 'graphology-metrics/centrality/betweenness';
-import degreeCentrality from 'graphology-metrics/centrality/degree';
+//import eigenvectorCentrality from 'graphology-metrics/centrality/eigenvector';
+import {
+    degreeCentrality,
+    inDegreeCentrality,
+    outDegreeCentrality
+} from 'graphology-metrics/centrality/degree';
 
 function constructGraph(data) {
+  const { nodes, edges } = data;
+
   let graph = new Graph();
-  let node = {data.name:WebGLQuery}
-  let nodeSet = new Set();
-  
-  data.forEach(item => {
-    nodeSet.add(item.id_entity_1);
-    nodeSet.add(item.id_entity_2);
+
+  nodes.forEach(node => {
+    graph.addNode(node.id, { 
+      label: node.name,
+      job: node.job,
+      gang: node.gang,
+      crimeRecord: node.crimeRecord,
+      netWorth: node.netWorth
+    });
   });
-  //fetch goes here
-  node = {[data.name]}
-  let nodes = []
-  nodeSet.forEach(nodeId => {
-    graph.addNode(nodeId, { label: nodeId.toString() });
-  });
-  
-  data.forEach(edge => {
-    graph.addEdge(edge.id_entity_1, edge.id_entity_2);
+
+  edges.forEach(edge => {
+    graph.addEdge(edge.source, edge.target, { relationship: edge.relationship });
   });
 
   let nodeClosenessCentralities = closenessCentrality(graph);
@@ -29,19 +33,19 @@ function constructGraph(data) {
   console.log('Betweenness centrality:', nodeBetweennessCentralities);
   let nodeDegreeCentralities = degreeCentrality(graph);
   console.log('Degree centrality:', nodeDegreeCentralities);
-  
-  let updatedNodes = Array.from(nodeSet).map(nodeId => {
+ // let nodeEigenVectorCentralities = eigenvectorCentrality(graph);
+  //  console.log('Degree centrality:', nodeEigenVectorCentralities);
+  let updatedNodes = nodes.map(node => {
     return {
-      id: nodeId,
-      label: nodeId.toString(),
-      degreeCentrality: nodeDegreeCentralities[nodeId],
-      closenessCentrality: nodeClosenessCentralities[nodeId],
-      betweennessCentrality: nodeBetweennessCentralities[nodeId]
+      ...node,
+      degreeCentrality:nodeDegreeCentralities[node.id],
+      closenessCentrality: nodeClosenessCentralities[node.id],
+      betweennessCentrality: nodeBetweennessCentralities[node.id],
+   //   eigenVectorCentrality: nodeEigenVectorCentralities[node.id],
     }
   });
-
   console.log('Updated nodes:', updatedNodes);
   console.log('Graph:', graph.export())
-  return { updatedNodes, edges: data };
+  return { updatedNodes, edges };
 }
 export default constructGraph;

@@ -6,6 +6,7 @@ import cola from 'cytoscape-cola';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import constructGraph from './Graphology';
+import './Graph.css'; 
 cytoscape.use(fcose);
 cytoscape.use(cola);
 
@@ -15,12 +16,11 @@ function Graph() {
 
 	const [currentMetric, setCurrentMetric] = useState('degreeCentrality');  
   const [loading, setLoading] = useState(true);
-//temporary value for search
-	let searchValue='John Doe'
+
 
 
 	useEffect(() => {
-		fetch(`https://localhost:3001/network/${searchValue}`)
+    fetch('https://localhost:3001/network/John Doe')
 			.then(response => response.json())
 			.then(data => {
 				console.log('Data fetched:', data);
@@ -98,7 +98,7 @@ function Graph() {
 		width: '100%',
 		height: '100%',
 		position: 'absolute',
-    fit:'true'
+    fit:true
 	};
 	useEffect(() => {
 		if (cyRef.current) {
