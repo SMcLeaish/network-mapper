@@ -4,6 +4,7 @@ import Map from './Components/Map/Map';
 import { Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Verifyuser from './Components/Verifyuser';
 function App() {
 
 
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path='/login' element={<LoginPage />} />
         <Route path='/map' element={<Map />}/>
+        <Route path='/users/confirm/' element={<Verifyuser />}/>
         
       </Routes>
       <ToastContainer

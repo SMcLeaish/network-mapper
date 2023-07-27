@@ -13,6 +13,8 @@ exports.up = function(knex) {
                 table.string('user_organization');
                 table.string('distinguished_name');
                 table.boolean('cac_approved').defaultTo(false);
+                table.string("emailToken").nullable()
+                table.boolean("isVerified")
             });
         }
     });

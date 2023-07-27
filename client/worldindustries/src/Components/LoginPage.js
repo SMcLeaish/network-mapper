@@ -5,6 +5,12 @@ import { useNavigate } from 'react-router-dom'
 import { useCookies } from "react-cookie"
 import "./LoginPage.css"
 import { ToastContainer, toast } from 'react-toastify';
+
+
+
+
+
+
 const Login = () => {
   const [username,setUsername]=useState("")
   const [password,setPassword]=useState("")
@@ -20,7 +26,7 @@ const Login = () => {
      fetch("https://localhost:3001/cookietest",{credentials:"include"})
     .then(res=>res.json())
     .then(data=>{if(data.success==true){
-        navigate('/map')
+        // navigate('/map')
     }})
     
     
@@ -35,9 +41,19 @@ const Login = () => {
   })
     .then(res=>res.json())
     .then(data => {
-      console.log("user exists")
-      if(data.userExists){
-        // navigate("/map")
+      console.log(data.isVerified)
+      
+      if(data.userExists && data.isVerified==false){
+        toast("Verify your email", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
       }
       
     })
@@ -48,14 +64,15 @@ const Login = () => {
       body: JSON.stringify({
         username:username,
         password:password,
-        email:email
+        email:email,
+        
       })
     })
     .then(res=>{
       console.log("res",res)
       res.json()
       })
-    .then(data => console.log(data))
+    .then(()=> console.log("hi") )
 
     .catch(err => console.log(err))
     
@@ -84,7 +101,7 @@ const handleNewUser=()=>{
         <form id="form" onSubmit={handleLogin} style={{color:"black"}}>
           <TextField id="loginText" label='username' placeholder="Username" fullWidth required onChange={(e)=>{setUsername(e.target.value)}} sx={{color:'black !important'}}/>
           <TextField id="loginText" label='password' placeholder="Enter Password" type='password' fullWidth required onChange={(e)=>{setPassword(e.target.value)}} />
-          <FormControlLabel control={<Checkbox  />} label="Remember Me" />          
+          {/* <FormControlLabel control={<Checkbox  />} label="Remember Me" />           */}
           <Button type='submit' color='primary' variant='contained' fullWidth onSubmit={handleLogin}>Sign In</Button> 
         </form>
         <Button type='NewAccount' color='primary' onClick={()=>handleNewUser()}> New User </Button>
@@ -105,7 +122,7 @@ const handleNewUser=()=>{
         <TextField label='password' placeholder="Enter Password" type='password' fullWidth required onChange={(e)=>{setPassword(e.target.value)}} />
         <TextField label='email' placeholder="Enter Email" type='email' fullWidth required onChange={(e)=>{setEmail(e.target.value)}} />
         <FormControlLabel control={<Checkbox  />} label="Remember Me" />          
-        <Button type='submit' color='primary' variant='contained' fullWidth onSubmit={handleLogin}>Create</Button> 
+        <Button   type='submit' color='primary' variant='contained' fullWidth onSubmit={handleLogin}>Create</Button> 
       </form>
       
       

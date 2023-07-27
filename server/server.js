@@ -4,12 +4,45 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const https = require('https');
 const fs = require('fs');
+const nodemailer=require('nodemailer')
 const app = express();
 const port = 3001;
+const crypto=require("crypto")
 const cookieParser = require('cookie-parser')
 const uuid=require('uuid').v4
-app.use(cookieParser())
 
+app.use(cookieParser())
+// setting up the method to send the email
+
+let transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    type: "OAuth2",
+    user: process.env.EMAIL,
+    pass: process.env.WORD,
+    clientId: process.env.OAUTH_CLIENTID,
+    clientSecret: process.env.OAUTH_CLIENT_SECRET,
+    refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+  },
+ });
+ transporter.verify((err, success) => {
+  err
+    ? console.log(err)
+    : console.log(`=== Server is ready to take messages: ${success} ===`);
+ });
+//  let mailOptions = {
+//   from: "test@gmail.com",
+//   to: process.env.EMAIL,
+//   subject: "Nodemailer API",
+//   text: "Hi from your nodemailer API",
+//  };
+//  transporter.sendMail(mailOptions, function (err, data) {
+//   if (err) {
+//     console.log("Error " + err);
+//   } else {
+//     console.log("Email sent successfully");
+//   }
+//  });
 
 // allows our client to recieve our cookie
 let corsOptions = {
@@ -37,6 +70,14 @@ const options = {
 
 const knex = require('knex')(require('./knexfile.js')['development'])
 
+
+
+
+
+
+
+
+
 app.get('/cookietest',(req,res)=>{
   if(req.headers.cookie){
     console.log("cookie found")
@@ -52,41 +93,56 @@ app.get('/cookietest',(req,res)=>{
 })
 
 app.get('/users', (req, res) => {
-  if(req.headers.cookie){
-    const test= req.headers.cookie.split('=')[1]
-    console.log(test.split(";"))
-     const usersession=test.split(";")[0]
-    console.log(usersession)
-  }else{
-    res.send({cookie:false})
-  }
   
-  if(usersession)
-    {
+    
       knex('user_data')
     .select('*')
     .then(data => res.status(200).send(data))
     .catch(err => res.status(404).send(err))
  
-}});
+});
 
-app.get('')
+
+
+
+// creating the new user and verifying their email
 
 app.post('/users', async (req, res) => {
-  
-  
-  console.log(req.body.password)
+  let token=crypto.randomBytes(64).toString("hex")
+  const link = `${process.env.BASE_URL}/users/confirm/?emailToken=${token}`;
+  let mailOptions = {
+    from: req.body.email,
+    to: process.env.EMAIL,
+    subject: "User Verify",
+    text: link,
+   };
+   
+   transporter.sendMail(mailOptions, link,function (err, data) {
+    
+
+    if (err) {
+      console.log("Error " + err);
+    } else {
+      console.log("Email sent successfully");
+    }
+   });
+
+
+
   try {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
     console.log(hashedPassword)
+    
     const newUser = {
       username: req.body.username,
       hashed_password: hashedPassword,
       email: req.body.email,        
       user_organization: req.body.user_organization,
       distinguished_name: req.body.distinguished_name,
-      cac_approved: req.body.cac_approved
+      cac_approved: req.body.cac_approved,
+      emailToken:token,
+      isVerified:false
     };
     console.log("newuser",newUser)
     knex('user_data')
