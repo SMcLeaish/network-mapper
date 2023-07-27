@@ -19,6 +19,7 @@ import Connections from '../Connections/Connections';
 import EventConnections from '../Connections/EventConnections';
 import GroupsIcon from '@mui/icons-material/Groups'
 import { Circle } from 'react-leaflet';
+import TravelExploreIcon from '@mui/icons-material/TravelExplore'
 
 
 const cityList = require('./Chinacities.json')
@@ -281,7 +282,7 @@ function Map() {
                                     <div className='searchfield'>
                                         <TextField label='Longitude'  onChange={ (e) => setLong(e.target.value)}/>
                                     </div>
-                                    <PersonSearchIcon className='locationSearch' onClick={() => {setCoord([lat, long])}}/>
+                                    <TravelExploreIcon className='locationSearch' onClick={() => {setCoord([lat, long])}}/>
                                 </form>
                             </div>
                         </div>
@@ -342,7 +343,7 @@ function Map() {
                                                         <h3>Name: {feature.name}</h3> 
                                                         <p>Phone: {feature.phone_number}</p>
                                                         <p>Location: {JSON.stringify(feature.location)}</p>
-                                                        <PersonSearchIcon className='' onClick={(e) => navigate(`/details`,{ state: feature.name})}/>
+                                                        <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details`,{ state: feature.name})}/>
                                                     </Popup>
                                                 </Marker>
                                             )},
@@ -362,7 +363,7 @@ function Map() {
                                                      <Popup>
                                                         <h3>Name: {feature.name}</h3> 
                                                         <p>Location: {JSON.stringify(feature.location)}</p>
-                                                        <PersonSearchIcon className='' onClick={(e) => navigate(`/details`,{ state: feature.name})}/>
+                                                        <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details`,{ state: feature.name})}/>
                                                     </Popup>
                                                 </Marker>
                                             )},
@@ -383,7 +384,7 @@ function Map() {
                                                         <h3>Name: {feature.event_name}</h3> 
                                                         <p>Phone: {feature.date}</p>
                                                         <p>Location: {JSON.stringify(feature.location)}</p>
-                                                        <PersonSearchIcon className='' onClick={(e) => navigate(`/details`,{ state: feature.event_name})}/>
+                                                        <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details`,{ state: feature.event_name})}/>
                                                     </Popup>
                                                 </Marker>
                                             )},
