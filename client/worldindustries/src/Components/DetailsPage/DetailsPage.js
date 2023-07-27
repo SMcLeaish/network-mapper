@@ -62,7 +62,7 @@ const DetailsPage = () => {
   }
 
   const returnChipsForAssociates = (data) => {
-   return data.map((e) => {
+    return data.map((e) => {
       return (
         <Chip key={e.entity_id}
             label={e.name}
@@ -75,52 +75,54 @@ const DetailsPage = () => {
 
   const returnNarratives = (data) => {
     return data.map((e) => {
-       return (
+      return (
         <Chip key={e.id}
             label={e.narrative_string}
         />
-       )
-     })
-   }
+      )
+    })
+  }
 
-   const returnEvents = (data) => {
-    return data.map((e) => {
-       return (
-        <Chip key={e.interaction_id}
-            label={e.event_name}
-        />
-       )
-     })
-   }
+  const returnEvents = (data) => {
+    let events = data.map(e => e.event_name)
+    let unique = [...new Set(events)]
+    return unique.map((e) => {
+        return (
+          <Chip key={e}
+              label={e}
+          />
+        )
+    })
+  }
 
-   const returnBiography = (data) => {
+  const returnBiography = (data) => {
     if(data.length > 0) {
       let bio = data[0]
       if (bio.individual_id) {
         return (
-         <div>
+        <div>
           <Chip key={bio.individual_name}
               label={`Name: ${bio.individual_name}`}
           />
           <Chip key={bio.position_id}
               label={`Works for ${bio.org_name}`}
           />
-         </div>
+        </div>
         )
       } else {
         return (
           <div>
-           <Chip key={bio.individual_name}
-               label={`Organization name: ${bio.name}`}
-           />
-           <Chip key={bio.position_id}
-               label={`Type ${bio.type}`}
-           />
+          <Chip key={bio.individual_name}
+              label={`Organization name: ${bio.name}`}
+          />
+          <Chip key={bio.position_id}
+              label={`Organization type: ${bio.type}`}
+          />
           </div>
-         )
+        )
       }
     }
-   }
+  }
 
   return (
       <Container maxWidth='xl' className='details-page-container'>
