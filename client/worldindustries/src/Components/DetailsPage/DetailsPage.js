@@ -39,13 +39,14 @@ const DetailsPage = () => {
           .then(res => res.json())
           .then(data => {
             setEntity(data)
-            fetch(`https://localhost:3001/position/${data[0].org_id}`)
-              .then(res => res.json())
-              .then(data1 => {
-                setBiography(data1)
-            })
           })
       })
+  }, [])
+
+  useEffect(() => {
+    fetch(`https://localhost:3001/biography/${id}`)
+      .then(res => res.json())
+      .then(data => {console.log(data); setBiography(data)})
   }, [])
 
   const handleClickAssociate = () => {
@@ -95,16 +96,29 @@ const DetailsPage = () => {
    const returnBiography = (data) => {
     if(data.length > 0) {
       let bio = data[0]
-      return (
-       <div>
-        <Chip key={bio.position_id}
-            label={`Organization: ${bio.org_name}`}
-        />
-        <Chip key={bio.org_type}
-            label={`Organization type: ${bio.org_type}`}
-        />
-       </div>
-      )
+      if (bio.individual_id) {
+        return (
+         <div>
+          <Chip key={bio.individual_name}
+              label={`Name: ${bio.individual_name}`}
+          />
+          <Chip key={bio.position_id}
+              label={`Works for ${bio.org_name}`}
+          />
+         </div>
+        )
+      } else {
+        return (
+          <div>
+           <Chip key={bio.individual_name}
+               label={`Organization name: ${bio.name}`}
+           />
+           <Chip key={bio.position_id}
+               label={`Type ${bio.type}`}
+           />
+          </div>
+         )
+      }
     }
    }
 
