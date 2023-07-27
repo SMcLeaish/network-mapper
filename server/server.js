@@ -145,6 +145,33 @@ app.get('/position/:id', (req, res) => {
     })
 })
 
+app.get('/biography/:id', (req, res) => {
+  let { id } = req.params;
+  knex.select('entity.id AS entity_id', 'organization.id AS org_id', 'name', 'type', 'mgrs')
+    .from('entity')
+    .where('entity.id', id)
+    .join('organization', 'id_organization', 'organization.id')
+    .join('organization_type', 'organization_type_id', 'organization_type.id')
+    .then(data => {
+      if (data.length > 0) {
+        res.status(200).json(data)
+      } else {
+        knex.select('entity.id AS entity_id', 'individual.id AS individual_id', 'individual.name AS individual_name',
+          'role.title AS job_title', 'responsibilities.name AS job_responsibilities', 'individual.location AS individual_location', 'individual.id_user_data', 'organization.id AS org_id', 'organization.name AS org_name',
+        )
+          .from('entity')
+          .where('entity.id', id)
+          .join('individual', 'entity.id_individual', 'individual.id')
+          .join('position', 'position.individual_id', 'individual.id')
+          .join('organization', 'position.organization_id', 'organization.id')
+          .join('organization_type', 'organization_type_id', 'organization_type.id')
+          .join('role', 'position.role_id', 'role.id')
+          .join('responsibilities', 'role.responsibilities_id', 'responsibilities.id')
+          .then((data) => res.status(200).json(data))
+      }
+    })
+})
+
 
 app.get('/entity/:name', (req, res) => {
   let { name } = req.params
