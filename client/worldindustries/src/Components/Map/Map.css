@@ -159,7 +159,7 @@ color: red !important;
     height: 3rem;
     width: 3rem;
     border-radius: 50%;
-    background-color: green;  
+    background-color: goldenrod;  
     color: black;
     transform: translate(-25%, -25%);
     display: flex;
@@ -178,24 +178,22 @@ color: red !important;
     width: 27.5px;
     background-color: red;
     border-radius: 100px;
-    margin-left: 5px;
-    margin-right:5px
   }
 
   .notActiveLines {
     width: 27.5px;
     background-color: steelblue;
     border-radius: 100px;
-    margin-left: 5px;
-    margin-right:5px
-
   }
 
   .Eventactiveline {
     width: 27.5px;
-    background-color: green;
+    background-color: darkblue;
     border-radius: 100px;
     margin-right: 5px;
+    margin-left: 5px;
+    color: white;
+
   }
 
   .EventnotActiveLines {
@@ -211,5 +209,4 @@ color: red !important;
   width: 27.5px;
   background-color: steelblue;
   border-radius: 100px;
-  margin-left: 5px;
 }

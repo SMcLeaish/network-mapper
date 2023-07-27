@@ -45,7 +45,7 @@ useEffect(() => {
         <div>
                 {entityConnect.map((person) => 
                 (console.log(person.individual_location, person.event_location),
-                <Polyline positions={[person.individual_location, person.event_location]} color="green" />
+                <Polyline positions={[person.individual_location, person.event_location]} color="darkblue" />
 
             ))}
         </div>

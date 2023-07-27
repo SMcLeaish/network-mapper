@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router';
 import Connections from '../Connections/Connections';
 import EventConnections from '../Connections/EventConnections';
 import GroupsIcon from '@mui/icons-material/Groups'
+import { Circle } from 'react-leaflet';
 
 
 const cityList = require('./Chinacities.json')
@@ -262,8 +263,6 @@ function Map() {
                                         <p>Phone: {org.date}</p>
                                         <p>Location: {JSON.stringify(org.location)}</p>
                                         <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details`,{ state: org.event_name})}/>
-
-
                                     </>
                                     : console.log(`member not found`)
                                     )}
@@ -395,7 +394,11 @@ function Map() {
                             </LayersControl>
                             {(poly ? <Connections details={detailsSelect}/> : console.log('no connections'))}
                             {(eventpoly ? <EventConnections details={detailsSelect}/> : console.log('no connections'))}
-
+                            {(targetValue !== '' ?  
+                                <Circle color='blue' fillColor='yellow' weight={2} opacity={.9}center={coord} radius={8000}/>
+                                :
+                                console.log('')
+)}
                             <MapController coord={coord}/>
                             <ScaleControl position='topleft' />    
                         </MapContainer>

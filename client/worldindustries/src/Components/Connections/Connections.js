@@ -56,8 +56,9 @@ console.log(individualConnect, primaryLocation)
             {connectDetails.map((person) => 
             (console.log(person.location, primaryLocation),
                 <Polyline positions={[primaryLocation, person.location]} color="red" />
+            ))
+            }
 
-            ))}
         </div>
         {/* <div>
                 {entityConnect.map((person) => 
