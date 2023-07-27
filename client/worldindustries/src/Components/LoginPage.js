@@ -26,7 +26,7 @@ const Login = () => {
      fetch("https://localhost:3001/cookietest",{credentials:"include"})
     .then(res=>res.json())
     .then(data=>{if(data.success==true){
-        // navigate('/map')
+        setCookie(true)
     }})
     
     
@@ -54,6 +54,8 @@ const Login = () => {
           progress: undefined,
           theme: "light",
           });
+      }else if(data.userExists&&data.isVerified&&cookie){
+          navigate("/map")
       }
       
     })

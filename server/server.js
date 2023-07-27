@@ -212,6 +212,35 @@ app.post('/users/login', (req, res) => {
     .catch(err => res.status(500).send(err))
 });
 
+
+app.put('/users/:id',(req,res)=>{
+  
+  let {id,username,email,user_organization,distinguished_name,cac_approved,emailToken,isVerified}=req.body
+  
+  console.log("Patching")
+  knex('user_data')
+    .where('id',req.body.id)
+    .update({emailToken:null,isVerified:true})
+    .then((rowCount) => {
+      if (rowCount === 0) {
+      return res.status(404).json({
+          message: 'Item not found',
+      });
+      }
+      res.status(200).json({
+      message: 'Item updated successfully',
+      });
+  })
+  .catch((err) =>
+      res.status(500).json({
+      message: 'An error occurred while updating the item',
+      error: err,
+      })
+  );
+})
+
+
+
 app.get('/narratives/:id', (req, res) => {
   let { id } = req.params;
   knex.select('*')
