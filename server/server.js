@@ -255,7 +255,6 @@ app.get('/entity/:name', (req, res) => {
     })
 })
 
-<<<<<<< HEAD
 app.get('/entity/id/:id', (req, res) => {
   let { id } = req.params
   knex.select('*')
@@ -272,7 +271,8 @@ app.get('/entity/id/:id', (req, res) => {
           .where({ 'entity.id': id })
           .then(data => res.status(200).json(data))
       }
-=======
+    })
+  })
 app.get('/relationships/:id', (req, res) => {
   let { id } = req.params
   let entityIds = [];
@@ -305,7 +305,6 @@ app.get('/relationships/:id', (req, res) => {
           data.forEach(e => returnData.push(e))
           res.status(200).json(returnData)
         })
->>>>>>> origin/woller_branch_map
     })
 })
 
