@@ -6,7 +6,7 @@ const https = require('https');
 const fs = require('fs');
 const app = express();
 const port = 3001;
-const startNameQuery = require('./name_query');
+const { startNetworkQuery }= require('./network-query');
 const { eventNames } = require('process');
 app.use(cors());
 app.use(express.json());
@@ -38,8 +38,6 @@ app.get('/network/:name', (req, res) => {
       res.json({
         nodes: nodes,
         edges: edges,
-        total: Array.from(totalEntitiesSet),
-        processed: Array.from(processedSet),
         //names: names
       });
     })
@@ -48,199 +46,6 @@ app.get('/network/:name', (req, res) => {
       console.error(error);
     });
 });
-
-async function startNetworkQuery(name, nodes, edges, totalEntitiesSet, processedSet, names) {
-  try {
-    const rawData = await startNameQuery(name)
-    const node = buildNodeObject(rawData)
-    const nodeExists = nodes.some(existingNode => existingNode.id === node.id);
-
-    if (!nodeExists) {
-      nodes.push(node);
-    }
-
-    let associates = node.associates;
-    console.log(associates)
-    associates.forEach(item => totalEntitiesSet.add(item))
-    totalEntitiesSet.add(node.id)
-    node.associates.forEach(associate => {
-      const edgeExists = edges.some(edge =>
-        (edge.source === node.id && edge.target === associate) ||
-        (edge.source === associate && edge.target === node.id)
-      );
-
-      if (!edgeExists) {
-        edges.push({ source: node.id, target: associate });
-      }
-    });
-    processedSet.add(node.id)
-    let totalEntitiesArray = Array.from(totalEntitiesSet);
-    let processedArray = Array.from(processedSet);
-    let differencesArray = totalEntitiesArray.filter(x => !processedArray.includes(x));
-    let queryResults = await Promise.all(differencesArray.map(id => queryNameByID(id)));
-    queryResults = queryResults.flat();
-    queryResults = queryResults.filter(entity => !processedSet.has(entity.id));
-    names.push(...queryResults);
-    console.log(names)
-    if (names.length > 0) {
-      let newEntry = names.shift();
-      let newName = newEntry[0].name;
-      console.log(newName, typeof (newName))
-      await recursionFunction(newName, nodes, edges, totalEntitiesSet, processedSet, names);
-    }
-    return { nodes, edges, total: Array.from(totalEntitiesSet), processed: Array.from(processedSet) };
-
-
-
-  } catch (error) {
-    console.error({ error: 'An error occurred while fetching data.' })
-  }
-}
-
-async function recursionFunction(name, nodes, edges, totalEntitiesSet, processedSet, names) {
-  if (!name || !nodes || !edges || !totalEntitiesSet || !processedSet || !names || name.length === 0) {
-    console.log("One of the parameters is undefined or newNames is empty");
-    return;
-  }
-
-
-  // Check if totalEntitiesSet and processedSet are equal
-  if (setsAreEqual(totalEntitiesSet, processedSet)) {
-    console.log("totalEntitiesSet and processedSet are equal");
-    return;
-  }
-
-  // If the conditions are not met, call startNetworkQuery
-  return await startNetworkQuery(name, nodes, edges, totalEntitiesSet, processedSet, names);
-
-  // Call recursion function again
-}
-
-// Helper function to check if two sets are equal
-function setsAreEqual(setA, setB) {
-  console.log('Set A: ', setA, 'Set B: ', setB)
-  if (setA.size !== setB.size) {
-    return false;
-  }
-
-  for (let item of setA) {
-    if (!setB.has(item)) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-function buildNodeObject(data) {
-  let consolidatedData = {};
-
-  if (data.length > 0) {
-    let firstEntry = data[0];
-    let nameField = firstEntry.individualName ? 'individualName' : 'orgName';
-    let typeField = firstEntry.individualName ? 'individual' : 'organization';
-    consolidatedData = {
-      id: firstEntry.id,
-      name: firstEntry[nameField],
-      type: typeField,
-      location: firstEntry.individual_location || firstEntry.org_location,
-      weight: firstEntry.weight,
-      username: firstEntry.username,
-      user_organization: firstEntry.user_organization,
-      event_data: [],
-      associates: new Set()
-    };
-  }
-
-  data.forEach(entry => {
-    consolidatedData.event_data.push({
-      event_id: entry.id_event,
-      event_name: entry.event_name,
-      event_location: entry.event_location,
-      event_date: entry.event_date,
-      event_type: entry.event_type
-    });
-
-    consolidatedData.associates.add(entry.id_entity_1);
-    consolidatedData.associates.add(entry.id_entity_2);
-  });
-  consolidatedData.associates = Array.from(consolidatedData.associates).filter(id => id !== consolidatedData.id);
-  return consolidatedData;
-}
-
-
-async function queryNameByID(id) {
-  try {
-    const entityArray = [id]
-    const resultArray = [];
-
-    for (let id of entityArray) {
-      // let data = await knex.select('*')
-      //   .from('entity')
-      //   .join('individual', 'entity.id_individual', 'individual.id')
-      //   .where({ 'entity.id': id });
-
-      // if (data.length !== 0) {
-      //   resultArray.push(data);
-      // } else {
-      //   data = await knex.select('*')
-      //     .from('entity')
-      //     .join('organization', 'entity.id_organization', 'organization.id')
-      //     .where({ 'entity.id': id });
-      //   resultArray.push(data);
-      // }
-      let data = await knex.select('entity.id as entity_id', 'individual.*')
-        .from('entity')
-        .join('individual', 'entity.id_individual', 'individual.id')
-        .where({ 'entity.id': id });
-
-      if (data.length !== 0) {
-        resultArray.push(data);
-      } else {
-        data = await knex.select('entity.id as entity_id', 'organization.*')
-          .from('entity')
-          .join('organization', 'entity.id_organization', 'organization.id')
-          .where({ 'entity.id': id });
-        resultArray.push(data);
-      }
-    }
-    return resultArray;
-  } catch {
-    console.error({ error: 'An error occurred while fetching data.' })
-  }
-}
-
-// async function queryAllNames(initialName) {
-//   const results = [];
-//   const namesQueue = [initialName];
-
-//   while (namesQueue.length > 0) {
-//     const currentName = namesQueue.shift();
-
-//     try {
-//       const { entitySet, nodes, edges, newData, names } = await recursiveQuery(currentName);
-
-//       namesQueue.push(...names);
-
-//       results.push({ entitySet, nodes, edges, newData });
-
-//     } catch (error) {
-//       console.log(`Error while processing name: ${currentName}`);
-//       console.log(error);
-//       // Decide how to handle the error
-//     }
-//   }
-
-//   return results;
-// }
-
-
-
-
-
-
-
-
 
 
 
