@@ -27,11 +27,11 @@ const knex = require('knex')(require('./knexfile.js')['development'])
 
 app.get('/network/:name', (req, res) => {
   const { name } = req.params;
-  const entitySet = new Set();
+  const processedSet = new Set();
   const nodes = [];
   const edges = [];
 
-  recursiveQuery(name, entitySet, nodes, edges)
+  recursiveQuery(name, entitySet, nodes, edges, processedSet)
     .then(data => {
       res.json({nodes: data.nodes, edges: data.edges});
     })
@@ -48,22 +48,47 @@ function buildEntitySet(data, entitySet) {
   });
   return entitySet;
 }
-
-function buildNodes(data, entitySet, nodes) {
-  data.forEach(item => {
-    // if (!nodes.some(node => node.id === item.id)) {
-    const associates = Array.from(entitySet);
-    const node = {
-      name: item.name,
-      individual_location: item.individual_location,
-      associates,
-      events: [item.event_name],
-    };
-    nodes.push(node);
- //} 
-  });
-  return nodes;
-}
+// FIX ME TO ADD ASSOCIATES
+// function buildNodes(data, entitySet, nodes) {
+  function buildNodes(data, nodes, processedSet) {
+    data.forEach(item => {
+      console.log(item);
+      let id, type;
+      if (item.organization_entity_id != undefined){
+        id = item.organization_entity_id;
+        type = 'organization';
+      } else {
+        id = item.individual_entity_id;
+        type = 'individual';
+      }
+  
+      
+      if (processedSet.has(id)) {
+        return;
+      }
+  
+      let existingNode = nodes.find(node => node.id === id);
+      if (existingNode) {
+        existingNode.events.push(item.event_name);
+      } else {
+        const node = {
+          id: id,
+          type: type,
+          name: item.name,
+          individual_location: item.individual_location,
+          //associates,
+          events: [item.event_name],
+        };
+        nodes.push(node);
+        processedSet.add(id);
+        console.log('id:', id);
+        console.log('Set: ', processedSet);
+      }
+    });
+    return nodes;
+  }
+  
+  
 
 function buildEdges(data, edges) {
   data.forEach(item => {
@@ -100,7 +125,7 @@ async function queryNameFromID(entitySet) {
 }
 
 
-async function recursiveQuery(name, entitySet, nodes, edges) {
+async function recursiveQuery(name, entitySet, nodes, edges, processedSet) {
   try {
     let data = await knex.select('*')
       .from('individual')
@@ -138,15 +163,14 @@ async function recursiveQuery(name, entitySet, nodes, edges) {
         .where({ 'individual.name': name });
     }
 
-    const oldSize = entitySet.size;
-    entitySet = buildEntitySet(data, entitySet);
-    const newSize = entitySet.size;
-
-    if (oldSize === newSize) {
-      return { entitySet };
+    buildEntitySet(data, entitySet)
+    
+    console.log('EntitySet:', Array.from(entitySet));
+    console.log('ProcessedNodes:', Array.from(processedSet));
+    nodes = buildNodes(data, nodes, processedSet);
+    if (Array.from(entitySet).every(node => processedSet.has(node))) {
+      return { entitySet, nodes, edges };
     }
-
-    nodes = buildNodes(data, entitySet, nodes);
     edges = buildEdges(data, edges);
     const newData = await queryNameFromID(entitySet);
 
@@ -154,11 +178,11 @@ async function recursiveQuery(name, entitySet, nodes, edges) {
     const names = flatNewData.map(item => item.name);
     const results = [];
     for (let name of names) {
-      const result = await recursiveQuery(name, entitySet, nodes, edges);
+      const result = await recursiveQuery(name, entitySet, nodes, edges, processedSet);
       results.push(result);
     }
 
-    return { entitySet, nodes, edges, newData, results };
+    return { nodes, edges, newData, results };
 
   } catch (error) {
     console.log(error);
