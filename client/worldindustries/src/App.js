@@ -4,6 +4,8 @@ import LoginPage from './Components/LoginPage';
 import Map from './Components/Map/Map';
 import Graph from './Components/Map/Map';
 import { Routes, Route } from 'react-router-dom';
+import Details from './Components/Details/Details';
+
 
 function App() {
   return (

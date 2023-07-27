@@ -6,21 +6,15 @@ const MapController = (props) => {
   let newBounds = map.getBounds();
 
   const flyToDuration = 3;
-    console.log(props.coord);
-    console.log(newBounds)
+    // console.log(props.coord);
+    // console.log(newBounds)
 
   const flyTo = () => {
-    map.flyTo(props.coord, 13, {
+    map.flyTo(props.coord, 9, {
       animate: true,
       duration: flyToDuration,
     });
   };
-
-//   const ShowBounds = () => {
-//     const mMap = useMap();
-//     let newBounds = mMap.getBounds();
-//     console.log(newBounds);
-//     }
 
   useEffect(() => {
     if(props.coord) {
