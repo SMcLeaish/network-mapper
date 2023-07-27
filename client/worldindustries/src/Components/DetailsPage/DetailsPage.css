@@ -14,3 +14,20 @@
 .rounded-button {
   border-radius: 100px !important;
 }
+
+
+.associate-form {
+  display: flex;
+  position: absolute;
+  top: 20%;
+  left: 25%;
+  width: 50%;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1vh;
+  padding: 2%;
+  border: 2px solid turquoise;
+  background-color: bisque;
+}

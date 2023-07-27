@@ -1,5 +1,5 @@
 import './DetailsPage.css';
-import { Container, Grid, Typography, Stack, Button, Chip } from '@mui/material';
+import { Container, Grid, Typography, Stack, Button, Chip, TextField, MenuItem } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -14,11 +14,29 @@ const DetailsPage = () => {
   const [ narratives, setNarratives ] = useState([])
   const [ entity, setEntity ] = useState([])
   const [ biography, setBiography ] = useState([])
+  const [ addAssociateToggle, setAddAssociateToggle ] = useState(false)
+  const [ everyone, setEveryone ] = useState([])
 
   useEffect(() => {
     fetch(`https://localhost:3001/relationships/${id}`)
       .then(res => res.json())
       .then(data => {setAssociates(data)})
+  }, [])
+
+  useEffect(() => {
+    let allData = []
+    fetch(`https://localhost:3001/individuals`)
+      .then(res => res.json())
+      .then(data => data.forEach(e => allData.push(e)))
+      .then(() => {
+        fetch(`https://localhost:3001/organizations`)
+          .then(res => res.json())
+          .then(data => {
+            data.forEach(e => allData.push(e))
+            setEveryone(allData)
+          })
+      })
+    
   }, [])
 
   useEffect(() => {
@@ -46,11 +64,11 @@ const DetailsPage = () => {
   useEffect(() => {
     fetch(`https://localhost:3001/biography/${id}`)
       .then(res => res.json())
-      .then(data => {console.log(data); setBiography(data)})
+      .then(data => setBiography(data))
   }, [])
 
   const handleClickAssociate = () => {
-    console.log('clicked associate');
+    console.log(everyone);
   }
 
   const handleDeleteAssociate = () => {
@@ -58,7 +76,8 @@ const DetailsPage = () => {
   }
 
   const handleAddAssociate = () => {
-    console.log('added associate');
+    console.log(addAssociateToggle);
+    setAddAssociateToggle(!addAssociateToggle)
   }
 
   const returnChipsForAssociates = (data) => {
@@ -124,8 +143,42 @@ const DetailsPage = () => {
     }
   }
 
+  const renderAssociateForm = (check) => {
+    if (check) {
+      return (
+        <div className='associate_form_container'>
+          <form className='associate-form'>
+            <TextField
+              id="outlined-select"
+              select
+              label="Select"
+              helperText="Please select your associate"
+              defaultValue=''
+              onChange={(e) => console.log(e.target.value)}
+            >
+                {everyone.map(person => (
+                  <MenuItem key={person.name} value={person.name}>
+                    {person.name}
+                  </MenuItem>
+                ))}
+            </TextField>
+            <Button
+                  variant="outlined"
+                  startIcon={<AddCircleIcon />}
+                  className='rounded-button'
+                  onClick={() => console.log()}
+                  >
+                  Add Associate
+            </Button>
+          </form>
+        </div>
+      )
+    }
+  }
+
   return (
       <Container maxWidth='xl' className='details-page-container'>
+        {renderAssociateForm(addAssociateToggle)}
         <Grid container>
           <Grid container item xs={6}>
             <Grid item xs={5} className='details-item-container'>
