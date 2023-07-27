@@ -53,25 +53,38 @@ async function startNetworkQuery(name, nodes, edges, totalEntitiesSet, processed
   try {
     const rawData = await startNameQuery(name)
     const node = buildNodeObject(rawData)
+    const nodeExists = nodes.some(existingNode => existingNode.id === node.id);
+
+    if (!nodeExists) {
+      nodes.push(node);
+    }
+
     let associates = node.associates;
     console.log(associates)
     associates.forEach(item => totalEntitiesSet.add(item))
     totalEntitiesSet.add(node.id)
     node.associates.forEach(associate => {
-      edges.push({ source: node.id, target: associate });
-    })
-    nodes.push(node)
+      const edgeExists = edges.some(edge =>
+        (edge.source === node.id && edge.target === associate) ||
+        (edge.source === associate && edge.target === node.id)
+      );
+
+      if (!edgeExists) {
+        edges.push({ source: node.id, target: associate });
+      }
+    });
     processedSet.add(node.id)
     let totalEntitiesArray = Array.from(totalEntitiesSet);
     let processedArray = Array.from(processedSet);
     let differencesArray = totalEntitiesArray.filter(x => !processedArray.includes(x));
     let queryResults = await Promise.all(differencesArray.map(id => queryNameByID(id)));
     queryResults = queryResults.flat();
+    queryResults = queryResults.filter(entity => !processedSet.has(entity.id));
     names.push(...queryResults);
     console.log(names)
     if (names.length > 0) {
-      let newEntry = names.shift(); // This removes the first array from names and assigns it to newEntry
-      let newName = newEntry[0].name; // This gets the name property of the first object in newEntry
+      let newEntry = names.shift();
+      let newName = newEntry[0].name;
       console.log(newName, typeof (newName))
       await recursionFunction(newName, nodes, edges, totalEntitiesSet, processedSet, names);
     }
@@ -83,6 +96,7 @@ async function startNetworkQuery(name, nodes, edges, totalEntitiesSet, processed
     console.error({ error: 'An error occurred while fetching data.' })
   }
 }
+
 async function recursionFunction(name, nodes, edges, totalEntitiesSet, processedSet, names) {
   if (!name || !nodes || !edges || !totalEntitiesSet || !processedSet || !names || name.length === 0) {
     console.log("One of the parameters is undefined or newNames is empty");
