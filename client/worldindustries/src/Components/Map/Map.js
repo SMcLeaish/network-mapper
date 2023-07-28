@@ -25,6 +25,7 @@ import { mgrs, forward, toPoint } from 'mgrs';
 
 const cityList = require('./Chinacities.json')
 
+//this is a small change
 function Map() {
     const filterstyle = {
         color: red,
