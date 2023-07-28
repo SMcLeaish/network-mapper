@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "knex migrate:latest && knex seed:run && nodemon server.js",
+    "start": "knex migrate:rollback && knex migrate:latest && knex seed:run && nodemon server.js",
     "start-dev": "knex migrate:rollback && knex migrate:latest && knex seed:run && nodemon server.js"
   },
   "keywords": [],

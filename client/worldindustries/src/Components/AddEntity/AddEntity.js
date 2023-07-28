@@ -1,5 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './AddEntity.css';
+import { styled, TextField, Box, Button, Container, Grid, Paper } from '@mui/material';
+import { createFilterOptions } from '@mui/material/Autocomplete';
+
 
 //  ADD ENTITY - PARENT FUNCTION
 const AddEntity = () => {
@@ -8,11 +11,33 @@ const AddEntity = () => {
     const [organization, setOrganization] = useState('');
     const [association, setAssociation] = useState('');
     const [events, setEvents] = useState('');
+    const [name, setName] = useState('')
 
     //  UPLOAD PHOTO - CHILD FUNCTION
     const profilePictureUpload = (event) => {
         const file = event.target.files[0];
         setProfilePicture(file);
+    };
+
+    //  SET NAME - CHILD FUNCTION
+    const SettingName = () => {
+        useEffect(() => {
+            fetch('http://localhost:8080/name/')
+            .then(response => response.json())
+            .then(data => setName(data))
+            .catch(error => console.log(error));
+        }, []);
+
+        return (
+            <div>
+                <h3>
+                    Name
+                </h3>
+                <p>
+                    { name }
+                </p>
+            </div>
+        );
     };
 
     //  SET ORGANIZATION - CHILD FUNCTION
@@ -44,7 +69,7 @@ const AddEntity = () => {
         const maxCharacters = 500;
         const remainingCharacters = maxCharacters - narrative.length;
         
-        return (
+            return (
             <div>
                 <textarea value={narrative} onChange={narrativeUpdate} maxLength={maxCharacters} />
                 <div>
@@ -54,7 +79,7 @@ const AddEntity = () => {
         )
     }
 
-    return (
+      return (
         <div>
             <header>
                 <h1>
@@ -76,6 +101,9 @@ const AddEntity = () => {
                 <input type='file' accept='image/*' onChange={profilePictureUpload} />
             </div>
             <div>
+                <SettingName />
+            </div>
+            <div>
                 <h3>
                     Organization:
                 </h3>
@@ -84,13 +112,24 @@ const AddEntity = () => {
             <div>
                 <h3>
                     Association:
+                    <Grid container spacing={4}>
+
+
+                    </Grid>
                 </h3>
                 <input type='text' value={association} onChange={settingAssociation} />
             </div>
             <div>
-                <h3>
-                    Events:
-                </h3>
+                <h3> Events </h3>
+                {/* <Autocomplete
+                  disablePortal
+                  id="events-box"
+                // options={Events}
+                sx={{ width: 300 }}
+                renderInput={(params) => 
+                <TextField {...params} label="Movie" />}
+                   /> */}
+                
                 <input type='text' value={events} onChange={settingEvents} />
             </div>
             <div>
@@ -99,9 +138,10 @@ const AddEntity = () => {
                 </h3>
                 <SettingNarrative />
             </div>
-            <button onClick={AddEntity}>
-                Save
-            </button>
+            <Button onClick={AddEntity} class="mdc-button mdc-button-outlined">
+              <span class="mdc-button__label">Outlined Button </span>
+                 Save
+            </Button>
         </div>
 
     )
