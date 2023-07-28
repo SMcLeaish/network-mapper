@@ -216,6 +216,13 @@ color: red !important;
   border-radius: 100px;
 }
 
+.OrgDetailsIcon {
+  width: 27.5px;
+  background-color: steelblue;
+  border-radius: 100px;
+  margin-left: 5px;
+}
+
 .mgrsConversion {
   background-color: #F8F4E3;
   border-radius: 5px;

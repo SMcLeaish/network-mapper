@@ -290,7 +290,7 @@ function Map() {
                                         <p>Name: {org.name}</p> 
                                         <p>Location: {JSON.stringify(org.location)}</p>
                                         <ShareIcon className= {Orgpoly ? 'activelines' : 'notActiveLines'} onClick={() => {setOrgPolyLine(!Orgpoly)}}/>
-                                        <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details`,{ state: org.name})}/>
+                                        <PersonSearchIcon className='OrgDetailsIcon' onClick={(e) => navigate(`/details`,{ state: org.name})}/>
 
 
                                     </>
@@ -347,7 +347,7 @@ function Map() {
                     <div>
                         <MapContainer center={[13.57406,108.18783]} zoom={6} ref={mapRef} id='map'>
                             <LayersControl>
-                                <BaseLayer checked name="OpenStreetMap">
+                                <BaseLayer name="OpenStreetMap">
                                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; <a href=&quot;https://www.openstreetmap.org/copyright&quot;>OpenStreetMap</a> contributors" />
                                 </BaseLayer>
 
@@ -375,7 +375,7 @@ function Map() {
                                     />
                                 </BaseLayer>
 
-                                <BaseLayer name="Terrain">
+                                <BaseLayer checked name="Terrain">
                                     <TileLayer
                                     url='http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}'
                                         maxZoom= {20}
@@ -432,7 +432,7 @@ function Map() {
                                                      <Popup>
                                                         <h3>Name: {feature.name}</h3> 
                                                         <p>Location: {JSON.stringify(feature.location)}</p>
-                                                        <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details`,{ state: feature.name})}/>
+                                                        <PersonSearchIcon className='OrgDetailsIcon' onClick={(e) => navigate(`/details`,{ state: feature.name})}/>
                                                     </Popup>
                                                 </Marker>
                                             )},
