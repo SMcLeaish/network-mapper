@@ -109,27 +109,26 @@ const AddEntity = () => {
                 </h3>
                 <input type='text' value={organization} onChange={settingOrganization} />
             </div>
+                 <Container maxWidth="lg">
+                 <h3> Association </h3> 
+                 
+                 
+                 
+                 </Container>
+           
+           
             <div>
-                <h3>
-                    Association:
-                    <Grid container spacing={4}>
-
-
-                    </Grid>
-                </h3>
+                
+                     
                 <input type='text' value={association} onChange={settingAssociation} />
             </div>
             <div>
                 <h3> Events </h3>
-                {/* <Autocomplete
-                  disablePortal
-                  id="events-box"
-                // options={Events}
-                sx={{ width: 300 }}
-                renderInput={(params) => 
-                <TextField {...params} label="Movie" />}
-                   /> */}
-                
+                <Grid item xs={7} className='details-item-container'>
+            <Box className='events-box'>
+           
+            </Box>
+          </Grid>
                 <input type='text' value={events} onChange={settingEvents} />
             </div>
             <div>
