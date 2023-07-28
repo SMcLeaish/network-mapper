@@ -1,23 +1,22 @@
 import React, { useEffect } from 'react'
-import {Grid,Paper,Avatar,FormControlLabel,Checkbox,Button,TextField,Link,Typography} from '@mui/material'
+import {Grid,Paper,Avatar,FormControlLabel,Checkbox,Button,TextField} from '@mui/material'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useCookies } from "react-cookie"
 import "./LoginPage.css"
-import { ToastContainer, toast } from 'react-toastify';
-import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
+import { toast } from 'react-toastify';
+
 
 
 
 
 
 const Login = () => {
+
+
   const [username,setUsername]=useState("")
   const [password,setPassword]=useState("")
   const [email,setEmail]=useState("")
   const [newUser,setNewUser]=useState(false)
-  // const [cookie, setCookie] = useState(false)
-
   const navigate=useNavigate()
 
 
@@ -34,12 +33,9 @@ useEffect(()=>{
 
 
   const handleLogin = async (e) => {
-
     e.preventDefault();
 
-     
-    
-    
+    // are you a new user or are you signing in
     newUser===false ?  await fetch("https://localhost:3001/users/login",{
       credentials:"include",
       method:"POST",
@@ -51,14 +47,23 @@ useEffect(()=>{
   })
     .then(res=>res.json())
     .then(data => {
-      console.log(data)
       if(data.userExists&&data.isVerified){
-        //make the cookie 
         navigate("/map")
     }
       else if(data.userExists){
-        console.log("here")
         toast("Verify your email", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+      }
+      else{
+        toast("User not found, create an account", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -82,24 +87,23 @@ useEffect(()=>{
       })
     })
     .then(res=>{
-      console.log("res",res)
       res.json()
       })
     .then(()=> console.log("hi") )
 
     .catch(err => console.log(err))
-    
-    
- 
- 
-    
-    // fetch and set body to the parameters
   }
+
+
+ // clicking on New user
+
 const handleNewUser=()=>{
   setNewUser(true)
 }
 
+
   const paperStyle={padding:50,height:'80vh',width:280,margin:"20px auto"}
+
   return (
     <>
     
