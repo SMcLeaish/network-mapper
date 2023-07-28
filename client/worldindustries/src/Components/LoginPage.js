@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import "./LoginPage.css"
 import { toast } from 'react-toastify';
-
+import PasswordStrengthBar from 'react-password-strength-bar';
 
 
 
@@ -118,6 +118,7 @@ const handleNewUser=()=>{
         <form id="form" onSubmit={handleLogin} style={{color:"black"}}>
           <TextField id="loginText" label='username' placeholder="Username" fullWidth required onChange={(e)=>{setUsername(e.target.value)}} sx={{color:'black !important'}}/>
           <TextField id="loginText" label='password' placeholder="Enter Password" type='password' fullWidth required onChange={(e)=>{setPassword(e.target.value)}} />
+          
           {/* <FormControlLabel control={<Checkbox  />} label="Remember Me" />           */}
           <Button type='submit' color='primary' variant='contained' fullWidth onSubmit={handleLogin}>Sign In</Button> 
         </form>
@@ -137,6 +138,7 @@ const handleNewUser=()=>{
       <form onSubmit={handleLogin}>
         <TextField label='username' placeholder="Username" fullWidth required onChange={(e)=>{setUsername(e.target.value)}}/>
         <TextField label='password' placeholder="Enter Password" type='password' fullWidth required onChange={(e)=>{setPassword(e.target.value)}} />
+        <PasswordStrengthBar password={password} />
         <TextField label='email' placeholder="Enter Email" type='email' fullWidth required onChange={(e)=>{setEmail(e.target.value)}} />
         <FormControlLabel control={<Checkbox  />} label="Remember Me" />          
         <Button   type='submit' color='primary' variant='contained' fullWidth onSubmit={handleLogin}>Create</Button> 
