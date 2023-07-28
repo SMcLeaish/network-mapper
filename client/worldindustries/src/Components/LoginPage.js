@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {Grid,Paper,Avatar,FormControlLabel,Checkbox,Button,TextField,Link,Typography} from '@mui/material'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCookies } from "react-cookie"
 import "./LoginPage.css"
 import { ToastContainer, toast } from 'react-toastify';
-
+import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
 
 
 
@@ -16,18 +16,28 @@ const Login = () => {
   const [password,setPassword]=useState("")
   const [email,setEmail]=useState("")
   const [newUser,setNewUser]=useState(false)
-  const [cookie, setCookie] = useState(false)
+  // const [cookie, setCookie] = useState(false)
 
   const navigate=useNavigate()
+
+
+
+// check if your cookie session exists on entry
+useEffect(()=>{
+  fetch("https://localhost:3001/cookietest",{credentials:"include"})
+  .then(res=>res.json())
+  .then(data=>{if(data.success==true){
+      (navigate("/map"))
+  }})
+},[])
+
+
 
   const handleLogin = async (e) => {
 
     e.preventDefault();
-     fetch("https://localhost:3001/cookietest",{credentials:"include"})
-    .then(res=>res.json())
-    .then(data=>{if(data.success==true){
-        setCookie(true)
-    }})
+
+     
     
     
     newUser===false ?  await fetch("https://localhost:3001/users/login",{
@@ -41,9 +51,13 @@ const Login = () => {
   })
     .then(res=>res.json())
     .then(data => {
-      console.log(data.isVerified)
-      
-      if(data.userExists && data.isVerified==false){
+      console.log(data)
+      if(data.userExists&&data.isVerified){
+        //make the cookie 
+        navigate("/map")
+    }
+      else if(data.userExists){
+        console.log("here")
         toast("Verify your email", {
           position: "top-center",
           autoClose: 5000,
@@ -54,10 +68,7 @@ const Login = () => {
           progress: undefined,
           theme: "light",
           });
-      }else if(data.userExists&&data.isVerified&&cookie){
-          navigate("/map")
       }
-      
     })
     : 
     fetch("https://localhost:3001/users",{
@@ -132,6 +143,7 @@ const handleNewUser=()=>{
 
   </Grid>
     }
+    
     </>
   );
 }

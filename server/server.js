@@ -170,34 +170,33 @@ app.post('/users', async (req, res) => {
 
 app.post('/users/login', (req, res) => {
   const sessionId= uuid()
-  res.cookie( 'session',sessionId,{ 
-    
-    httpOnly: true,
-    secure: true,
-    sameSite: 'none',
-    path: '/',
-    expires: 0,
-    signed: false,
-}
   
-  )
-  console.log("logging in cookie made")
   
-  knex('user_data')
+    knex('user_data')
     .select('*')
     .where('username', req.body.username)
     .then(data => {
+      
       if (data.length > 0) {
         bcrypt.compare(req.body.password, data[0].hashed_password)
           .then(found => {
-            if (found) {
+            if (found&&data[0].isVerified) {
+              res.cookie( 'session',sessionId,{ 
+    
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none',
+                path: '/',
+                expires: 0,
+                signed: false,
+            })
               let responseObj = {
                 userExists: found,
                 ...data[0]
               }
               res.send(responseObj);
-            } else {
-              
+            } else{
+              console.log(found)
               let responseObj = {
                 userExists: found
               }
@@ -215,7 +214,7 @@ app.post('/users/login', (req, res) => {
 
 app.put('/users/:id',(req,res)=>{
   
-  let {id,username,email,user_organization,distinguished_name,cac_approved,emailToken,isVerified}=req.body
+  
   
   console.log("Patching")
   knex('user_data')
