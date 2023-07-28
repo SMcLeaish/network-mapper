@@ -1,9 +1,8 @@
 import './DetailsPage.css';
-import { Container, Grid, Typography, Stack, Button, Chip, TextField, MenuItem, Popper, Box, Card } from '@mui/material';
+import { Container, Grid, Typography, Stack, Button, Chip, TextField, MenuItem, Card } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import AddAssociateForm from './AddAssociateForm';
 
 
 const placeholderImg = 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80';
@@ -17,11 +16,24 @@ const DetailsPage = () => {
   const [ biography, setBiography ] = useState([])
   const [ addAssociateToggle, setAddAssociateToggle ] = useState(false)
   const [ everyone, setEveryone ] = useState([])
+  const [ events, setEvents ] = useState([])
+  const [ associateToAdd, setAssociateToAdd ] = useState({
+    weight: 1,
+    id_entity_1: parseInt(id),
+    id_entity_2: 0,
+    id_event: 1
+  })
 
   useEffect(() => {
     fetch(`https://localhost:3001/relationships/${id}`)
       .then(res => res.json())
       .then(data => {setAssociates(data)})
+  }, [id])
+
+  useEffect(() => {
+    fetch(`https://localhost:3001/events`)
+      .then(res => res.json())
+      .then(data => {setEvents(data)})
   }, [])
 
   useEffect(() => {
@@ -48,7 +60,7 @@ const DetailsPage = () => {
         narrativesToAdd = data.filter(e => e.id_entity === parseInt(id))
         setNarratives(narrativesToAdd)
       })
-  }, [])
+  }, [id])
 
   useEffect(() => {
     fetch(`https://localhost:3001/entity/id/${id}`)
@@ -60,15 +72,13 @@ const DetailsPage = () => {
             setEntity(data)
           })
       })
-  }, [])
+  }, [id])
 
   useEffect(() => {
     fetch(`https://localhost:3001/biography/${id}`)
       .then(res => res.json())
       .then(data => setBiography(data))
-  }, [])
-
-  const [anchorEl, setAnchorEl] = useState(null);
+  }, [id])
 
   const handleClickAssociate = () => {
     console.log(everyone);
@@ -134,30 +144,65 @@ const DetailsPage = () => {
       } else {
         return (
           <div>
-          <Chip key={bio.individual_name}
-              label={`Organization name: ${bio.name}`}
-          />
-          <Chip key={bio.position_id}
-              label={`Organization type: ${bio.type}`}
-          />
+            <Chip key={bio.individual_name}
+                label={`Organization name: ${bio.name}`}
+            />
+            <Chip key={bio.position_id}
+                label={`Organization type: ${bio.type}`}
+            />
           </div>
         )
       }
     }
   }
 
+  const handleChangeForFormEntity = (e) => {
+    console.log(e.target.value)
+    fetch(`https://localhost:3001/entity/${e.target.value}`)
+      .then(res => res.json())
+      .then(data => {
+        let entity2 = data[0].primary_entity_id;
+        let obj = {...associateToAdd}
+        obj.id_entity_2 = entity2
+        setAssociateToAdd(obj)
+        // console.log(obj)
+      })
+  }
+
+  const handleChangeForFormEvent = (e) => {
+    let event = e.target.value
+    console.log(event)
+    let obj = {...associateToAdd}
+    obj.id_event = event.id
+    setAssociateToAdd(obj)
+    console.log(associateToAdd)
+  }
+
+  const handleOnSubmitForm = () => {
+    let init = {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(associateToAdd)
+    }
+    fetch('https://localhost:3001/interaction', init)
+      .then(res => res.json)
+      .then(data => console.log(data))
+  }
+
   const renderAssociateForm = (check) => {
     if (check) {
       return (
         <div className='associate_form_container'>
-          <form className='associate-form'>
+          <form className='associate-form' onSubmit={() => handleOnSubmitForm()}>
             <TextField
-              id="outlined-select"
+              id="id_entity_2"
               select
               label="Select"
               helperText="Please select your associate"
               defaultValue=''
-              onChange={(e) => console.log(e.target.value)}
+              onChange={(e) => handleChangeForFormEntity(e)}
             >
                 {everyone.map(person => (
                   <MenuItem key={person.name} value={person.name}>
@@ -165,11 +210,25 @@ const DetailsPage = () => {
                   </MenuItem>
                 ))}
             </TextField>
+            <TextField
+              id="id_event"
+              select
+              label="Select"
+              helperText="Please select the event"
+              defaultValue=''
+              onChange={(e) => handleChangeForFormEvent(e)}
+            >
+                {events.map(event => (
+                  <MenuItem key={event.event_name} value={event}>
+                    {event.event_name}
+                  </MenuItem>
+                ))}
+            </TextField>
             <Button
                   variant="outlined"
                   startIcon={<AddCircleIcon />}
                   className='rounded-button'
-                  onClick={() => console.log()}
+                  type='submit'
                   >
                   Add Associate
             </Button>
@@ -179,22 +238,67 @@ const DetailsPage = () => {
     }
   }
 
-  const handleClickAddAssociate = (event) => {
-    setAnchorEl(anchorEl ? null : event.currentTarget);
-
-  }
-
-  const open = Boolean(anchorEl);
-  const idOpen = open ? 'simple-popper' : undefined;
-
-  // const card = () => {
-  //   fetch(" ") 
-  // //     .then((response) => response.json())
-  // //     .then(data => setUserData(data))
-  //  }
-
   return (
-      // <Container maxWidth='xl' className='details-page-container'>
+    <Container maxWidth='xl' className='details-page-container'>
+      {renderAssociateForm(addAssociateToggle)}
+      <Grid container>
+        <Grid container item xs={6}>
+          <Grid item xs={5} className='details-item-container'>
+            <img src={placeholderImg} alt="user" className='details-image' />
+          </Grid>
+          <Grid item xs={7} className='details-page-container'>
+            <Card sx={{ maxHeight: 50 }}>
+              <h2>User Profile</h2> 
+            </Card> 
+            {returnBiography(biography)}
+          </Grid>
+          <Grid item xs={12} className='details-item-container'>
+            <img src={placeholderMap} alt="map" className='details-image' />
+              details-page
+          </Grid>
+        </Grid>
+        <Grid container item xs={6}>
+          <Grid item xs={12} className='details-item-container'>
+            <Stack direction='row' justifyContent='space-between' alignItems={'center'}>
+              <Typography variant='h4' gutterBottom>
+                Known Associates
+              </Typography>
+              <Button
+                variant="outlined"
+                startIcon={<AddCircleIcon />}
+                onClick={handleAddAssociate}
+                className='rounded-button'>
+                Add Associate
+              </Button>
+            </Stack>
+            <Stack direction='row' spacing={1} useFlexGap flexWrap={'wrap'}>
+              {returnChipsForAssociates(associates)}
+            </Stack>
+          </Grid>
+          <Grid item xs={12} className='details-item-container'>
+            <Typography variant='h4' gutterBottom>
+                Events
+            </Typography>
+            {returnEvents(entity)}
+          </Grid>
+          <Grid item xs={12} className='details-item-container'>
+            <Typography variant='h4' gutterBottom>
+              Narrative
+            </Typography>
+            <Typography variant='body1' gutterBottom>
+            </Typography>
+              {returnNarratives(narratives)}
+          </Grid>
+        </Grid>
+      </Grid>
+    </Container>
+  );
+}
+
+export default DetailsPage;
+
+
+// <Container maxWidth='xl' className='details-page-container'>
       //   {renderAssociateForm(addAssociateToggle)}
       //   <Grid container>
       //     <Grid container item xs={6}>
@@ -242,64 +346,3 @@ const DetailsPage = () => {
       //         {returnNarratives(narratives)}
       //       </Grid>
       //   </Container>
-    <Container maxWidth='xl' className='details-page-container'>
-      {renderAssociateForm(addAssociateToggle)}
-      <Grid container>
-        <Grid container item xs={6}>
-          <Grid item xs={5} className='details-item-container'>
-            <img src={placeholderImg} alt="user" className='details-image' />
-          </Grid>
-          <Grid item xs={7} className='details-page-container'>
-            <Card sx={{ maxHeight: 50 }}>
-              <h2>User Profile</h2> 
-            </Card> 
-            {returnBiography(biography)}
-          </Grid>
-          <Grid item xs={12} className='details-item-container'>
-            <img src={placeholderMap} alt="map" className='details-image' />
-              details-page
-          </Grid>
-        </Grid>
-        <Grid container item xs={6}>
-          <Grid item xs={12} className='details-item-container'>
-            <Stack direction='row' justifyContent='space-between' alignItems={'center'}>
-              <Typography variant='h4' gutterBottom>
-                Known Associates
-              </Typography>
-              <Button
-                variant="outlined"
-                startIcon={<AddCircleIcon />}
-                // onClick={handleClickAddAssociate}
-                onClick={handleAddAssociate}
-                className='rounded-button'>
-                Add Associate
-              </Button>
-              <Popper id={id} open={open} anchorEl={anchorEl}>
-                <AddAssociateForm />
-              </Popper>
-            </Stack>
-            <Stack direction='row' spacing={1} useFlexGap flexWrap={'wrap'}>
-              {returnChipsForAssociates(associates)}
-            </Stack>
-          </Grid>
-          <Grid item xs={12} className='details-item-container'>
-            <Typography variant='h4' gutterBottom>
-                Events
-            </Typography>
-            {returnEvents(entity)}
-          </Grid>
-          <Grid item xs={12} className='details-item-container'>
-            <Typography variant='h4' gutterBottom>
-              Narrative
-            </Typography>
-            <Typography variant='body1' gutterBottom>
-              {returnNarratives(narratives)}
-            </Typography>
-          </Grid>
-        </Grid>
-      </Grid>
-    </Container>
-  );
-}
-
-export default DetailsPage;
