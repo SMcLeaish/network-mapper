@@ -142,6 +142,14 @@ function Map() {
     const handleSearch = () => {
         setSearchBox(true)
         }
+
+    const resetPolyLines = () => {
+        seteventPolyLine(false);
+        setPolyLine(false);
+        setOrgPolyLine(false)
+    }
+
+
     console.log(`detailsSelect = ${detailsSelect}`)
     return (
         <div className="Map">
@@ -176,8 +184,7 @@ function Map() {
                                                 // setTargetValue('')
                                                 setTargetValue(newtargetValue);
                                                 setDetailsSelect(newtargetValue);
-                                                seteventPolyLine(false);
-                                                setPolyLine(false);
+                                                resetPolyLines()
                                                 // setCoord([29.304, 103.312]);
                                                 // setZoom(7)
                                                 individualData.find(info => (info.label === newtargetValue) ?  setCoord(info.location) : console.log())}
@@ -195,6 +202,8 @@ function Map() {
                                                 onInputChange={(event, newtargetValue) => {
                                                     setTargetValue(newtargetValue);
                                                     setDetailsSelect(newtargetValue);
+                                                    resetPolyLines()
+
                                                     // setCoord([29.304, 103.312]);
                                                     // setZoom(7)
                                                     OrganizationData.find(info => (info.label === newtargetValue) ?  setCoord(info.location) : console.log())}
@@ -210,6 +219,8 @@ function Map() {
                                             onInputChange={(event, newtargetValue) => {
                                                 setTargetValue(newtargetValue);
                                                 setDetailsSelect(newtargetValue);
+                                                resetPolyLines()
+
                                                 // setCoord([29.304, 103.312]);
                                                 // setZoom(7)
                                                 EventData.find(info => (info.label === newtargetValue) ?  setCoord(info.location) : console.log())}
