@@ -1,5 +1,7 @@
 require('dotenv').config();
-const knex = require('knex')(require('./knexfile.js')['development'])
+const mgrs = require('mgrs');
+const knex = require('knex')
+(require('./knexfile.js')['development'])
 
 async function startNameQuery(name) {
     try {
@@ -55,7 +57,7 @@ async function startNameQuery(name) {
       }
   
       let associates = node.associates;
-      console.log(associates)
+  
       associates.forEach(item => totalEntitiesSet.add(item))
       totalEntitiesSet.add(node.id)
       node.associates.forEach(associate => {
@@ -76,7 +78,6 @@ async function startNameQuery(name) {
       queryResults = queryResults.flat();
       queryResults = queryResults.filter(entity => !processedSet.has(entity.id));
       names.push(...queryResults);
-      console.log(names)
       if (names.length > 0) {
         let newEntry = names.shift();
         let newName = newEntry[0].name;
@@ -129,11 +130,20 @@ async function startNameQuery(name) {
       let firstEntry = data[0];
       let nameField = firstEntry.individualName ? 'individualName' : 'orgName';
       let typeField = firstEntry.individualName ? 'individual' : 'organization';
+      let location = firstEntry.individual_location || firstEntry.organization_location;
+      let latitude = location[0]
+      let longitude = location[1]
+      let revlocation = [...location].reverse();
+      let mgrsDigits = mgrs.forward(revlocation)
+      console.log(firstEntry.name, 'location: ',firstEntry.location, 'mgrs: ', mgrsDigits)
       consolidatedData = {
         id: firstEntry.id,
         name: firstEntry[nameField],
         type: typeField,
-        location: firstEntry.individual_location || firstEntry.org_location,
+        latitude: latitude,
+        longitude: longitude,
+        location: location,
+        mgrs: mgrsDigits,
         weight: firstEntry.weight,
         username: firstEntry.username,
         user_organization: firstEntry.user_organization,

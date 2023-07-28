@@ -17,6 +17,7 @@ import { useMap } from 'react-leaflet';
 import { useNavigate } from 'react-router';
 import Connections from '../Connections/Connections';
 import EventConnections from '../Connections/EventConnections';
+import OrgConnections from '../Connections/OrgConnections';
 import GroupsIcon from '@mui/icons-material/Groups'
 import { Circle } from 'react-leaflet';
 import TravelExploreIcon from '@mui/icons-material/TravelExplore'
@@ -95,8 +96,10 @@ function Map() {
           },[individualData2])
 
 
+
+
       const customIcon = new Icon({
-        iconUrl: require('../../img/location.png'),
+        iconUrl: require('../../img/business-building-svgrepo-com.png'),
         iconSize: [38, 38]
     })
 
@@ -134,7 +137,8 @@ function Map() {
     const [detailsSelect, setDetailsSelect] = useState('')
     const [poly, setPolyLine] = useState(false)
     const [eventpoly, seteventPolyLine] = useState(false)
-    
+    const [Orgpoly, setOrgPolyLine] = useState(false)
+
     const handleSearch = () => {
         setSearchBox(true)
         }
@@ -247,6 +251,7 @@ function Map() {
                                         <h1> Search Summary </h1>
                                         <p>Name: {org.name}</p> 
                                         <p>Location: {JSON.stringify(org.location)}</p>
+                                        <ShareIcon className= {Orgpoly ? 'activelines' : 'notActiveLines'} onClick={() => {setOrgPolyLine(!Orgpoly)}}/>
                                         <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details`,{ state: org.name})}/>
 
 
@@ -275,7 +280,7 @@ function Map() {
 
 
                             <div className='latLongSearch'>
-                                <form className='latLongSearch' autocomplete="off">
+                                <form className='latLongSearch' autoComplete="off">
                                     <div className='searchfield'>
                                         <TextField label='Latitude'  onChange={ (e) => setLat(e.target.value) }/>
                                     </div>
@@ -357,7 +362,7 @@ function Map() {
                                             chunkedLoading
                                             iconCreateFunction={createCustomClusterIcon2}>
                                             {OrganizationData.map(feature =>
-                                                <Marker position={feature.location} icon={individualsIcon} eventHandlers={{
+                                                <Marker position={feature.location} icon={customIcon} eventHandlers={{
                                                     click: () => {setCoord(feature.location)},
                                                   }}>
                                                      <Popup>
@@ -395,6 +400,7 @@ function Map() {
                             </LayersControl>
                             {(poly ? <Connections details={detailsSelect}/> : console.log('no connections'))}
                             {(eventpoly ? <EventConnections details={detailsSelect}/> : console.log('no connections'))}
+                            {(Orgpoly ? <OrgConnections details={detailsSelect}/> : console.log('no connections'))}
                             {(targetValue !== '' ?  
                                 <Circle color='blue' fillColor='yellow' weight={2} opacity={.9}center={coord} radius={8000}/>
                                 :
