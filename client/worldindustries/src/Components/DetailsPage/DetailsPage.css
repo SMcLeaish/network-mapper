@@ -1,5 +1,6 @@
 .details-page-container {
   margin-top: 20px;
+  border: 2px solid red;
 }
 
 .details-item-container {
@@ -14,7 +15,6 @@
 .rounded-button {
   border-radius: 100px !important;
 }
-
 
 .associate-form {
   display: flex;

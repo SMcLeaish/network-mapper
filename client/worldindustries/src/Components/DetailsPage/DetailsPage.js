@@ -1,8 +1,9 @@
 import './DetailsPage.css';
-import { Container, Grid, Typography, Stack, Button, Chip, TextField, MenuItem } from '@mui/material';
+import { Container, Grid, Typography, Stack, Button, Chip, TextField, MenuItem, Popper, Box, Card } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import AddAssociateForm from './AddAssociateForm';
 
 
 const placeholderImg = 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80';
@@ -66,6 +67,8 @@ const DetailsPage = () => {
       .then(res => res.json())
       .then(data => setBiography(data))
   }, [])
+
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClickAssociate = () => {
     console.log(everyone);
@@ -174,60 +177,130 @@ const DetailsPage = () => {
         </div>
       )
     }
+
+  const handleClickAddAssociate = (event) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+
   }
 
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popper' : undefined;
+
+  // const card = () => {
+  //   fetch(" ") 
+  // //     .then((response) => response.json())
+  // //     .then(data => setUserData(data))
+  //  }
+
   return (
-      <Container maxWidth='xl' className='details-page-container'>
-        {renderAssociateForm(addAssociateToggle)}
-        <Grid container>
-          <Grid container item xs={6}>
-            <Grid item xs={5} className='details-item-container'>
-              <img src={placeholderImg} alt="user" className='details-image' />
-            </Grid>
-            <Grid item xs={7} className='details-item-container'>
-                <Typography variant='h4' gutterBottom>
-                  Biography
-                </Typography>
-                {returnBiography(biography)}
-            </Grid>
-            <Grid item xs={12} className='details-item-container'>
-              <img src={placeholderMap} alt="map" className='details-image' />
-            </Grid>
+      // <Container maxWidth='xl' className='details-page-container'>
+      //   {renderAssociateForm(addAssociateToggle)}
+      //   <Grid container>
+      //     <Grid container item xs={6}>
+      //       <Grid item xs={5} className='details-item-container'>
+      //         <img src={placeholderImg} alt="user" className='details-image' />
+      //       </Grid>
+      //       <Grid item xs={7} className='details-item-container'>
+      //           <Typography variant='h4' gutterBottom>
+      //             Biography
+      //           </Typography>
+      //           {returnBiography(biography)}
+      //       </Grid>
+      //       <Grid item xs={12} className='details-item-container'>
+      //         <img src={placeholderMap} alt="map" className='details-image' />
+      //       </Grid>
+      //     </Grid>
+      //     <Grid container item xs={6}>
+      //       <Grid item xs={12} className='details-item-container'>
+      //         <Stack direction='row' justifyContent='space-between' alignItems={'center'}>
+      //           <Typography variant='h4' gutterBottom>
+      //             Known Associates
+      //           </Typography>
+      //           <Button
+      //             variant="outlined"
+      //             startIcon={<AddCircleIcon />}
+      //             onClick={handleAddAssociate}
+      //             className='rounded-button'>
+      //             Add Associate
+      //           </Button>
+      //         </Stack>
+      //         <Stack direction='row' spacing={1} useFlexGap flexWrap={'wrap'}>
+      //           {returnChipsForAssociates(associates)}
+      //         </Stack>
+      //       </Grid>
+      //       <Grid item xs={12} className='details-item-container'>
+      //           <Typography variant='h4' gutterBottom>
+      //             Events
+      //           </Typography>
+      //           {returnEvents(entity)}
+      //       </Grid>
+      //       <Grid item xs={12} className='details-item-container'>
+      //           <Typography variant='h4' gutterBottom>
+      //             Narratives
+      //           </Typography>
+      //         {returnNarratives(narratives)}
+      //       </Grid>
+      //   </Container>
+    <Container maxWidth='xl' className='details-page-container'>
+      {renderAssociateForm(addAssociateToggle)}
+      <Grid container>
+        <Grid container item xs={6}>
+          <Grid item xs={5} className='details-item-container'>
+            <img src={placeholderImg} alt="user" className='details-image' />
           </Grid>
-          <Grid container item xs={6}>
-            <Grid item xs={12} className='details-item-container'>
-              <Stack direction='row' justifyContent='space-between' alignItems={'center'}>
-                <Typography variant='h4' gutterBottom>
-                  Known Associates
-                </Typography>
-                <Button
-                  variant="outlined"
-                  startIcon={<AddCircleIcon />}
-                  onClick={handleAddAssociate}
-                  className='rounded-button'>
-                  Add Associate
-                </Button>
-              </Stack>
-              <Stack direction='row' spacing={1} useFlexGap flexWrap={'wrap'}>
-                {returnChipsForAssociates(associates)}
-              </Stack>
-            </Grid>
-            <Grid item xs={12} className='details-item-container'>
-                <Typography variant='h4' gutterBottom>
-                  Events
-                </Typography>
-                {returnEvents(entity)}
-            </Grid>
-            <Grid item xs={12} className='details-item-container'>
-                <Typography variant='h4' gutterBottom>
-                  Narratives
-                </Typography>
-              {returnNarratives(narratives)}
-            </Grid>
+          <Grid item xs={7} className='details-page-container'>
+            <Card sx={{ maxHeight: 50 }}>
+              <h2>User Profile</h2> 
+            </Card> 
+            <p> name </p>
+            <p> phone number </p>
+            <p> location </p>
+          </Grid>
+          <Grid item xs={12} className='details-item-container'>
+            <img src={placeholderMap} alt="map" className='details-image' />
+              details-page
           </Grid>
         </Grid>
-      </Container>
+        <Grid container item xs={6}>
+          <Grid item xs={12} className='details-item-container'>
+            <Stack direction='row' justifyContent='space-between' alignItems={'center'}>
+              <Typography variant='h4' gutterBottom>
+                Known Associates
+              </Typography>
+              <Button
+                variant="outlined"
+                startIcon={<AddCircleIcon />}
+                onClick={handleClickAddAssociate}
+                className='rounded-button'>
+                Add Associate
+              </Button>
+              <Popper id={id} open={open} anchorEl={anchorEl}>
+                <AddAssociateForm />
+              </Popper>
+            </Stack>
+            <Stack direction='row' spacing={1} useFlexGap flexWrap={'wrap'}>
+              {returnChipsForAssociates(associates)}
+            </Stack>
+          </Grid>
+          <Grid item xs={12} className='details-item-container'>
+            <Typography variant='h4' gutterBottom>
+                Events
+            </Typography>
+            {returnEvents(entity)}
+          </Grid>
+          <Grid item xs={12} className='details-item-container'>
+            <Typography variant='h4' gutterBottom>
+              Narrative
+            </Typography>
+            <Typography variant='body1' gutterBottom>
+              {returnNarratives(narratives)}
+            </Typography>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Container>
   );
+}
 }
 
 export default DetailsPage;
