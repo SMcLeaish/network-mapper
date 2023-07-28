@@ -301,7 +301,6 @@ const DetailsPage = () => {
           </Grid>
         </Grid>
         <Grid container item xs={6}>
-          
           <Grid item xs={12} className='details-item-container'>
             <Box className='data-box'>
               <Typography variant='h4' gutterBottom>
