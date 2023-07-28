@@ -107,7 +107,8 @@ const DetailsPage = () => {
   const returnChipsForAssociates = (data) => {
     return data.map((e) => {
       return (
-        <Chip key={e.entity_id}
+        <Chip
+            key={e.entity_id}
             label={e.name}
             onClick={() => handleClickAssociate(e.entity_id)}
             onDelete={() => handleDeleteAssociate(e.entity_id)}
@@ -119,7 +120,8 @@ const DetailsPage = () => {
   const returnNarratives = (data) => {
     return data.map((e) => {
       return (
-        <Chip key={e.id}
+        <Chip 
+            key={e.id}
             label={e.narrative_string}
         />
       )
@@ -131,7 +133,8 @@ const DetailsPage = () => {
     let unique = [...new Set(events)]
     return unique.map((e) => {
         return (
-          <Chip key={e}
+          <Chip
+              key={e}
               label={e}
           />
         )
@@ -139,7 +142,6 @@ const DetailsPage = () => {
   }
 
   const returnBiography = (data) => {
-    console.log(data)
     if(data.length > 0) {
       let bio = data[0]
       if (bio.individual_id) {
