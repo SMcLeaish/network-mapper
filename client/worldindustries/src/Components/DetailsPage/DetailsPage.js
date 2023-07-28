@@ -2,12 +2,7 @@ import { useState } from 'react';
 import { Container, Grid, Typography, Stack, Button, Chip, Popper, Box, Card} from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AddAssociateForm from './AddAssociateForm';
-import TextField from '@mui/icons-material/AddCircle';
 import './DetailsPage.css';
-
-// const dummyAssociates = {
-
-// }
 
 const placeholderImg = 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80';
 const placeholderMap = 'https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1750&q=80';
@@ -45,13 +40,13 @@ const DetailsPage = () => {
             <img src={placeholderImg} alt="user" className='details-image' />
           </Grid>
           <Grid item xs={7} className='details-page-container'>
-               <Card sx={{ maxHeight: 50 }}>
-                  <h2>User Profile</h2> 
-               </Card> 
-                     <p> name </p>
-                     <p> phone number </p>
-                     <p> location </p>   
-                </Grid>
+            <Card sx={{ maxHeight: 50 }}>
+              <h2>User Profile</h2> 
+            </Card> 
+            <p> name </p>
+            <p> phone number </p>
+            <p> location </p>
+          </Grid>
           <Grid item xs={12} className='details-item-container'>
             <img src={placeholderMap} alt="map" className='details-image' />
           </Grid>
