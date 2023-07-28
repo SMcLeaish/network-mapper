@@ -19,7 +19,7 @@
 .associate-form {
   display: flex;
   position: absolute;
-  top: 20%;
+  top: 25%;
   left: 25%;
   width: 50%;
   flex-wrap: wrap;
