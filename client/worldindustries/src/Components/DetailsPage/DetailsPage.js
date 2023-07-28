@@ -209,7 +209,7 @@ const DetailsPage = () => {
     if (check) {
       return (
         <div className='associate_form_container'>
-          <form className='associate-form' onSubmit={() => handleOnSubmitForm()}>
+          <form className='associate-form bg-jet' onSubmit={() => handleOnSubmitForm()}>
             <TextField
               id="id_entity_2"
               select
@@ -253,7 +253,7 @@ const DetailsPage = () => {
   }
 
   return (
-    <Container maxWidth='xl' className='details-page-container'>
+    <Container maxWidth='xl' className='details-page-container bg-jet'>
       {renderAssociateForm(addAssociateToggle)}
       <Grid container>
         <Grid container item xs={6}>
