@@ -16,6 +16,7 @@ const DetailsPage = () => {
   const [ entity, setEntity ] = useState([])
   const [ biography, setBiography ] = useState([])
   const [ addAssociateToggle, setAddAssociateToggle ] = useState(false)
+  const [ addNarrToggle, setAddNarrToggle ] = useState(false)
   const [ everyone, setEveryone ] = useState([])
   const [ events, setEvents ] = useState([])
   const [ associateToAdd, setAssociateToAdd ] = useState({
@@ -144,6 +145,7 @@ const DetailsPage = () => {
   return (
     <Container maxWidth='xl' className='details-page-container bg-jet'>
       {MyFunctions.renderAssociateForm(addAssociateToggle, handleOnSubmitForm, handleChangeForFormEntity, handleChangeForFormEvent, everyone, events, setAddAssociateToggle)}
+      {MyFunctions.renderNarrativeForm(addNarrToggle, setAddNarrToggle)}
       <Grid container>
         <Grid container item xs={6}>
           <Grid item xs={5} className='details-item-container'>
@@ -199,7 +201,9 @@ const DetailsPage = () => {
                 <Button
                   variant="outlined"
                   startIcon={<AddCircleIcon />}
-                  className='rounded-button'>
+                  className='rounded-button'
+                  onClick={() => setAddNarrToggle(true)}
+                  >
                   Add narrative
                 </Button>
               </Stack>

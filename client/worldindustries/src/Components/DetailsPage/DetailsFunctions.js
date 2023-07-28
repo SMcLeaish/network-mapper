@@ -2,10 +2,39 @@ import { TextField, MenuItem, Button, Chip } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 
-export const renderNarrativeForm = (check) => {
+export const renderNarrativeForm = (check, setAddNarrToggle) => {
     if (check) {
         return (
-            <></>
+            <form className='associate-form bg-jet'>
+                <TextField
+                    required
+                    multiline
+                    id="narrative_string"
+                    label="Required"
+                    defaultValue=""
+                    placeholder='Enter your narrative'
+                    autoComplete='off'
+                />
+                <div>
+                    <Button
+                        variant="outlined"
+                        startIcon={<AddCircleIcon />}
+                        className='rounded-button'
+                        type='submit'
+                    >
+                        Add Narrative
+                    </Button>
+                    <Button
+                        variant="outlined"
+                        startIcon={<CancelIcon />}
+                        className='rounded-button'
+                        type='button'
+                        onClick={() => setAddNarrToggle(false)}
+                    >
+                        Cancel
+                    </Button>
+                </div>
+            </form>
         )
     }
 }

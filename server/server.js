@@ -294,8 +294,11 @@ app.delete('/interaction', (req, res) => {
     .then(() => res.status(201).json({message: 'Interaction has been deleted'}))
 })
 
-app.post('/narrative/:id', (req, res) => {
-  
+app.post('/narrative', (req, res) => {
+  let body = req.body
+  knex('narrative')
+    .insert(body)
+    .then(()=> res.status(201).json({message: 'narrative has been added'}))
 })
 
 
