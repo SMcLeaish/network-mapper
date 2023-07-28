@@ -106,72 +106,6 @@ const DetailsPage = () => {
     setAddAssociateToggle(!addAssociateToggle)
   }
 
-  const returnChipsForAssociates = (data) => {
-    return data.map((e) => {
-      return (
-        <Chip
-            key={e.entity_id}
-            label={e.name}
-            onClick={() => handleClickAssociate(e.entity_id)}
-            onDelete={() => handleDeleteAssociate(e.entity_id)}
-        />
-      )
-    })
-  }
-
-  const returnNarratives = (data) => {
-    return data.map((e) => {
-      return (
-        <Chip 
-            key={e.id}
-            label={e.narrative_string}
-        />
-      )
-    })
-  }
-
-  const returnEvents = (data) => {
-    let events = data.map(e => e.event_name)
-    let unique = [...new Set(events)]
-    return unique.map((e) => {
-        return (
-          <Chip
-              key={e}
-              label={e}
-          />
-        )
-    })
-  }
-
-  const returnBiography = (data) => {
-    if(data.length > 0) {
-      let bio = data[0]
-      if (bio.individual_id) {
-        return (
-        <>
-          <Chip key={bio.individual_name}
-              label={`Name: ${bio.individual_name}`}
-          />
-          <Chip key={bio.position_id}
-              label={`Works for ${bio.org_name}`}
-          />
-        </>
-        )
-      } else {
-        return (
-          <>
-            <Chip key={bio.individual_name}
-                label={`Organization name: ${bio.name}`}
-            />
-            <Chip key={bio.position_id}
-                label={`Organization type: ${bio.type}`}
-            />
-          </>
-        )
-      }
-    }
-  }
-
   const handleChangeForFormEntity = (e) => {
     console.log(e.target.value)
     fetch(`https://localhost:3001/entity/${e.target.value}`)
@@ -221,7 +155,7 @@ const DetailsPage = () => {
                 User Profile
               </Typography>
               <Stack direction='row' spacing={1} useFlexGap flexWrap={'wrap'}>
-                {returnBiography(biography)}
+                {MyFunctions.returnBiography(biography)}
               </Stack>
             </Box>
           </Grid>
@@ -240,7 +174,7 @@ const DetailsPage = () => {
                 </Button>
               </Stack>
               <Stack direction='row' spacing={1} useFlexGap flexWrap={'wrap'}>
-                {returnChipsForAssociates(associates)}
+                {MyFunctions.returnChipsForAssociates(associates, handleClickAssociate, handleDeleteAssociate)}
               </Stack>
             </Box>
           </Grid>
@@ -250,7 +184,7 @@ const DetailsPage = () => {
                   Events
               </Typography>
               <Stack direction='row' spacing={1} useFlexGap flexWrap={'wrap'}>
-                {returnEvents(entity)}
+                {MyFunctions.returnEvents(entity)}
               </Stack>
             </Box>
           </Grid>
@@ -271,7 +205,7 @@ const DetailsPage = () => {
               </Stack>
               <Typography variant='body1' gutterBottom>
               </Typography>
-                {returnNarratives(narratives)}
+                {MyFunctions.returnNarratives(narratives)}
             </Box>
           </Grid>
         </Grid>

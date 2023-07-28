@@ -1,4 +1,4 @@
-import { TextField, MenuItem, Button } from '@mui/material';
+import { TextField, MenuItem, Button, Chip } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 
@@ -7,6 +7,72 @@ export const renderNarrativeForm = (check) => {
         return (
             <></>
         )
+    }
+}
+
+export const returnChipsForAssociates = (data, handleClickAssociate, handleDeleteAssociate) => {
+    return data.map((e) => {
+        return (
+            <Chip
+                key={e.entity_id}
+                label={e.name}
+                onClick={() => handleClickAssociate(e.entity_id)}
+                onDelete={() => handleDeleteAssociate(e.entity_id)}
+            />
+        )
+    })
+}
+
+export const returnNarratives = (data) => {
+    return data.map((e) => {
+        return (
+            <Chip
+                key={e.id}
+                label={e.narrative_string}
+            />
+        )
+    })
+}
+
+export const returnEvents = (data) => {
+    let events = data.map(e => e.event_name)
+    let unique = [...new Set(events)]
+    return unique.map((e) => {
+        return (
+            <Chip
+                key={e}
+                label={e}
+            />
+        )
+    })
+}
+
+export const returnBiography = (data) => {
+    if (data.length > 0) {
+        let bio = data[0]
+        if (bio.individual_id) {
+            return (
+                <>
+                    <Chip key={bio.individual_name}
+                        label={`Name: ${bio.individual_name}`}
+                    />
+                    <Chip key={bio.position_id}
+                        label={`Works for ${bio.org_name}`}
+                    />
+                </>
+            )
+        } else {
+            return (
+                <>
+                    <Chip key={bio.individual_name}
+                        label={`Organization name: ${bio.name}`}
+                    />
+                    <Chip key={bio.position_id}
+                        label={`Organization type: ${bio.type}`}
+                    />
+                </>
+            )
+        }
     }
 }
 
