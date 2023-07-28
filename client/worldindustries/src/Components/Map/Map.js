@@ -140,6 +140,7 @@ function Map() {
     const [Orgpoly, setOrgPolyLine] = useState(false)
     const [MGRSvalue, setMGRSvalue] = useState('')
     const [MGRSConversion, setMGRSConversion] = useState(null)
+    const [searchSet, setSearch] = useState(false)
 
     const handleSearch = () => {
         setSearchBox(true)
@@ -160,6 +161,7 @@ function Map() {
         console.log('numbers are', longNum , latNum)
         console.log(forward(lonlat))
         setMGRSConversion(forward(lonlat))
+        setSearch(true)
 
     }
 
@@ -172,7 +174,7 @@ function Map() {
         value[1] = temp
         console.log(value)
         setCoord(value)
-
+        setSearch(true)
     }
 
     console.log(`detailsSelect = ${detailsSelect}`)
@@ -349,7 +351,7 @@ function Map() {
                                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; <a href=&quot;https://www.openstreetmap.org/copyright&quot;>OpenStreetMap</a> contributors" />
                                 </BaseLayer>
 
-                                <BaseLayer name="World Imagery">
+                                {/* <BaseLayer name="World Imagery">
                                     <TileLayer
                                     url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
                                     attribution="&copy; Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
@@ -363,7 +365,24 @@ function Map() {
                                     attribution="&copy; NASA Blue Marble, image service by OpenGeo"
                                     maxNativeZoom={8}
                                     />
+                                </BaseLayer> */}
+
+                                <BaseLayer name="Google Imagery">
+                                    <TileLayer
+                                    url='https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'
+                                    maxZoom= {20}
+                                    subdomains={['mt1','mt2','mt3']}
+                                    />
                                 </BaseLayer>
+
+                                <BaseLayer name="Terrain">
+                                    <TileLayer
+                                    url='http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}'
+                                        maxZoom= {20}
+                                        subdomains={['mt0','mt1','mt2','mt3']}
+                                    />
+                                </BaseLayer>
+
                             </LayersControl>
                         <LayersControl position='topright' id='custom-icon'>
                                 <LayersControl.Overlay name ="Cities">
@@ -446,7 +465,7 @@ function Map() {
                             {(poly ? <Connections details={detailsSelect}/> : console.log('no connections'))}
                             {(eventpoly ? <EventConnections details={detailsSelect}/> : console.log('no connections'))}
                             {(Orgpoly ? <OrgConnections details={detailsSelect}/> : console.log('no connections'))}
-                            {(targetValue !== '' ?  
+                            {(targetValue !== '' || searchSet === true ?  
                                 <Circle color='blue' fillColor='yellow' weight={2} opacity={.9}center={coord} radius={8000}/>
                                 :
                                 console.log('')
