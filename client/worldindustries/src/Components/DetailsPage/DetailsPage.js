@@ -80,16 +80,28 @@ const DetailsPage = () => {
       .then(data => setBiography(data))
   }, [id])
 
-  const handleClickAssociate = () => {
-    console.log(everyone);
+  const handleClickAssociate = (id) => {
+    console.log(id);
   }
 
-  const handleDeleteAssociate = () => {
-    console.log('deleted associate');
+  const handleDeleteAssociate = (entity2) => {
+    let obj = {
+      "id_entity_1": parseInt(id),
+      "id_entity_2": entity2
+    }
+    let init = {
+      method: 'DELETE',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(obj)
+    }
+    fetch('https://localhost:3001/interaction', init)
+      .then(res => res.json())
+      .then(data => {alert(data.message); window.location.reload()})
   }
 
   const handleAddAssociate = () => {
-    console.log(addAssociateToggle);
     setAddAssociateToggle(!addAssociateToggle)
   }
 
@@ -98,8 +110,8 @@ const DetailsPage = () => {
       return (
         <Chip key={e.entity_id}
             label={e.name}
-            onClick={handleClickAssociate}
-            onDelete={handleDeleteAssociate}
+            onClick={() => handleClickAssociate(e.entity_id)}
+            onDelete={() => handleDeleteAssociate(e.entity_id)}
         />
       )
     })

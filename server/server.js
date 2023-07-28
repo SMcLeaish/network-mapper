@@ -285,6 +285,15 @@ app.post('/interaction', (req, res) => {
     .then(() => res.status(201).json({message: 'Interaction has been added'}))
 })
 
+app.delete('/interaction', (req, res) => {
+  let { id_entity_1, id_entity_2 } = req.body;
+  knex('interaction')
+    .whereIn('id_entity_1', [id_entity_1, id_entity_2])
+    .whereIn('id_entity_2', [id_entity_1, id_entity_2])
+    .del()
+    .then(() => res.status(201).json({message: 'Interaction has been deleted'}))
+})
+
 
 https.createServer(options, app).listen(port, () => {
   console.log('HTTPS server running on port 3001');
