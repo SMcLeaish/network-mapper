@@ -1,9 +1,10 @@
 import './DetailsPage.css';
-import { Container, Grid, Typography, Stack, Button, Chip, TextField, MenuItem, Box} from '@mui/material';
+import { Container, Grid, Typography, Stack, Button, Chip, TextField, MenuItem, Box, Popper} from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import CancelIcon from '@mui/icons-material/Cancel';
+import * as MyFunctions from './DetailsFunctions.js';
 
 const placeholderImg = 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80';
 const placeholderMap = 'https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1750&q=80';
@@ -206,69 +207,9 @@ const DetailsPage = () => {
       .then(data => console.log(data))
   }
 
-  const renderAssociateForm = (check) => {
-    if (check) {
-      return (
-        <div className='associate_form_container'>
-          <form className='associate-form bg-jet' onSubmit={() => handleOnSubmitForm()}>
-            <TextField
-              required
-              id="id_entity_2"
-              select
-              label="Select"
-              helperText="Please select your associate"
-              defaultValue=''
-              onChange={(e) => handleChangeForFormEntity(e)}
-            >
-                {everyone.map(person => (
-                  <MenuItem key={person.name} value={person.name}>
-                    {person.name}
-                  </MenuItem>
-                ))}
-            </TextField>
-            <TextField
-              required
-              id="id_event"
-              select
-              label="Select"
-              helperText="Please select the event"
-              defaultValue=''
-              onChange={(e) => handleChangeForFormEvent(e)}
-            >
-                {events.map(event => (
-                  <MenuItem key={event.event_name} value={event}>
-                    {event.event_name}
-                  </MenuItem>
-                ))}
-            </TextField>
-            <div>
-              <Button
-                    variant="outlined"
-                    startIcon={<AddCircleIcon />}
-                    className='rounded-button'
-                    type='submit'
-                    >
-                    Add Associate
-              </Button>
-              <Button
-                    variant="outlined"
-                    startIcon={<CancelIcon />}
-                    className='rounded-button'
-                    type='button'
-                    onClick={() => setAddAssociateToggle(false)}
-                    >
-                    Cancel
-              </Button>
-            </div>
-          </form>
-        </div>
-      )
-    }
-  }
-
   return (
     <Container maxWidth='xl' className='details-page-container bg-jet'>
-      {renderAssociateForm(addAssociateToggle)}
+      {MyFunctions.renderAssociateForm(addAssociateToggle, handleOnSubmitForm, handleChangeForFormEntity, handleChangeForFormEvent, everyone, events, setAddAssociateToggle)}
       <Grid container>
         <Grid container item xs={6}>
           <Grid item xs={5} className='details-item-container'>
@@ -315,12 +256,19 @@ const DetailsPage = () => {
           </Grid>
         </Grid>
         <Grid container item xs={6}>
-          
           <Grid item xs={12} className='details-item-container'>
             <Box className='data-box'>
-              <Typography variant='h4' gutterBottom>
-                Narratives
-              </Typography>
+            <Stack direction='row' justifyContent='space-between' alignItems={'center'}>
+                <Typography variant='h4' gutterBottom>
+                  Narratives
+                </Typography>
+                <Button
+                  variant="outlined"
+                  startIcon={<AddCircleIcon />}
+                  className='rounded-button'>
+                  Add narrative
+                </Button>
+              </Stack>
               <Typography variant='body1' gutterBottom>
               </Typography>
                 {returnNarratives(narratives)}
