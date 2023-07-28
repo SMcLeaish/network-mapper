@@ -11,50 +11,20 @@ const crypto=require("crypto")
 const cookieParser = require('cookie-parser')
 const uuid=require('uuid').v4
 
-app.use(cookieParser())
-// setting up the method to send the email
 
-let transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    type: "OAuth2",
-    user: process.env.EMAIL,
-    pass: process.env.WORD,
-    clientId: process.env.OAUTH_CLIENTID,
-    clientSecret: process.env.OAUTH_CLIENT_SECRET,
-    refreshToken: process.env.OAUTH_REFRESH_TOKEN,
-  },
- });
- transporter.verify((err, success) => {
-  err
-    ? console.log(err)
-    : console.log(`=== Server is ready to take messages: ${success} ===`);
- });
-//  let mailOptions = {
-//   from: "test@gmail.com",
-//   to: process.env.EMAIL,
-//   subject: "Nodemailer API",
-//   text: "Hi from your nodemailer API",
-//  };
-//  transporter.sendMail(mailOptions, function (err, data) {
-//   if (err) {
-//     console.log("Error " + err);
-//   } else {
-//     console.log("Email sent successfully");
-//   }
-//  });
 
-// allows our client to recieve our cookie
+
 let corsOptions = {
   origin: 'http://localhost:3000',  //front end url
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
   credentials: true,
 }
-
-// corsOptions goes inside of cors
 app.use(cors(corsOptions));
 
 app.use(express.json());
+
+app.use(cookieParser())
+
 
 
 const options = {
@@ -68,16 +38,26 @@ const options = {
     // rejectUnauthorized: false 
 };
 
+
+// setting up the method to send the email
+let transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    type: "OAuth2",
+    user: process.env.EMAIL,
+    clientId: process.env.OAUTH_CLIENTID,
+    clientSecret: process.env.OAUTH_CLIENT_SECRET,
+    refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+  },
+ });
+
+
+
 const knex = require('knex')(require('./knexfile.js')['development'])
 
 
 
-
-
-
-
-
-
+// cookie test will check if there is a session cookie
 app.get('/cookietest',(req,res)=>{
   if(req.headers.cookie){
     console.log("cookie found")
@@ -92,47 +72,39 @@ app.get('/cookietest',(req,res)=>{
   }
 })
 
+
+
 app.get('/users', (req, res) => {
-  
-    
-      knex('user_data')
+ 
+     knex('user_data')
     .select('*')
     .then(data => res.status(200).send(data))
     .catch(err => res.status(404).send(err))
  
 });
 
-
-
-
-// creating the new user and verifying their email
+// creating the new user and sends them an email for verification
 
 app.post('/users', async (req, res) => {
+
+  // token for the email params unique everytime and secure, goes in the mailing options
   let token=crypto.randomBytes(64).toString("hex")
   const link = `${process.env.BASE_URL}/users/confirm/?emailToken=${token}`;
   let mailOptions = {
     from: req.body.email,
-    to: process.env.EMAIL,
+    to: req.body.email,
     subject: "User Verify",
     text: link,
    };
+
+   //sends the email
+
+   transporter.sendMail(mailOptions, link)
    
-   transporter.sendMail(mailOptions, link,function (err, data) {
-    
-
-    if (err) {
-      console.log("Error " + err);
-    } else {
-      console.log("Email sent successfully");
-    }
-   });
-
-
-
   try {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
-    console.log(hashedPassword)
+    console.log(req.body.email)
     
     const newUser = {
       username: req.body.username,
@@ -144,7 +116,6 @@ app.post('/users', async (req, res) => {
       emailToken:token,
       isVerified:false
     };
-    console.log("newuser",newUser)
     knex('user_data')
     .where('username',req.body.username)
     .then(data => {
@@ -168,15 +139,14 @@ app.post('/users', async (req, res) => {
   }
 });
 
+
+// logs in the user and makes sure they are verified, if verified a session cookie is created
 app.post('/users/login', (req, res) => {
   const sessionId= uuid()
-  
-  
     knex('user_data')
     .select('*')
     .where('username', req.body.username)
-    .then(data => {
-      
+    .then(data => {   
       if (data.length > 0) {
         bcrypt.compare(req.body.password, data[0].hashed_password)
           .then(found => {
@@ -204,35 +174,30 @@ app.post('/users/login', (req, res) => {
             }
           })
           .catch(err => res.status(500).send(err));
-      } else {
-        // response if user is not found in DB
       }
     })
     .catch(err => res.status(500).send(err))
 });
 
+// this will verify the user and update the 2 object fields
 
 app.put('/users/:id',(req,res)=>{
-  
-  
-  
-  console.log("Patching")
   knex('user_data')
     .where('id',req.body.id)
     .update({emailToken:null,isVerified:true})
     .then((rowCount) => {
       if (rowCount === 0) {
       return res.status(404).json({
-          message: 'Item not found',
+          message: 'user not found',
       });
       }
       res.status(200).json({
-      message: 'Item updated successfully',
+      message: 'user updated successfully',
       });
   })
   .catch((err) =>
       res.status(500).json({
-      message: 'An error occurred while updating the item',
+      message: 'An error occurred while updating the user',
       error: err,
       })
   );
