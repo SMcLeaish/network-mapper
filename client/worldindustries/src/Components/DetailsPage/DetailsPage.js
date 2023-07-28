@@ -3,6 +3,7 @@ import { Container, Grid, Typography, Stack, Button, Chip, TextField, MenuItem, 
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 const placeholderImg = 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80';
 const placeholderMap = 'https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1750&q=80';
@@ -211,6 +212,7 @@ const DetailsPage = () => {
         <div className='associate_form_container'>
           <form className='associate-form bg-jet' onSubmit={() => handleOnSubmitForm()}>
             <TextField
+              required
               id="id_entity_2"
               select
               label="Select"
@@ -225,6 +227,7 @@ const DetailsPage = () => {
                 ))}
             </TextField>
             <TextField
+              required
               id="id_event"
               select
               label="Select"
@@ -238,14 +241,25 @@ const DetailsPage = () => {
                   </MenuItem>
                 ))}
             </TextField>
-            <Button
-                  variant="outlined"
-                  startIcon={<AddCircleIcon />}
-                  className='rounded-button'
-                  type='submit'
-                  >
-                  Add Associate
-            </Button>
+            <div>
+              <Button
+                    variant="outlined"
+                    startIcon={<AddCircleIcon />}
+                    className='rounded-button'
+                    type='submit'
+                    >
+                    Add Associate
+              </Button>
+              <Button
+                    variant="outlined"
+                    startIcon={<CancelIcon />}
+                    className='rounded-button'
+                    type='button'
+                    onClick={() => setAddAssociateToggle(false)}
+                    >
+                    Cancel
+              </Button>
+            </div>
           </form>
         </div>
       )

@@ -13,6 +13,7 @@
 }
 
 .rounded-button {
+  position: relative;
   border-radius: 100px !important;
 }
 
@@ -30,6 +31,7 @@
   padding: 2%;
   border: 2px solid turquoise;
   background-color: bisque;
+  z-index: 2;
 }
 
 .bg-gray {
