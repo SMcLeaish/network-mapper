@@ -177,6 +177,7 @@ const DetailsPage = () => {
         </div>
       )
     }
+  }
 
   const handleClickAddAssociate = (event) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -184,7 +185,7 @@ const DetailsPage = () => {
   }
 
   const open = Boolean(anchorEl);
-  const id = open ? 'simple-popper' : undefined;
+  const idOpen = open ? 'simple-popper' : undefined;
 
   // const card = () => {
   //   fetch(" ") 
@@ -252,9 +253,7 @@ const DetailsPage = () => {
             <Card sx={{ maxHeight: 50 }}>
               <h2>User Profile</h2> 
             </Card> 
-            <p> name </p>
-            <p> phone number </p>
-            <p> location </p>
+            {returnBiography(biography)}
           </Grid>
           <Grid item xs={12} className='details-item-container'>
             <img src={placeholderMap} alt="map" className='details-image' />
@@ -270,7 +269,8 @@ const DetailsPage = () => {
               <Button
                 variant="outlined"
                 startIcon={<AddCircleIcon />}
-                onClick={handleClickAddAssociate}
+                // onClick={handleClickAddAssociate}
+                onClick={handleAddAssociate}
                 className='rounded-button'>
                 Add Associate
               </Button>
@@ -300,7 +300,6 @@ const DetailsPage = () => {
       </Grid>
     </Container>
   );
-}
 }
 
 export default DetailsPage;
