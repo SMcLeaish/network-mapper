@@ -34,10 +34,10 @@
   background-color: #2D2D2A;
   border: black;
   width: 300px;
-  height: 500px;
+  height: 600px;
   z-index: 2;
   position: absolute;
-  bottom: 40px;
+  bottom: 100px;
   right: 30px;
   border-radius: 5px;
   padding: 30px;
@@ -71,7 +71,7 @@
 .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
   color: #F8F4E3 !important;
 }
-
+/* 
 .SearchContainer{
   display: flex;
   flex-direction: row;
@@ -80,12 +80,12 @@
   height: 40px;
   z-index: 2;
   position: absolute;
-  bottom: 40px;
+  bottom: 60px;
   left: 30px;
   border-radius: 15px;
   padding-top: 15px;
   padding-left: 10px;
-}
+} */
 
 .closeIcon {
   width: 27.5px;
@@ -214,4 +214,9 @@ color: red !important;
   width: 27.5px;
   background-color: steelblue;
   border-radius: 100px;
+}
+
+.mgrsConversion {
+  background-color: #F8F4E3;
+  border-radius: 5px;
 }

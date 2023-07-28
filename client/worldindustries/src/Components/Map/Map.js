@@ -21,7 +21,7 @@ import OrgConnections from '../Connections/OrgConnections';
 import GroupsIcon from '@mui/icons-material/Groups'
 import { Circle } from 'react-leaflet';
 import TravelExploreIcon from '@mui/icons-material/TravelExplore'
-
+import { mgrs, forward, toPoint } from 'mgrs';
 
 const cityList = require('./Chinacities.json')
 
@@ -138,6 +138,8 @@ function Map() {
     const [poly, setPolyLine] = useState(false)
     const [eventpoly, seteventPolyLine] = useState(false)
     const [Orgpoly, setOrgPolyLine] = useState(false)
+    const [MGRSvalue, setMGRSvalue] = useState('')
+    const [MGRSConversion, setMGRSConversion] = useState(null)
 
     const handleSearch = () => {
         setSearchBox(true)
@@ -149,6 +151,29 @@ function Map() {
         setOrgPolyLine(false)
     }
 
+    const handleMGRS = (long, lat) => {
+        // 17SPU7853083668
+
+        const longNum = parseFloat(long)
+        const latNum = parseFloat(lat)
+        let lonlat = [longNum,latNum]
+        console.log('numbers are', longNum , latNum)
+        console.log(forward(lonlat))
+        setMGRSConversion(forward(lonlat))
+
+    }
+
+    const handleMGRSSearch = (MGRSvalue) => {
+        console.log(MGRSvalue)
+        let value = (toPoint(MGRSvalue))
+        console.log(value)
+        let temp = value[0];
+        value[0] = value[1];
+        value[1] = temp
+        console.log(value)
+        setCoord(value)
+
+    }
 
     console.log(`detailsSelect = ${detailsSelect}`)
     return (
@@ -298,9 +323,18 @@ function Map() {
                                     <div className='searchfield'>
                                         <TextField label='Longitude'  onChange={ (e) => setLong(e.target.value)}/>
                                     </div>
-                                    <TravelExploreIcon className='locationSearch' onClick={() => {setCoord([lat, long])}}/>
+                                    <TravelExploreIcon className='locationSearch' onClick={() => {setCoord([lat, long], handleMGRS(long,lat))}}/>
                                 </form>
                             </div>
+                            <div>
+                                <form className='latLongSearch' autoComplete="off">
+                                    <div className='searchfield'>
+                                        <TextField label='MGRS Search'  onChange={ (e) => setMGRSvalue(e.target.value) }/>
+                                    </div>
+                                    <TravelExploreIcon className='locationSearch' onClick={() => {handleMGRSSearch(MGRSvalue)}}/>
+                                </form>
+                            </div>
+                            {MGRSConversion !== null ? <p className='mgrsConversion'>{`Lat/Long ⮕ MGRS: ${MGRSConversion}`}</p> : console.log('')}
                         </div>
                     </>
                     :
