@@ -146,25 +146,25 @@ const DetailsPage = () => {
       let bio = data[0]
       if (bio.individual_id) {
         return (
-        <div>
+        <>
           <Chip key={bio.individual_name}
               label={`Name: ${bio.individual_name}`}
           />
           <Chip key={bio.position_id}
               label={`Works for ${bio.org_name}`}
           />
-        </div>
+        </>
         )
       } else {
         return (
-          <div>
+          <>
             <Chip key={bio.individual_name}
                 label={`Organization name: ${bio.name}`}
             />
             <Chip key={bio.position_id}
                 label={`Organization type: ${bio.type}`}
             />
-          </div>
+          </>
         )
       }
     }
@@ -271,11 +271,6 @@ const DetailsPage = () => {
             </Box>
           </Grid>
           <Grid item xs={12} className='details-item-container'>
-            <img src={placeholderMap} alt="map" className='details-image' />
-          </Grid>
-        </Grid>
-        <Grid container item xs={6}>
-          <Grid item xs={12} className='details-item-container'>
             <Box className='data-box'>
               <Stack direction='row' justifyContent='space-between' alignItems={'center'}>
                 <Typography variant='h4' gutterBottom>
@@ -304,10 +299,13 @@ const DetailsPage = () => {
               </Stack>
             </Box>
           </Grid>
+        </Grid>
+        <Grid container item xs={6}>
+          
           <Grid item xs={12} className='details-item-container'>
             <Box className='data-box'>
               <Typography variant='h4' gutterBottom>
-                Narrative
+                Narratives
               </Typography>
               <Typography variant='body1' gutterBottom>
               </Typography>
