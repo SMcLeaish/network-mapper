@@ -138,7 +138,7 @@ const handleNewUser=()=>{
       <form onSubmit={handleLogin}>
         <TextField label='username' placeholder="Username" fullWidth required onChange={(e)=>{setUsername(e.target.value)}}/>
         <TextField label='password' placeholder="Enter Password" type='password' fullWidth required onChange={(e)=>{setPassword(e.target.value)}} />
-        <PasswordStrengthBar password={password} />
+        <PasswordStrengthBar password={password} minLength={5}/>
         <TextField label='email' placeholder="Enter Email" type='email' fullWidth required onChange={(e)=>{setEmail(e.target.value)}} />
         <FormControlLabel control={<Checkbox  />} label="Remember Me" />          
         <Button   type='submit' color='primary' variant='contained' fullWidth onSubmit={handleLogin}>Create</Button> 
