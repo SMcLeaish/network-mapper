@@ -15,6 +15,7 @@ exports.up = function(knex) {
                 table.boolean('cac_approved').defaultTo(false);
                 table.string("emailToken").nullable()
                 table.boolean("isVerified")
+                table.string("session_cookie").nullable()
             });
         }
     });

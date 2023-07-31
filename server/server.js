@@ -57,19 +57,24 @@ const knex = require('knex')(require('./knexfile.js')['development'])
 
 
 
-// cookie test will check if there is a session cookie
+
 app.get('/cookietest',(req,res)=>{
   if(req.headers.cookie){
-    console.log("cookie found")
-    const test= req.headers.cookie.split('=')[1]
-    console.log(test.split(";"))
-     const usersession=test.split(";")[0]
-    
-    res.send({success:true})
-  }else{
-    console.log("cookie not found")
-    res.send({success:false})
+  let stored=req.headers.cookie.split('=')[1]
+    knex('user_data')
+      .select('*')
+        .where('session_cookie',stored)
+        .then(found => {
+          if (found) {
+            res.send({success:true,data:found})
+          }else{
+            
+            res.send({success:false})
   }
+})
+}else{
+  res.send({success:false})
+}
 })
 
 
@@ -104,7 +109,7 @@ app.post('/users', async (req, res) => {
   try {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
-    console.log(req.body.email)
+    
     
     const newUser = {
       username: req.body.username,
@@ -119,11 +124,11 @@ app.post('/users', async (req, res) => {
     knex('user_data')
     .where('username',req.body.username)
     .then(data => {
-      console.log("inserting")
+      
       if (data.length > 0) {
         res.status(404).json({userCreated: false, message: `Username: *${req.body.username}* already taken!`});
       } else {
-        console.log("isnerting new user")
+        
         knex('user_data')
           .insert(newUser)
           .then(() => {
@@ -140,6 +145,32 @@ app.post('/users', async (req, res) => {
 });
 
 
+
+app.put('/users/cookie',(req,res)=>{
+  console.log("s",req.headers.cookie.split('=')[1])
+  knex('user_data')
+    .where('username',req.body.username)
+    .update({session_cookie:req.headers.cookie.split('=')[1]})
+    .then((rowCount) => {
+      if (rowCount === 0) {
+      return res.status(404).json({
+          success: false,
+      });
+      }
+      res.status(200).json({
+     success: true,
+     data:rowCount
+      });
+  })
+  .catch((err) =>
+      res.status(500).json({
+      message: 'An error occurred while updating the user session cookie',
+      error: err,
+      })
+  );
+})
+
+
 // logs in the user and makes sure they are verified, if verified a session cookie is created
 app.post('/users/login', (req, res) => {
   const sessionId= uuid()
@@ -151,6 +182,7 @@ app.post('/users/login', (req, res) => {
         bcrypt.compare(req.body.password, data[0].hashed_password)
           .then(found => {
             if (found&&data[0].isVerified) {
+              
               res.cookie( 'session',sessionId,{ 
     
                 httpOnly: true,
@@ -160,6 +192,10 @@ app.post('/users/login', (req, res) => {
                 expires: 0,
                 signed: false,
             })
+            
+              
+            
+            
               let responseObj = {
                 userExists: found,
                 ...data[0]

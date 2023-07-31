@@ -21,15 +21,14 @@ const cityList = require('./Chinacities.json')
 
 function Map() {
     const navigate=useNavigate()
-    
+    const location=useLocation();
+    console.log("location",location.state)
     useEffect(()=>{
         fetch("https://localhost:3001/cookietest",{credentials:"include"})
         .then(res=>res.json())
         .then(data=>{
-            console.log("data",data)
             if(data.success){
-                console.log("data",data)
-                toast('Welcome!', {
+                toast(`Welcome! ${location.state.username} `, {
                     position: "top-center",
                     autoClose: 5000,
                     hideProgressBar: false,

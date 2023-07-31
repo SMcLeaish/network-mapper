@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 import {Grid,Paper,Avatar,FormControlLabel,Checkbox,Button,TextField} from '@mui/material'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import "./LoginPage.css"
 import { toast } from 'react-toastify';
 import PasswordStrengthBar from 'react-password-strength-bar';
-
+import Cookies from 'js-cookie';
 
 
 
@@ -18,23 +18,34 @@ const Login = () => {
   const [email,setEmail]=useState("")
   const [newUser,setNewUser]=useState(false)
   const navigate=useNavigate()
-
-
+  const[userInfo,setUserInfo] =useState({})
+  
 
 // check if your cookie session exists on entry
 useEffect(()=>{
-  fetch("https://localhost:3001/cookietest",{credentials:"include"})
-  .then(res=>res.json())
-  .then(data=>{if(data.success==true){
-      (navigate("/map"))
-  }})
-},[])
+    
+    
+    fetch("https://localhost:3001/cookietest",{credentials:"include"})
+    .then(res=>res.json())
+    .then(data=>{
+      if(data.success==true){
+         (navigate("/map",{state:data.data[0]}))
+       
+      }
+      else{
+        return
+      }
+})}
+,[])
+
+  
+
 
 
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+    
     // are you a new user or are you signing in
     newUser===false ?  await fetch("https://localhost:3001/users/login",{
       credentials:"include",
@@ -47,10 +58,8 @@ useEffect(()=>{
   })
     .then(res=>res.json())
     .then(data => {
-      if(data.userExists&&data.isVerified){
-        navigate("/map")
-    }
-      else if(data.userExists){
+      console.log("data",data)
+       if(data.userExists&&!data.isVerified){
         toast("Verify your email", {
           position: "top-center",
           autoClose: 5000,
@@ -62,7 +71,8 @@ useEffect(()=>{
           theme: "light",
           });
       }
-      else{
+      else if(!data.userExists){
+        console.log("no user")
         toast("User not found, create an account", {
           position: "top-center",
           autoClose: 5000,
@@ -74,7 +84,28 @@ useEffect(()=>{
           theme: "light",
           });
       }
-    })
+      else if(data.userExists&&data.isVerified){
+        
+        setUserInfo(data)
+      }
+    }).then(async ()=>{
+      fetch("https://localhost:3001/users/cookie",{
+        credentials:"include",
+        method:"PUT",
+        headers:{ 'Content-Type': 'application/json' },
+        body:JSON.stringify({
+          username:username,
+          password:password,
+          
+        })
+      }).then(res=>res.json())
+      .then(data=>{
+        if(data.success){
+          console.log(userInfo)
+          navigate('/map',{state:userInfo})
+        }
+      })
+  })
     : 
     fetch("https://localhost:3001/users",{
       method:"POST",
