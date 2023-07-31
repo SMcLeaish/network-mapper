@@ -23,6 +23,7 @@ import { Circle } from 'react-leaflet';
 import TravelExploreIcon from '@mui/icons-material/TravelExplore'
 import { mgrs, forward, toPoint } from 'mgrs';
 
+
 const cityList = require('./Chinacities.json')
 
 //this is a small change
@@ -48,6 +49,9 @@ function Map() {
           })
           .catch(error=>console.log('i am not getting the data'))
       },[])
+
+        console.log('indiv data 2: ',individualData2)
+        console.log('indiv data after change: ',individualData)
 
 
       const [OrganizationData2, setOrganizationData2] = useState([])
@@ -99,6 +103,7 @@ function Map() {
 
 
 
+
       const customIcon = new Icon({
         iconUrl: require('../../img/business-building-svgrepo-com.png'),
         iconSize: [38, 38]
@@ -135,17 +140,35 @@ function Map() {
     const [searchbox, setSearchBox] = useState(false)
     const [inputValue, setInputValue] = useState(options[0]);
     const [targetValue, setTargetValue] = useState('');
-    const [detailsSelect, setDetailsSelect] = useState('')
+    const [detailsSelect, setDetailsSelect] = useState(null)
     const [poly, setPolyLine] = useState(false)
     const [eventpoly, seteventPolyLine] = useState(false)
     const [Orgpoly, setOrgPolyLine] = useState(false)
     const [MGRSvalue, setMGRSvalue] = useState('')
     const [MGRSConversion, setMGRSConversion] = useState(null)
     const [searchSet, setSearch] = useState(false)
+    const [entityConnect, setEntityConnect] = useState([])
     // const [modeValue, setMode] = useState(false)
     // const multipleList = []
  
     // console.log('this is the list:', multipleList)
+  
+    useEffect(() => {
+        if (detailsSelect) {
+        fetch(`https://localhost:3001/entity/${detailsSelect}`)
+          .then((res) => res.json())
+          .then(data => {
+            setEntityConnect(data[0].primary_entity_id)
+            console.log(data[0].primary_entity_id)
+
+          })
+          .catch(error=>console.log('i am not getting the data'))}
+      },[detailsSelect])
+      
+
+        console.log('ENTITY CONNECT', entityConnect)
+
+
 
     const handleSearch = () => {
         setSearchBox(true)
@@ -186,8 +209,22 @@ function Map() {
         setSearch(true)
     }
 
-    console.log(`detailsSelect = ${detailsSelect}`)
+    console.log(`detailsSelect = ${detailsSelect}`);
+
+    // added for modal
+    const [open, setOpen] = useState(false);
+
+    const handleOpenDetailsDialog = () => {
+      setOpen(true);
+    };
+  
+    const handleCloseDetailsDialog = () => {
+      setOpen(false);
+    };
+    // end added for modal
+
     return (
+        <>
         <div className="Map">
             <div className='Container'>
                 <div className='ManageSearch'>
@@ -282,10 +319,8 @@ function Map() {
                                             <p>Location: {JSON.stringify(person.location)}</p>
                                             <ShareIcon className= {poly ? 'activelines' : 'notActiveLines'} onClick={() => {setPolyLine(!poly)}}/>
                                             <GroupsIcon className= {eventpoly ? 'Eventactiveline' : 'EventnotActiveLines'} onClick={() => {seteventPolyLine(!eventpoly)}}/>
-                                            <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details`,{ state: person.name})}/>
-
-
-
+                                            <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/>
+                                            <PersonSearchIcon className='DetailsIcon' onClick={handleOpenDetailsDialog}/>
                                         </>
                                         : console.log(`member not found`)
                                          )}
@@ -299,7 +334,7 @@ function Map() {
                                         <p>Name: {org.name}</p> 
                                         <p>Location: {JSON.stringify(org.location)}</p>
                                         <ShareIcon className= {Orgpoly ? 'activelines' : 'notActiveLines'} onClick={() => {setOrgPolyLine(!Orgpoly)}}/>
-                                        <PersonSearchIcon className='OrgDetailsIcon' onClick={(e) => navigate(`/details`,{ state: org.name})}/>
+                                        <PersonSearchIcon className='OrgDetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/>
 
 
                                     </>
@@ -313,9 +348,10 @@ function Map() {
                                     <>
                                         <h1> Search Summary </h1>
                                         <p>Name: {org.event_name}</p> 
-                                        <p>Phone: {org.date}</p>
+                                        <p>Date: {org.date}</p>
+                                        <p>Type: {org.type}</p>
                                         <p>Location: {JSON.stringify(org.location)}</p>
-                                        <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details`,{ state: org.event_name})}/>
+                                        {/* <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
                                     </>
                                     : console.log(`member not found`)
                                     )}
@@ -421,7 +457,7 @@ function Map() {
                                                         <h3>Name: {feature.name}</h3> 
                                                         <p>Phone: {feature.phone_number}</p>
                                                         <p>Location: {JSON.stringify(feature.location)}</p>
-                                                        <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details`,{ state: feature.name})}/>
+                                                        <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/>
                                                     </Popup>
                                                 </Marker>
                                             )},
@@ -441,7 +477,7 @@ function Map() {
                                                      <Popup>
                                                         <h3>Name: {feature.name}</h3> 
                                                         <p>Location: {JSON.stringify(feature.location)}</p>
-                                                        <PersonSearchIcon className='OrgDetailsIcon' onClick={(e) => navigate(`/details`,{ state: feature.name})}/>
+                                                        <PersonSearchIcon className='OrgDetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/>
                                                     </Popup>
                                                 </Marker>
                                             )},
@@ -460,9 +496,10 @@ function Map() {
                                                   }}>
                                                     <Popup>
                                                         <h3>Name: {feature.event_name}</h3> 
-                                                        <p>Phone: {feature.date}</p>
+                                                        <p>Date: {feature.date}</p>
+                                                        <p>Type: {feature.type}</p>
                                                         <p>Location: {JSON.stringify(feature.location)}</p>
-                                                        <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details`,{ state: feature.event_name})}/>
+                                                        {/* <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
                                                     </Popup>
                                                 </Marker>
                                             )},
@@ -478,7 +515,7 @@ function Map() {
                                 <Circle color='blue' fillColor='yellow' weight={2} opacity={.9}center={coord} radius={8000}/>
                                 :
                                 console.log('')
-)}
+                            )}
                             <MapController coord={coord}/>
                             <ScaleControl position='topleft' />    
                         </MapContainer>
@@ -486,6 +523,8 @@ function Map() {
                 </div>
             </div>
         </div>
+        
+        </>
     );
 }
 
