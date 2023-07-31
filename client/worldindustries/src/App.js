@@ -10,7 +10,9 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useState } from 'react';
 import { Dialog } from '@mui/material';
 
-const chosenColor = '#F8F4E3';
+const latte = '#F8F4E3';
+const steelBlue = '#3F88C5';
+const jet = '#2D2D2A';
 
 const theme = createTheme({
   palette: {
@@ -21,31 +23,55 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           '& label.Mui-focused': {
-            color: chosenColor,
+            color: latte,
           },
           '& .MuiFormLabel-root': {
-            color: chosenColor,
+            color: latte,
           },
           '& .MuiInput-underline:after': {
-            borderBottomColor: chosenColor,
+            borderBottomColor: latte,
           },
           '& .MuiOutlinedInput-root': {
             '& fieldset': {
-              borderColor: chosenColor,
+              borderColor: latte,
             },
             '&:hover fieldset': {
-              borderColor: chosenColor,
+              borderColor: latte,
             },
             '&.Mui-focused fieldset': {
-              borderColor: chosenColor,
+              borderColor: latte,
             },
             '& .MuiOutlinedInput-input': {
-              color: chosenColor
+              color: latte
             },
+            '& input:-webkit-autofill': {
+              '-webkit-text-fill-color': latte,
+              '-webkit-box-shadow': `0 0 0 100px ${jet} inset`,
+            }
           },
         }
       }
     },
+    MuiButton: {
+      styleOverrides: {
+        contained: {
+          backgroundColor: steelBlue,
+          color: latte,
+          ':hover': {
+            backgroundColor: '#5c9fd8'
+          }
+        },
+        outlined: {
+          color: steelBlue,
+          border: `2px solid ${steelBlue}`,
+          ':hover': {
+            color: latte,
+            backgroundColor: steelBlue,
+            border: `2px solid ${steelBlue}`,
+          }
+        },
+      }
+    }
   }
 });
 

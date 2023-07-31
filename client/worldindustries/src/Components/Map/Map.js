@@ -24,6 +24,8 @@ import TravelExploreIcon from '@mui/icons-material/TravelExplore'
 import { forward, toPoint } from 'mgrs';
 import DetailsPage from '../DetailsPage/DetailsPage';
 import MultipleConnections from '../Connections/MultipleConnections';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 
 const cityList = require('./Chinacities.json')
@@ -151,6 +153,11 @@ function Map() {
     const [searchSet, setSearch] = useState(false)
     const [entityConnect, setEntityConnect] = useState(1)
     const [modeValue, setMode] = useState(false)
+    const [targetValue1, setTargetValue1] = useState()
+    const [targetValue2, setTargetValue2] = useState()
+    const [targetValue3, setTargetValue3] = useState()
+    const [targetValue4, setTargetValue4] = useState()
+    const [targetValue5, setTargetValue5] = useState()
     // const multipleList = []
  
     // console.log('this is the list:', multipleList)
@@ -225,6 +232,16 @@ function Map() {
     };
     // end added for modal
 
+    const [ searchSwitchChecked, setSearchSwitchChecked ] = useState(false);
+
+    const handleSearchSwitch = (event) => {
+        setSearchSwitchChecked(event.target.checked);
+        setMode(!modeValue);
+    }
+
+    console.log('targetvalue1', targetValue1)
+    console.log('targetvalue2', targetValue2)
+
     return (
         <>
         <div className="Map">
@@ -236,8 +253,20 @@ function Map() {
                     {searchbox ? 
                     <>
                         <div className='filterContainer'>
-                            <ManageSearchIcon className= {modeValue ? 'activelines' : 'notActiveLines'}  onClick={() => {setMode(true)}}/>
                             <CloseIcon className='closeIcon' onClick={() => {setSearchBox(false)}}/>
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={searchSwitchChecked}
+                                        onChange={handleSearchSwitch}
+                                    />
+                                }
+                                label="Search Multiple Individuals"
+                                className='searchSwitch'
+                            />
+                            
+                            {/* <ManageSearchIcon className= {modeValue ? 'activelines' : 'notActiveLines'}  onClick={() => {setMode(!modeValue)}}/> */}
+                            
 
                             { !modeValue ? 
                                 <div>
@@ -251,7 +280,7 @@ function Map() {
                                             id="combo-box-demo"
                                             options={options}
                                             sx={{ width: 300  }}
-                                            renderInput={(params) => <TextField {...params} label="Search Focus"  />}/>
+                                            renderInput={(params) => <TextField {...params} label="Search Focus" margin='normal' />}/>
                                     </div>
 
                                     <div className='secondSearch'>
@@ -271,7 +300,7 @@ function Map() {
                                                         id="combo-box-demo"
                                                         options={individualData}
                                                         sx={{ width: 300 }}
-                                                        renderInput={(params) => <TextField {...params} label="Search Individual" />}/>
+                                                        renderInput={(params) => <TextField {...params} label="Search Individual" margin='normal' />}/>
                                                         
                                             :
                                             ( (inputValue === 'Organization')  ? 
@@ -290,7 +319,7 @@ function Map() {
                                                         id="combo-box-demo"
                                                         options={OrganizationData}
                                                         sx={{ width: 300 }}
-                                                        renderInput={(params) => <TextField {...params} label="Search Organization" />}/>
+                                                        renderInput={(params) => <TextField {...params} label="Search Organization" margin='normal' />}/>
                                             :
                                                 <Autocomplete
                                                     inputValue={targetValue}
@@ -309,7 +338,7 @@ function Map() {
                                                     options={EventData}
                                                 
                                                     sx={{ width: 300 }}
-                                                    renderInput={(params) => <TextField {...params} label="Search Event" />}/>                         
+                                                    renderInput={(params) => <TextField {...params} label="Search Event" margin='normal' />}/>                         
                                             )}
                                     </div>
                                             {/* this is for the small details area */}
@@ -366,7 +395,60 @@ function Map() {
                                         ))}
                                     </div>
                                 </div>
-                                : <MultipleConnections />}
+                                : 
+                                <div>
+                                    <Autocomplete 
+                                            inputValue={targetValue1}
+                                            onInputChange={(event, newtargetValue1) => {
+                                                setTargetValue1(newtargetValue1) }}
+                                            disablePortal
+                                            id="combo-box-demo"
+                                            options={individualData}
+                                            sx={{ width: 300 }}
+                                            renderInput={(params) => <TextField {...params} label="Search Individual 1" margin='normal' />}/>
+            
+                                    <Autocomplete 
+                                        inputValue={targetValue2}
+                                            onInputChange={(event, newtargetValue2) => {
+                                                setTargetValue2(newtargetValue2) }}
+                                            disablePortal
+                                            id="combo-box-demo"
+                                            options={individualData}
+                                            sx={{ width: 300 }}
+                                            renderInput={(params) => <TextField {...params} label="Search Individual 2" margin='normal' />}/>
+
+                                    <Autocomplete 
+                                            inputValue={targetValue3}
+                                            onInputChange={(event, newtargetValue3) => {
+                                                setTargetValue3(newtargetValue3) }}
+                                            disablePortal
+                                            id="combo-box-demo"
+                                            options={individualData}
+                                            sx={{ width: 300 }}
+                                            renderInput={(params) => <TextField {...params} label="Search Individual 3" margin='normal' />}/>
+            
+                                    <Autocomplete 
+                                        inputValue={targetValue4}
+                                            onInputChange={(event, newtargetValue4) => {
+                                                setTargetValue4(newtargetValue4) }}
+                                            disablePortal
+                                            id="combo-box-demo"
+                                            options={individualData}
+                                            sx={{ width: 300 }}
+                                            renderInput={(params) => <TextField {...params} label="Search Individual 4" margin='normal' />}/>
+                                                                                
+                                    <Autocomplete 
+                                        inputValue={targetValue5}
+                                            onInputChange={(event, newtargetValue5) => {
+                                                setTargetValue5(newtargetValue5) }}
+                                            disablePortal
+                                            id="combo-box-demo"
+                                            options={individualData}
+                                            sx={{ width: 300 }}
+                                            renderInput={(params) => <TextField {...params} label="Search Individual 4" margin='normal' />}/>
+                                </div>
+                                
+                                }
 
 
                             <div className='latLongSearch'>
@@ -517,6 +599,7 @@ function Map() {
                                 </LayersControl.Overlay>
 
                             </LayersControl>
+                            {(modeValue ? <MultipleConnections targetValue1={targetValue1} targetValue2={targetValue2} targetValue3={targetValue3} targetValue4={targetValue4} targetValue5={targetValue5}/> : console.log('no connections for multiple'))}
                             {(poly ? <Connections details={detailsSelect}/> : console.log('no connections'))}
                             {(eventpoly ? <EventConnections details={detailsSelect}/> : console.log('no connections'))}
                             {(Orgpoly ? <OrgConnections details={detailsSelect}/> : console.log('no connections'))}
