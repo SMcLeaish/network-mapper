@@ -10,16 +10,49 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useState } from 'react';
 import { Dialog } from '@mui/material';
 
-const darkTheme = createTheme({
+const chosenColor = '#F8F4E3';
+
+const theme = createTheme({
   palette: {
     mode: 'dark',
   },
+  components: {
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& label.Mui-focused': {
+            color: chosenColor,
+          },
+          '& .MuiFormLabel-root': {
+            color: chosenColor,
+          },
+          '& .MuiInput-underline:after': {
+            borderBottomColor: chosenColor,
+          },
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: chosenColor,
+            },
+            '&:hover fieldset': {
+              borderColor: chosenColor,
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: chosenColor,
+            },
+            '& .MuiOutlinedInput-input': {
+              color: chosenColor
+            },
+          },
+        }
+      }
+    },
+  }
 });
 
 function App() {
 
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={theme}>
       <div className="App">
         <Routes>
           <Route path='/login' element={<LoginPage />} />

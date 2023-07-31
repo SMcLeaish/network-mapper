@@ -39,7 +39,7 @@ useEffect(() => {
     // individualConnect.map((loc) =>  setPrimaryLocation(loc[0].location))
 },[entityConnect])
 
-console.log(individualConnect, primaryLocation)
+// console.log(individualConnect, primaryLocation)
 
   useEffect(() => {
     fetch(`https://localhost:3001/relationships/${id}`)
@@ -54,9 +54,9 @@ console.log(individualConnect, primaryLocation)
     <>
         <div> 
             {connectDetails.map((person) => 
-            (console.log(person.location, primaryLocation),
+            // (console.log(person.location, primaryLocation),
                 <Polyline positions={[primaryLocation, person.location]} color="red" />
-            ))
+            )
             }
 
         </div>

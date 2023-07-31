@@ -44,19 +44,19 @@
   border: 1px solid black;
 }
 
-.MuiAutocomplete-listbox{
+/* .MuiAutocomplete-listbox{
   background-color: #F8F4E3;
-}
+} */
 
 /* .css-1d3z3hw-MuiOutlinedInput-notchedOutline {
   border: 5px solid red;
 } */
-.MuiOutlinedInput-notchedOutline{
+/* .MuiOutlinedInput-notchedOutline{
   border: 2px solid #F8F4E3 !important;
-}
+} */
 
 
-.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
+/* .css-1jy569b-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
   color: #F8F4E3 !important;
 }
 
@@ -70,7 +70,7 @@
 
 .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
   color: #F8F4E3 !important;
-}
+} */
 /* 
 .SearchContainer{
   display: flex;
@@ -119,7 +119,7 @@
   cursor: pointer;
 }
 
-.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+/* .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
 color: #F8F4E3 !important;
 }
 
@@ -130,7 +130,7 @@ color: red !important;
 input:-internal-autofill-selected {
 background-color: red !important;
 color: red !important;
-}
+} */
 
 
 /* .searchfield {

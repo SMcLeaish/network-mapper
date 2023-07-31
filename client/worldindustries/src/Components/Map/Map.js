@@ -6,7 +6,7 @@ import MarkerClusterGroup from 'react-leaflet-cluster';
 import './Map.css';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import CloseIcon from '@mui/icons-material/Close';
-import { Autocomplete, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Autocomplete } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { ScaleControl } from 'react-leaflet';
 import { MapController } from '../MapController/MapController';
@@ -21,8 +21,9 @@ import OrgConnections from '../Connections/OrgConnections';
 import GroupsIcon from '@mui/icons-material/Groups'
 import { Circle } from 'react-leaflet';
 import TravelExploreIcon from '@mui/icons-material/TravelExplore'
-import { mgrs, forward, toPoint } from 'mgrs';
+import { forward, toPoint } from 'mgrs';
 import DetailsPage from '../DetailsPage/DetailsPage';
+import MultipleConnections from '../Connections/MultipleConnections';
 
 
 const cityList = require('./Chinacities.json')
@@ -51,8 +52,8 @@ function Map() {
           .catch(error=>console.log('i am not getting the data'))
       },[])
 
-        console.log('indiv data 2: ',individualData2)
-        console.log('indiv data after change: ',individualData)
+        // console.log('indiv data 2: ',individualData2)
+        // console.log('indiv data after change: ',individualData)
 
 
       const [OrganizationData2, setOrganizationData2] = useState([])
@@ -149,7 +150,7 @@ function Map() {
     const [MGRSConversion, setMGRSConversion] = useState(null)
     const [searchSet, setSearch] = useState(false)
     const [entityConnect, setEntityConnect] = useState(1)
-    // const [modeValue, setMode] = useState(false)
+    const [modeValue, setMode] = useState(false)
     // const multipleList = []
  
     // console.log('this is the list:', multipleList)
@@ -167,7 +168,7 @@ function Map() {
       },[detailsSelect])
       
 
-        console.log('ENTITY CONNECT', entityConnect)
+        // console.log('ENTITY CONNECT', entityConnect)
 
 
 
@@ -210,7 +211,7 @@ function Map() {
         setSearch(true)
     }
 
-    console.log(`detailsSelect = ${detailsSelect}`);
+    // console.log(`detailsSelect = ${detailsSelect}`);
 
     // added for modal
     const [open, setOpen] = useState(false);
@@ -235,132 +236,137 @@ function Map() {
                     {searchbox ? 
                     <>
                         <div className='filterContainer'>
-                            {/* <ManageSearchIcon className= {modeValue ? 'activelines' : 'notActiveLines'}  onClick={() => {setMode(true)}}/> */}
+                            <ManageSearchIcon className= {modeValue ? 'activelines' : 'notActiveLines'}  onClick={() => {setMode(true)}}/>
                             <CloseIcon className='closeIcon' onClick={() => {setSearchBox(false)}}/>
-                            <div className='filterHeader'>
-                                <Autocomplete
-                                    inputValue={inputValue}
-                                        onInputChange={(event, newInputValue) => {
-                                        setInputValue(newInputValue);
-                                        }}
-                                    disablePortal
-                                    id="combo-box-demo"
-                                    options={options}
-                                    sx={{ width: 300  }}
-                                    renderInput={(params) => <TextField {...params} label="Search Focus"  />}/>
-                            </div>
 
-                            <div className='secondSearch'>
-                                {/* <FindDetails inputValue={inputValue}/> */}
-                                {(inputValue === 'Individual') ?
-                                    <Autocomplete style={filterstyle}
-                                        inputValue={targetValue}
-                                            onInputChange={(event, newtargetValue) => {
-                                                // setTargetValue('')
-                                                setTargetValue(newtargetValue);
-                                                setDetailsSelect(newtargetValue);
-                                                resetPolyLines()                                                // setCoord([29.304, 103.312]);
-                                                // setZoom(7)
-                                                individualData.find(info => (info.label === newtargetValue) ?  setCoord(info.location) : console.log())}
-                                                }
-                                                disablePortal
-                                                id="combo-box-demo"
-                                                options={individualData}
-                                                sx={{ width: 300 }}
-                                                renderInput={(params) => <TextField {...params} label="Search Individual" />}/>
-                                                
-                                    :
-                                    ( (inputValue === 'Organization')  ? 
+                            { !modeValue ? 
+                                <div>
+                                    <div className='filterHeader'>
                                         <Autocomplete
-                                            inputValue={targetValue}
-                                                onInputChange={(event, newtargetValue) => {
-                                                    setTargetValue(newtargetValue);
-                                                    setDetailsSelect(newtargetValue);
-                                                    resetPolyLines()
-
-                                                    // setCoord([29.304, 103.312]);
-                                                    // setZoom(7)
-                                                    OrganizationData.find(info => (info.label === newtargetValue) ?  setCoord(info.location) : console.log())}
-                                                }
-                                                disablePortal
-                                                id="combo-box-demo"
-                                                options={OrganizationData}
-                                                sx={{ width: 300 }}
-                                                renderInput={(params) => <TextField {...params} label="Search Organization" />}/>
-                                    :
-                                        <Autocomplete
-                                            inputValue={targetValue}
-                                            onInputChange={(event, newtargetValue) => {
-                                                setTargetValue(newtargetValue);
-                                                setDetailsSelect(newtargetValue);
-                                                resetPolyLines()
-
-                                                // setCoord([29.304, 103.312]);
-                                                // setZoom(7)
-                                                EventData.find(info => (info.label === newtargetValue) ?  setCoord(info.location) : console.log())}
-
-                                            }
+                                            inputValue={inputValue}
+                                                onInputChange={(event, newInputValue) => {
+                                                setInputValue(newInputValue);
+                                                }}
                                             disablePortal
                                             id="combo-box-demo"
-                                            options={EventData}
-                                           
-                                            sx={{ width: 300 }}
-                                            renderInput={(params) => <TextField {...params} label="Search Event" />}/>                         
-                                    )}
-                            </div>
-                                    {/* this is for the small details area */}
-                            <div className='MapSummary'>
-                                {inputValue === 'Individual' ? 
-                                    <div> 
-                                        {individualData.map((person) => person.name === detailsSelect ? 
-                                        <>
-                                            <h1> Search Summary </h1>
-                                            <p>Name: {person.name}</p> 
-                                            <p>Phone: {person.phone_number}</p>
-                                            <p>Location: {JSON.stringify(person.location)}</p>
-                                            <ShareIcon className= {poly ? 'activelines' : 'notActiveLines'} onClick={() => {setPolyLine(!poly)}}/>
-                                            <GroupsIcon className= {eventpoly ? 'Eventactiveline' : 'EventnotActiveLines'} onClick={() => {seteventPolyLine(!eventpoly)}}/>
-                                            {/* <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
-                                            <PersonSearchIcon className='DetailsIcon' onClick={handleOpenDetailsDialog}/>
-                                        </>
-                                        : console.log(`member not found`)
-                                         )}
+                                            options={options}
+                                            sx={{ width: 300  }}
+                                            renderInput={(params) => <TextField {...params} label="Search Focus"  />}/>
                                     </div>
-                                :
-                                ( inputValue === 'Organization' ?
-                                    <div> 
-                                    {OrganizationData.map((org) => org.name === detailsSelect ? 
-                                    <>
-                                        <h1> Search Summary </h1>
-                                        <p>Name: {org.name}</p> 
-                                        <p>Location: {JSON.stringify(org.location)}</p>
-                                        <ShareIcon className= {Orgpoly ? 'activelines' : 'notActiveLines'} onClick={() => {setOrgPolyLine(!Orgpoly)}}/>
-                                        <PersonSearchIcon className='OrgDetailsIcon' onClick={handleOpenDetailsDialog}/>
+
+                                    <div className='secondSearch'>
+                                        {/* <FindDetails inputValue={inputValue}/> */}
+                                        {(inputValue === 'Individual') ?
+                                            <Autocomplete style={filterstyle}
+                                                inputValue={targetValue}
+                                                    onInputChange={(event, newtargetValue) => {
+                                                        // setTargetValue('')
+                                                        setTargetValue(newtargetValue);
+                                                        setDetailsSelect(newtargetValue);
+                                                        resetPolyLines()                                                // setCoord([29.304, 103.312]);
+                                                        // setZoom(7)
+                                                        individualData.find(info => (info.label === newtargetValue) ?  setCoord(info.location) : console.log())}
+                                                        }
+                                                        disablePortal
+                                                        id="combo-box-demo"
+                                                        options={individualData}
+                                                        sx={{ width: 300 }}
+                                                        renderInput={(params) => <TextField {...params} label="Search Individual" />}/>
+                                                        
+                                            :
+                                            ( (inputValue === 'Organization')  ? 
+                                                <Autocomplete
+                                                    inputValue={targetValue}
+                                                        onInputChange={(event, newtargetValue) => {
+                                                            setTargetValue(newtargetValue);
+                                                            setDetailsSelect(newtargetValue);
+                                                            resetPolyLines()
+
+                                                            // setCoord([29.304, 103.312]);
+                                                            // setZoom(7)
+                                                            OrganizationData.find(info => (info.label === newtargetValue) ?  setCoord(info.location) : console.log())}
+                                                        }
+                                                        disablePortal
+                                                        id="combo-box-demo"
+                                                        options={OrganizationData}
+                                                        sx={{ width: 300 }}
+                                                        renderInput={(params) => <TextField {...params} label="Search Organization" />}/>
+                                            :
+                                                <Autocomplete
+                                                    inputValue={targetValue}
+                                                    onInputChange={(event, newtargetValue) => {
+                                                        setTargetValue(newtargetValue);
+                                                        setDetailsSelect(newtargetValue);
+                                                        resetPolyLines()
+
+                                                        // setCoord([29.304, 103.312]);
+                                                        // setZoom(7)
+                                                        EventData.find(info => (info.label === newtargetValue) ?  setCoord(info.location) : console.log())}
+
+                                                    }
+                                                    disablePortal
+                                                    id="combo-box-demo"
+                                                    options={EventData}
+                                                
+                                                    sx={{ width: 300 }}
+                                                    renderInput={(params) => <TextField {...params} label="Search Event" />}/>                         
+                                            )}
+                                    </div>
+                                            {/* this is for the small details area */}
+                                    <div className='MapSummary'>
+                                        {inputValue === 'Individual' ? 
+                                            <div> 
+                                                {individualData.map((person) => person.name === detailsSelect ? 
+                                                <>
+                                                    <h1> Search Summary </h1>
+                                                    <p>Name: {person.name}</p> 
+                                                    <p>Phone: {person.phone_number}</p>
+                                                    <p>Location: {JSON.stringify(person.location)}</p>
+                                                    <ShareIcon className= {poly ? 'activelines' : 'notActiveLines'} onClick={() => {setPolyLine(!poly)}}/>
+                                                    <GroupsIcon className= {eventpoly ? 'Eventactiveline' : 'EventnotActiveLines'} onClick={() => {seteventPolyLine(!eventpoly)}}/>
+                                                    {/* <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
+                                                    <PersonSearchIcon className='DetailsIcon' onClick={handleOpenDetailsDialog}/>
+                                                </>
+                                                : console.log(`member not found`)
+                                                )}
+                                            </div>
+                                        :
+                                        ( inputValue === 'Organization' ?
+                                            <div> 
+                                            {OrganizationData.map((org) => org.name === detailsSelect ? 
+                                            <>
+                                                <h1> Search Summary </h1>
+                                                <p>Name: {org.name}</p> 
+                                                <p>Location: {JSON.stringify(org.location)}</p>
+                                                <ShareIcon className= {Orgpoly ? 'activelines' : 'notActiveLines'} onClick={() => {setOrgPolyLine(!Orgpoly)}}/>
+                                                <PersonSearchIcon className='OrgDetailsIcon' onClick={handleOpenDetailsDialog}/>
 
 
-                                    </>
-                                    : console.log(`member not found`)
-                                    )}
+                                            </>
+                                            : console.log(`member not found`)
+                                            )}
+                                            </div>
+                                        :
+                                        (inputValue === 'Event' ? 
+                                            <div> 
+                                            {EventData.map((org) => org.event_name === detailsSelect ? 
+                                            <>
+                                                <h1> Search Summary </h1>
+                                                <p>Name: {org.event_name}</p> 
+                                                <p>Date: {org.date}</p>
+                                                {/* <p>Type: {org.type}</p> */}
+                                                <p>Location: {JSON.stringify(org.location)}</p>
+                                                {/* <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
+                                            </>
+                                            : console.log(`member not found`)
+                                            )}
+                                            </div>
+                                        :
+                                        console.log('none of them match')
+                                        ))}
                                     </div>
-                                :
-                                (inputValue === 'Event' ? 
-                                    <div> 
-                                    {EventData.map((org) => org.event_name === detailsSelect ? 
-                                    <>
-                                        <h1> Search Summary </h1>
-                                        <p>Name: {org.event_name}</p> 
-                                        <p>Date: {org.date}</p>
-                                        {/* <p>Type: {org.type}</p> */}
-                                        <p>Location: {JSON.stringify(org.location)}</p>
-                                        {/* <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
-                                    </>
-                                    : console.log(`member not found`)
-                                    )}
-                                    </div>
-                                :
-                                console.log('none of them match')
-                                ))}
-                            </div>
+                                </div>
+                                : <MultipleConnections />}
 
 
                             <div className='latLongSearch'>
