@@ -24,6 +24,7 @@ function Map() {
     const location=useLocation();
     console.log("location",location.state)
     useEffect(()=>{
+        if(location.state){
         fetch("https://localhost:3001/cookietest",{credentials:"include"})
         .then(res=>res.json())
         .then(data=>{
@@ -52,7 +53,7 @@ function Map() {
                     navigate('/login')
             }
     })        
-},[])
+}},[])
     
     const filterstyle = {
         color: red,

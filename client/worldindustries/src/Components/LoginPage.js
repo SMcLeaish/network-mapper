@@ -5,7 +5,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import "./LoginPage.css"
 import { toast } from 'react-toastify';
 import PasswordStrengthBar from 'react-password-strength-bar';
-import Cookies from 'js-cookie';
+
 
 
 
@@ -45,7 +45,7 @@ useEffect(()=>{
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    
+    let sendUser={}
     // are you a new user or are you signing in
     newUser===false ?  await fetch("https://localhost:3001/users/login",{
       credentials:"include",
@@ -86,7 +86,7 @@ useEffect(()=>{
       }
       else if(data.userExists&&data.isVerified){
         
-        setUserInfo(data)
+         sendUser=data
       }
     }).then(async ()=>{
       fetch("https://localhost:3001/users/cookie",{
@@ -99,10 +99,10 @@ useEffect(()=>{
           
         })
       }).then(res=>res.json())
-      .then(data=>{
+      .then( async data=>{
         if(data.success){
-          console.log(userInfo)
-          navigate('/map',{state:userInfo})
+          
+          navigate('/map',{state: sendUser})
         }
       })
   })
