@@ -147,7 +147,7 @@ app.post('/users', async (req, res) => {
 
 
 app.put('/users/cookie',(req,res)=>{
-  console.log("s",req.headers.cookie.split('=')[1])
+  
   knex('user_data')
     .where('username',req.body.username)
     .update({session_cookie:req.headers.cookie.split('=')[1]})
@@ -200,16 +200,25 @@ app.post('/users/login', (req, res) => {
                 userExists: found,
                 ...data[0]
               }
+              console.log(responseObj)
               res.send(responseObj);
-            } else{
-              console.log(found)
+            } else if(!found){
+              
               let responseObj = {
-                userExists: found
+                userExists: false
               }
+              console.log(responseObj)
               res.send(responseObj);
             }
           })
           .catch(err => res.status(500).send(err));
+      }
+      else{
+        let responseObj = {
+          userExists: false
+        }
+        console.log(responseObj)
+        res.send(responseObj);
       }
     })
     .catch(err => res.status(500).send(err))
@@ -218,6 +227,7 @@ app.post('/users/login', (req, res) => {
 // this will verify the user and update the 2 object fields
 
 app.put('/users/:id',(req,res)=>{
+  console.log("verified")
   knex('user_data')
     .where('id',req.body.id)
     .update({emailToken:null,isVerified:true})

@@ -17,8 +17,12 @@ const Login = () => {
   const [password,setPassword]=useState("")
   const [email,setEmail]=useState("")
   const [newUser,setNewUser]=useState(false)
+  const [user_organization,setuser_organization]=useState("")
+  
+  
   const navigate=useNavigate()
-  const[userInfo,setUserInfo] =useState({})
+  
+  
   
 
 // check if your cookie session exists on entry
@@ -28,7 +32,8 @@ useEffect(()=>{
     fetch("https://localhost:3001/cookietest",{credentials:"include"})
     .then(res=>res.json())
     .then(data=>{
-      if(data.success==true){
+      if(data.success==true && data.data[0]){
+        
          (navigate("/map",{state:data.data[0]}))
        
       }
@@ -46,6 +51,7 @@ useEffect(()=>{
   const handleLogin = async (e) => {
     e.preventDefault();
     let sendUser={}
+    console.log("submitting",newUser)
     // are you a new user or are you signing in
     newUser===false ?  await fetch("https://localhost:3001/users/login",{
       credentials:"include",
@@ -58,7 +64,7 @@ useEffect(()=>{
   })
     .then(res=>res.json())
     .then(data => {
-      console.log("data",data)
+      console.log("data");
        if(data.userExists&&!data.isVerified){
         toast("Verify your email", {
           position: "top-center",
@@ -71,7 +77,10 @@ useEffect(()=>{
           theme: "light",
           });
       }
-      else if(!data.userExists){
+      else if(data.userExists&&data.isVerified){
+         sendUser=data
+      }
+      else{
         console.log("no user")
         toast("User not found, create an account", {
           position: "top-center",
@@ -83,10 +92,7 @@ useEffect(()=>{
           progress: undefined,
           theme: "light",
           });
-      }
-      else if(data.userExists&&data.isVerified){
-        
-         sendUser=data
+          return
       }
     }).then(async ()=>{
       fetch("https://localhost:3001/users/cookie",{
@@ -114,6 +120,7 @@ useEffect(()=>{
         username:username,
         password:password,
         email:email,
+        user_organization:user_organization
         
       })
     })
@@ -150,7 +157,7 @@ const handleNewUser=()=>{
           <TextField id="loginText" label='username' placeholder="Username" fullWidth required onChange={(e)=>{setUsername(e.target.value)}} sx={{color:'black !important'}}/>
           <TextField id="loginText" label='password' placeholder="Enter Password" type='password' fullWidth required onChange={(e)=>{setPassword(e.target.value)}} />
           
-          {/* <FormControlLabel control={<Checkbox  />} label="Remember Me" />           */}
+          
           <Button type='submit' color='primary' variant='contained' fullWidth onSubmit={handleLogin}>Sign In</Button> 
         </form>
         <Button type='NewAccount' color='primary' onClick={()=>handleNewUser()}> New User </Button>
@@ -167,11 +174,12 @@ const handleNewUser=()=>{
         <h1>Create New Account</h1> 
       </Grid>
       <form onSubmit={handleLogin}>
-        <TextField label='username' placeholder="Username" fullWidth required onChange={(e)=>{setUsername(e.target.value)}}/>
-        <TextField label='password' placeholder="Enter Password" type='password' fullWidth required onChange={(e)=>{setPassword(e.target.value)}} />
-        <PasswordStrengthBar password={password} minLength={5}/>
+        <TextField label='Username' placeholder="Username" type='text' fullWidth required onChange={(e)=>{setUsername(e.target.value)}}/>
+        <TextField label='Password' placeholder="Enter Password" type='text' fullWidth required onChange={(e)=>{setPassword(e.target.value)}} />
+        <TextField label='User Org' placeholder="Enter Organization" type='text' fullWidth required onChange={(e)=>{setuser_organization(e.target.value)}} />
+        <PasswordStrengthBar password={password} minLength={5}> </PasswordStrengthBar>
         <TextField label='email' placeholder="Enter Email" type='email' fullWidth required onChange={(e)=>{setEmail(e.target.value)}} />
-        <FormControlLabel control={<Checkbox  />} label="Remember Me" />          
+                
         <Button   type='submit' color='primary' variant='contained' fullWidth onSubmit={handleLogin}>Create</Button> 
       </form>
       

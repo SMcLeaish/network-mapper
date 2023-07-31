@@ -24,6 +24,7 @@ function Map() {
     const location=useLocation();
     console.log("location",location.state)
     useEffect(()=>{
+        
         if(location.state){
         fetch("https://localhost:3001/cookietest",{credentials:"include"})
         .then(res=>res.json())
@@ -39,7 +40,8 @@ function Map() {
                     progress: undefined,
                     theme: "light",
                     });
-            }else{
+            }
+            else{
                 toast("Please sign in", {
                     position: "top-center",
                     autoClose: 5000,
@@ -53,7 +55,21 @@ function Map() {
                     navigate('/login')
             }
     })        
-}},[])
+}else{
+    toast("Please sign in", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
+        navigate('/login')
+}
+
+},[])
     
     const filterstyle = {
         color: red,
