@@ -110,7 +110,7 @@ export const renderAssociateForm = (check, handleSubmit, handleChangeForFormEnti
     if (check) {
         return (
             <div className='associate_form_container'>
-                <form className='associate-form bg-jet' onSubmit={() => handleSubmit()}>
+                <form className='associate-form bg-jet' onSubmit={(e) => handleSubmit(e)}>
                     <TextField
                         required
                         id="id_entity_2"

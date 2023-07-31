@@ -131,7 +131,8 @@ const DetailsPage = ({ open, onClose, id }) => {
     console.log(associateToAdd)
   }
 
-  const handleOnSubmitForm = () => {
+  const handleOnSubmitForm = (e) => {
+    e.preventDefault()
     let init = {
       method: 'POST',
       headers: {

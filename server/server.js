@@ -342,7 +342,7 @@ app.get('/relationships/:id', (req, res) => {
 app.post('/interaction', (req, res) => {
   knex('interaction')
     .insert(req.body)
-    .then(() => res.status(201).json({message: 'Interaction has been added'}))
+    .then(() => res.status(201).send({message: 'Interaction has been added'}))
 })
 
 app.delete('/interaction', (req, res) => {
