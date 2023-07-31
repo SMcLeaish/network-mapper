@@ -140,7 +140,7 @@ const handleNewUser=()=>{
 }
 
 
-  const paperStyle={padding:50,height:'80vh',width:280,margin:"20px auto"}
+  const paperStyle={padding:50,height:'80vh',width:280,margin:"20px auto",}
 
   return (
     <>
@@ -148,13 +148,13 @@ const handleNewUser=()=>{
     {newUser==false ?
     
     <Grid>
-      <Paper elevation={10} style={paperStyle}>
+      <Paper elevation={10} style={paperStyle} sx={{backgroundColor:"#2D2D2A"}}>
         <Grid align="center">
           <Avatar>Pic</Avatar>
           <h1>Sign In</h1> 
         </Grid>
-        <form id="form" onSubmit={handleLogin} style={{color:"black"}}>
-          <TextField id="loginText" label='username' placeholder="Username" fullWidth required onChange={(e)=>{setUsername(e.target.value)}} sx={{color:'black !important'}}/>
+        <form id="form" onSubmit={handleLogin} style={{backgroundColorcolor:"black"}}>
+          <TextField id="loginText" label='username' placeholder="Username" fullWidth required onChange={(e)=>{setUsername(e.target.value)}} sx={{color:'red'}}/>
           <TextField id="loginText" label='password' placeholder="Enter Password" type='password' fullWidth required onChange={(e)=>{setPassword(e.target.value)}} />
           
           
