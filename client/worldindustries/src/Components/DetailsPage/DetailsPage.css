@@ -1,0 +1,54 @@
+.details-page-container {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.details-item-container {
+  padding: 10px;
+}
+
+.details-image {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.rounded-button {
+  border-radius: 100px !important;
+}
+
+.associate-form {
+  display: flex;
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  width: 50%;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1vh;
+  padding: 2%;
+  border: 2px solid turquoise;
+  background-color: bisque;
+}
+
+.bg-gray {
+  background-color: gray;
+}
+
+.bg-green {
+  background-color: darkseagreen;
+}
+
+.bg-jet {
+  background-color: #2d2d2a;
+  color: #f8f4e3;
+}
+
+.data-box {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 15px;
+  border: 4px solid #f8f4e3;
+  border-radius: 10px;
+}

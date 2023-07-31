@@ -31,7 +31,16 @@ exports.seed = function(knex) {
           {weight: 1, id_entity_1: 8, id_entity_2: 2, id_event: 2},
           {weight: 1, id_entity_1: 9, id_entity_2: 3, id_event: 3},
           {weight: 1, id_entity_1: 10, id_entity_2: 4, id_event: 4},
-          {weight: 1, id_entity_1: 1, id_entity_2: 12, id_event: 5}
+          {weight: 1, id_entity_1: 11, id_entity_2: 2, id_event: 1},
+          {weight: 1, id_entity_1: 11, id_entity_2: 3, id_event: 2},
+          {weight: 1, id_entity_1: 11, id_entity_2: 4, id_event: 3},
+          {weight: 1, id_entity_1: 11, id_entity_2: 5, id_event: 4},
+          {weight: 1, id_entity_1: 12, id_entity_2: 5, id_event: 4},
+          {weight: 1, id_entity_1: 13, id_entity_2: 5, id_event: 4},
+          {weight: 1, id_entity_1: 14, id_entity_2: 5, id_event: 4},
+          {weight: 1, id_entity_1: 15, id_entity_2: 5, id_event: 4},
+          {weight: 1, id_entity_1: 16, id_entity_2: 5, id_event: 4},
+          {weight: 1, id_entity_1: 17, id_entity_2: 5, id_event: 4},
         ])
         .then(function(){
             return knex.raw("SELECT setval('interaction_id_seq', (SELECT MAX(id) from interaction))");

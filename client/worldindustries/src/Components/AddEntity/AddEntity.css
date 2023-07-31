@@ -1,0 +1,9 @@
+.association-grid{
+  border: 2px solid red;
+  padding: 10px;
+  background-color: antiquewhite; 
+}
+.auto-complete {
+  background-color: antiquewhite;
+  color: grey;
+}

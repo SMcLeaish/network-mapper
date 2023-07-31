@@ -171,47 +171,33 @@ app.get('/position/:id', (req, res) => {
     })
 })
 
-// app.get('/entity/:name', (req, res) => {
-//   let { name } = req.params
-//   knex.select('*')
-//     .from('individual')
-//     .where({'individual.name': name})
-//     .then(data => {
-//       if (data.length !== 0) {
-//         knex.select('entity.id AS individual_entity_id', 'individual.name', 'individual.name AS other_name', 'individual.location AS individual_location', 'interaction.weight', 
-//         'interaction.id_entity_1', 'interaction.id_entity_2', 'interaction.id_event', 'event.event_name', 
-//         'event.location AS event_location', 'event.date AS event_date', 'event_type.type AS event_type', 'user_data.username', 'user_data.user_organization')
-//           .from('individual')
-//           .join('entity', 'individual.id', 'entity.id_individual')
-//           .join('interaction', function() {
-//             this 
-//             .on('interaction.id_entity_1', '=', 'entity.id')
-//             .orOn('interaction.id_entity_2', '=', 'entity.id')
-//           })
-//           .join('event', 'interaction.id_event', 'event.id')
-//           .join('event_type', 'event.event_type_id', 'event_type.id')
-//           .join('user_data', 'individual.id_user_data', 'user_data.id')
-//           .where({'individual.name': name})
-//           .then((data) => res.status(200).json(data))
-//       } else {
-//         knex.select('entity.id AS organization_entity_id', 'organization.name', 'organization.location AS organization_location', 'interaction.weight', 
-//         'interaction.id_entity_1', 'interaction.id_entity_2', 'interaction.id_event', 'event.event_name', 
-//         'event.location AS event_location', 'event.date AS event_date', 'event_type.type AS event_type', 'user_data.username', 'user_data.user_organization')
-//           .from('organization')
-//           .where({'organization.name': name})
-//           .join('entity', 'organization.id', 'entity.id_organization')
-//           .join('interaction', function() {
-//             this 
-//               .on('id_entity_1', '=', 'entity.id')
-//               .orOn('id_entity_2', '=', 'entity.id')
-//           })
-//           .join('event', 'interaction.id_event', 'event.id')
-//           .join('event_type', 'event_type_id', 'event_type.id')
-//           .join('user_data', 'organization.id_user_data', 'user_data.id')
-//           .then((data) => res.status(200).json(data))
-//       }
-//     })
-// })
+app.get('/biography/:id', (req, res) => {
+  let { id } = req.params;
+  knex.select('entity.id AS entity_id', 'organization.id AS org_id', 'name', 'type', 'mgrs')
+    .from('entity')
+    .where('entity.id', id)
+    .join('organization', 'id_organization', 'organization.id')
+    .join('organization_type', 'organization_type_id', 'organization_type.id')
+    .then(data => {
+      if (data.length > 0) {
+        res.status(200).json(data)
+      } else {
+        knex.select('entity.id AS entity_id', 'individual.id AS individual_id', 'individual.name AS individual_name',
+          'role.title AS job_title', 'responsibilities.name AS job_responsibilities', 'individual.location AS individual_location', 'individual.id_user_data', 'organization.id AS org_id', 'organization.name AS org_name',
+        )
+          .from('entity')
+          .where('entity.id', id)
+          .join('individual', 'entity.id_individual', 'individual.id')
+          .join('position', 'position.individual_id', 'individual.id')
+          .join('organization', 'position.organization_id', 'organization.id')
+          .join('organization_type', 'organization_type_id', 'organization_type.id')
+          .join('role', 'position.role_id', 'role.id')
+          .join('responsibilities', 'role.responsibilities_id', 'responsibilities.id')
+          .then((data) => res.status(200).json(data))
+      }
+    })
+})
+
 
 app.get('/entity/:name', (req, res) => {
   let { name } = req.params
@@ -220,9 +206,9 @@ app.get('/entity/:name', (req, res) => {
     .where({ 'individual.name': name })
     .then(data => {
       if (data.length !== 0) {
-        knex.select('entity.id AS individual_entity_id', 'individual.name', 'individual.location AS individual_location', 'interaction.weight',
-          'interaction.id_entity_1', 'interaction.id_entity_2', 'interaction.id_event', 'event.event_name',
-          'event.location AS event_location', 'event.date AS event_date', 'event_type.type AS event_type', 'user_data.username AS event_data_username', 'user_data.user_organization AS event_data_useorg')
+        knex.select('entity.id AS individual_entity_id', 'entity.id AS primary_entity_id','individual.id AS individual_id','interaction.id AS interaction_id', 'individual.name AS individual_name', 'individual.location AS individual_location', 'interaction.weight', 
+        'interaction.id_entity_1', 'interaction.id_entity_2', 'interaction.id_event', 'event.event_name', 
+        'event.location AS event_location', 'event.date AS event_date', 'event_type.type AS event_type', 'user_data.username', 'user_data.user_organization')
           .from('individual')
           .join('entity', 'individual.id', 'entity.id_individual')
           .join('interaction', function () {
@@ -236,9 +222,9 @@ app.get('/entity/:name', (req, res) => {
           .where({ 'individual.name': name })
           .then((data) => res.status(200).json(data))
       } else {
-        knex.select('entity.id AS organization_entity_id', 'organization.name', 'organization.location AS organization_location', 'interaction.weight',
-          'interaction.id_entity_1', 'interaction.id_entity_2', 'interaction.id_event', 'event.event_name',
-          'event.location AS event_location', 'event.date AS event_date', 'event_type.type AS event_type', 'user_data.username AS event_data_username', 'user_data.user_organization AS  event_data_useorg')
+        knex.select('entity.id AS organization_entity_id', 'entity.id AS primary_entity_id', 'organization.id AS org_id', 'interaction.id AS interaction_id', 'organization.name', 'organization.location AS organization_location', 'interaction.weight', 
+        'interaction.id_entity_1', 'interaction.id_entity_2', 'interaction.id_event', 'event.event_name', 
+        'event.location AS event_location', 'event.date AS event_date', 'event_type.type AS event_type', 'user_data.username', 'user_data.user_organization')
           .from('organization')
           .where({ 'organization.name': name })
           .join('entity', 'organization.id', 'entity.id_organization')
@@ -253,6 +239,14 @@ app.get('/entity/:name', (req, res) => {
           .then((data) => res.status(200).json(data))
       }
     })
+})
+
+app.get('/entity', (req, res) => {
+  let { array } = req.body
+  knex.select('*')
+    .from('individual')
+    .whereIn('name', array)
+    .then(data => res.status(200).json(data))
 })
 
 app.get('/entity/id/:id', (req, res) => {
@@ -306,6 +300,58 @@ app.get('/relationships/:id', (req, res) => {
           res.status(200).json(returnData)
         })
     })
+})
+
+app.get('/relationships/:id', (req, res) => {
+    let { id } = req.params
+    let entityIds = [];
+    let returnData = [];
+    knex.select('*')
+      .from('interaction')
+      .where({'interaction.id_entity_1': id})
+      .orWhere({'interaction.id_entity_2': id})
+      .then(data => {
+        let allIds = []
+        data.forEach(e => {
+          allIds.push(e.id_entity_1)
+          allIds.push(e.id_entity_2)
+        })
+        entityIds = allIds.filter(eId => eId !== parseInt(id))
+      })
+      .then(() => {
+        knex.select('entity.id AS entity_id', '*')
+          .from('entity')
+          .join('individual', 'entity.id_individual', 'individual.id')
+          .whereIn('entity.id', entityIds)
+          .then(data => {
+            data.forEach(e => returnData.push(e))
+          })
+          .then(() => {
+            knex.select('entity.id AS entity_id', '*')
+              .from('entity')
+              .join('organization', 'entity.id_organization', 'organization.id')
+              .whereIn('entity.id', entityIds)
+              .then(data => {
+                data.forEach(e => returnData.push(e))
+                res.status(200).json(returnData)
+              })
+          })
+      })
+})
+
+app.post('/interaction', (req, res) => {
+  knex('interaction')
+    .insert(req.body)
+    .then(() => res.status(201).json({message: 'Interaction has been added'}))
+})
+
+app.delete('/interaction', (req, res) => {
+  let { id_entity_1, id_entity_2 } = req.body;
+  knex('interaction')
+    .whereIn('id_entity_1', [id_entity_1, id_entity_2])
+    .whereIn('id_entity_2', [id_entity_1, id_entity_2])
+    .del()
+    .then(() => res.status(201).json({message: 'Interaction has been deleted'}))
 })
 
 

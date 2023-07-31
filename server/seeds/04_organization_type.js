@@ -4,7 +4,7 @@ exports.seed = function(knex) {
         return knex('organization_type').insert([
           {type: 'ngo'},
           {type: 'corporation'},
-          {type: 'military'}
+          {type: 'military'},
         ]);
       }).then(function(){
         return knex.raw("SELECT setval('organization_type_id_seq', (SELECT MAX(id) from organization_type))");
