@@ -175,9 +175,9 @@ const handleNewUser=()=>{
       </Grid>
       <form onSubmit={handleLogin}>
         <TextField label='Username' placeholder="Username" type='text' fullWidth required onChange={(e)=>{setUsername(e.target.value)}}/>
-        <TextField label='Password' placeholder="Enter Password" type='text' fullWidth required onChange={(e)=>{setPassword(e.target.value)}} />
+        <TextField label='Password' placeholder="Enter Password" type='password' fullWidth required onChange={(e)=>{setPassword(e.target.value)}} />
+        <PasswordStrengthBar password={password} minLength={5}/> 
         <TextField label='User Org' placeholder="Enter Organization" type='text' fullWidth required onChange={(e)=>{setuser_organization(e.target.value)}} />
-        <PasswordStrengthBar password={password} minLength={5}> </PasswordStrengthBar>
         <TextField label='email' placeholder="Enter Email" type='email' fullWidth required onChange={(e)=>{setEmail(e.target.value)}} />
                 
         <Button   type='submit' color='primary' variant='contained' fullWidth onSubmit={handleLogin}>Create</Button> 
