@@ -6,7 +6,7 @@ import MarkerClusterGroup from 'react-leaflet-cluster';
 import './Map.css';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import CloseIcon from '@mui/icons-material/Close';
-import { Autocomplete } from '@mui/material';
+import { Autocomplete, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { ScaleControl } from 'react-leaflet';
 import { MapController } from '../MapController/MapController';
@@ -142,15 +142,23 @@ function Map() {
     const [MGRSvalue, setMGRSvalue] = useState('')
     const [MGRSConversion, setMGRSConversion] = useState(null)
     const [searchSet, setSearch] = useState(false)
+    // const [modeValue, setMode] = useState(false)
+    // const multipleList = []
+ 
+    // console.log('this is the list:', multipleList)
 
     const handleSearch = () => {
         setSearchBox(true)
         }
 
     const resetPolyLines = () => {
-        seteventPolyLine(false);
-        setPolyLine(false);
-        setOrgPolyLine(false)
+        // if (modeValue !== true) {
+            seteventPolyLine(false)
+            setPolyLine(false)
+            setOrgPolyLine(false)
+        // } else {
+        //     console.log('single')
+        // }
     }
 
     const handleMGRS = (long, lat) => {
@@ -189,6 +197,7 @@ function Map() {
                     {searchbox ? 
                     <>
                         <div className='filterContainer'>
+                            {/* <ManageSearchIcon className= {modeValue ? 'activelines' : 'notActiveLines'}  onClick={() => {setMode(true)}}/> */}
                             <CloseIcon className='closeIcon' onClick={() => {setSearchBox(false)}}/>
                             <div className='filterHeader'>
                                 <Autocomplete
@@ -212,8 +221,7 @@ function Map() {
                                                 // setTargetValue('')
                                                 setTargetValue(newtargetValue);
                                                 setDetailsSelect(newtargetValue);
-                                                resetPolyLines()
-                                                // setCoord([29.304, 103.312]);
+                                                resetPolyLines()                                                // setCoord([29.304, 103.312]);
                                                 // setZoom(7)
                                                 individualData.find(info => (info.label === newtargetValue) ?  setCoord(info.location) : console.log())}
                                                 }
