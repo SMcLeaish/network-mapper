@@ -118,17 +118,16 @@ const DetailsPage = ({ open, onClose, id }) => {
         let obj = {...associateToAdd}
         obj.id_entity_2 = entity2
         setAssociateToAdd(obj)
-        // console.log(obj)
+        console.log(obj)
       })
   }
 
   const handleChangeForFormEvent = (e) => {
     let event = e.target.value
-    console.log(event)
     let obj = {...associateToAdd}
     obj.id_event = event.id
     setAssociateToAdd(obj)
-    console.log(associateToAdd)
+    console.log("This is the associate to add: " + obj)
   }
 
   const handleOnSubmitForm = () => {
@@ -183,7 +182,7 @@ const DetailsPage = ({ open, onClose, id }) => {
                   </Button>
                 </Stack>
                 <Stack direction='row' spacing={1} useFlexGap flexWrap={'wrap'}>
-                  {MyFunctions.returnChipsForAssociates(associates)}
+                  {MyFunctions.returnChipsForAssociates(associates, handleClickAssociate, handleDeleteAssociate)}
                 </Stack>
               </Box>
             </Grid>
