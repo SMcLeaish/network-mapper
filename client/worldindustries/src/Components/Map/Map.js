@@ -320,7 +320,7 @@ function Map() {
                                             <p>Location: {JSON.stringify(person.location)}</p>
                                             <ShareIcon className= {poly ? 'activelines' : 'notActiveLines'} onClick={() => {setPolyLine(!poly)}}/>
                                             <GroupsIcon className= {eventpoly ? 'Eventactiveline' : 'EventnotActiveLines'} onClick={() => {seteventPolyLine(!eventpoly)}}/>
-                                            <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/>
+                                            {/* <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
                                             <PersonSearchIcon className='DetailsIcon' onClick={handleOpenDetailsDialog}/>
                                         </>
                                         : console.log(`member not found`)
@@ -335,7 +335,7 @@ function Map() {
                                         <p>Name: {org.name}</p> 
                                         <p>Location: {JSON.stringify(org.location)}</p>
                                         <ShareIcon className= {Orgpoly ? 'activelines' : 'notActiveLines'} onClick={() => {setOrgPolyLine(!Orgpoly)}}/>
-                                        <PersonSearchIcon className='OrgDetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/>
+                                        <PersonSearchIcon className='OrgDetailsIcon' onClick={handleOpenDetailsDialog}/>
 
 
                                     </>
@@ -350,7 +350,7 @@ function Map() {
                                         <h1> Search Summary </h1>
                                         <p>Name: {org.event_name}</p> 
                                         <p>Date: {org.date}</p>
-                                        <p>Type: {org.type}</p>
+                                        {/* <p>Type: {org.type}</p> */}
                                         <p>Location: {JSON.stringify(org.location)}</p>
                                         {/* <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
                                     </>
@@ -458,7 +458,8 @@ function Map() {
                                                         <h3>Name: {feature.name}</h3> 
                                                         <p>Phone: {feature.phone_number}</p>
                                                         <p>Location: {JSON.stringify(feature.location)}</p>
-                                                        <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/>
+                                                        {/* <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
+                                                        <PersonSearchIcon className='DetailsIcon' onClick={handleOpenDetailsDialog}/>
                                                     </Popup>
                                                 </Marker>
                                             )},
@@ -478,7 +479,8 @@ function Map() {
                                                      <Popup>
                                                         <h3>Name: {feature.name}</h3> 
                                                         <p>Location: {JSON.stringify(feature.location)}</p>
-                                                        <PersonSearchIcon className='OrgDetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/>
+                                                        {/* <PersonSearchIcon className='OrgDetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
+                                                        <PersonSearchIcon className='OrgDetailsIcon' onClick={handleOpenDetailsDialog}/>
                                                     </Popup>
                                                 </Marker>
                                             )},
@@ -498,7 +500,7 @@ function Map() {
                                                     <Popup>
                                                         <h3>Name: {feature.event_name}</h3> 
                                                         <p>Date: {feature.date}</p>
-                                                        <p>Type: {feature.type}</p>
+                                                        {/* <p>Type: {feature.type}</p> */}
                                                         <p>Location: {JSON.stringify(feature.location)}</p>
                                                         {/* <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
                                                     </Popup>

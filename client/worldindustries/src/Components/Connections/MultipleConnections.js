@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useMap } from "react-leaflet";
 import Map from "../Map/Map";
 import { Circle, Polyline } from 'react-leaflet'
+import { Autocomplete, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import TextField from '@mui/material/TextField';
+
+
 
 
 const Connections = (props) => {
@@ -11,6 +15,13 @@ const Connections = (props) => {
   const [id, setId] = useState([])
   const [connectDetails, setConnectDetails] = useState([])
   const [primaryLocation , setPrimaryLocation] = useState([]) 
+  const [targetValue1, setTargetValue1] = useState()
+  const [targetValue2, setTargetValue2] = useState()
+  const [targetValue3, setTargetValue3] = useState()
+  const [targetValue4, setTargetValue4] = useState()
+  const [targetValue5, setTargetValue5] = useState()
+  const [individualData, setIndividualData] = useState([])
+  const [coord, setCoord] = useState()
 
 
   useEffect(() => {
@@ -52,6 +63,21 @@ console.log(individualConnect, primaryLocation)
 
   return (
     <>
+        <div>
+        <Autocomplete 
+            inputValue={targetValue1}
+                onInputChange={(event, newtargetValue) => {
+                                                // setTargetValue('')
+                                          // setCoord([29.304, 103.312]);
+                                                // setZoom(7)
+                individualData.find(info => (info.label === newtargetValue) ?  setCoord(info.location) : console.log())}
+                }
+                disablePortal
+                id="combo-box-demo"
+                options={individualData}
+                sx={{ width: 300 }}
+                renderInput={(params) => <TextField {...params} label="Search Individual 1" />}/>
+        </div>
         <div> 
             {connectDetails.map((person) => 
             (console.log(person.location, primaryLocation),

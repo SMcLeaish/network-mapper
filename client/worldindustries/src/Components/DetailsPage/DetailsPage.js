@@ -23,11 +23,13 @@ const DetailsPage = ({ open, onClose, id }) => {
     id_event: 1
   })
 
+  const [updateStatus, setUpdateStatus] = useState(true)
+
   useEffect(() => {
     fetch(`https://localhost:3001/relationships/${id}`)
       .then(res => res.json())
       .then(data => {setAssociates(data)})
-  }, [id])
+  }, [id, updateStatus])
 
   useEffect(() => {
     fetch(`https://localhost:3001/events`)
@@ -95,9 +97,10 @@ const DetailsPage = ({ open, onClose, id }) => {
       },
       body: JSON.stringify(obj)
     }
+    // const updatedAssociates = associates.filter(associate => associate !== obj);
     fetch('https://localhost:3001/interaction', init)
       .then(res => res.json())
-      .then(data => {alert(data.message); window.location.reload()})
+      .then(data => {alert(data.message); setUpdateStatus(!updateStatus);})
   }
 
   const handleAddAssociate = () => {
