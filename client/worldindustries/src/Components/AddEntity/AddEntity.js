@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import './AddEntity.css';
-import { styled, TextField, Box, Button, Container, Grid, Paper } from '@mui/material';
-import { createFilterOptions } from '@mui/material/Autocomplete';
-
+import { styled, TextField, Box, Button, Container, Grid, Paper, AutoComplete } from '@mui/material';
 
 //  ADD ENTITY - PARENT FUNCTION
 const AddEntity = () => {
@@ -12,7 +10,8 @@ const AddEntity = () => {
     const [association, setAssociation] = useState('');
     const [events, setEvents] = useState('');
     const [name, setName] = useState('')
-
+    const [option, setOption] = useState([]);
+    
     //  UPLOAD PHOTO - CHILD FUNCTION
     const profilePictureUpload = (event) => {
         const file = event.target.files[0];
@@ -38,6 +37,19 @@ const AddEntity = () => {
                 </p>
             </div>
         );
+    };
+    
+    const AutoComplete = () => {
+        useEffect(() => {
+            fetch(" ")
+            .then((response) => response.json())
+            .then((data) => {
+                setOption(data);
+            })
+            .catch((error) => {
+            console.error('Error fetching data:', error);
+        });
+        },[]);
     };
 
     //  SET ORGANIZATION - CHILD FUNCTION
@@ -78,8 +90,8 @@ const AddEntity = () => {
             </div>
         )
     }
-
-      return (
+  
+    return (
         <div>
             <header>
                 <h1>
@@ -111,22 +123,23 @@ const AddEntity = () => {
             </div>
                  <Container maxWidth="lg">
                  <h3> Association </h3> 
-                 <Grid container spacing={4}>
-
-
-
-
-                 </Grid>
-                 
-                 
-                 </Container>
-           
-           
-            <div>
+                  <AutoComplete
+                    option={option} 
+                    getOptionLabel={(option) => option.label}
+                  renderInput={(params) => ( 
+                    <TextField {...params} label="Select a option" 
+                   classname="auto-complete" />
+                  )}
+                    
+                  
+                  
+                  />
+                </Container>
                 
-                     
+            <div>
                 <input type='text' value={association} onChange={settingAssociation} />
             </div>
+            
             <div>
                 <h3> Events </h3>
                 <Grid item xs={7} className='details-item-container'>
@@ -136,19 +149,21 @@ const AddEntity = () => {
           </Grid>
                 <input type='text' value={events} onChange={settingEvents} />
             </div>
+
             <div>
                 <h3>
                     Narrative:
                 </h3>
                 <SettingNarrative />
             </div>
+            
             <Button onClick={AddEntity} class="mdc-button mdc-button-outlined">
               <span class="mdc-button__label">Outlined Button </span>
                  Save
             </Button>
         </div>
 
-    )
-}
+    );
+};
 
 export default AddEntity;

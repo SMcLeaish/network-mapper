@@ -1,5 +1,5 @@
 import './DetailsPage.css';
-import { Container, Grid, Typography, Stack, Button, Chip, TextField, MenuItem, Box, Popper} from '@mui/material';
+import { Dialog, Container, Grid, Typography, Stack, Button, Chip, TextField, MenuItem, Box} from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -7,10 +7,9 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import * as MyFunctions from './DetailsFunctions.js';
 
 const placeholderImg = 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80';
-const placeholderMap = 'https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1750&q=80';
 
-const DetailsPage = () => {
-  let { id } = useParams();
+const DetailsPage = ({ open, onClose, id }) => {
+
   const [ associates, setAssociates ] = useState([])
   const [ narratives, setNarratives ] = useState([])
   const [ entity, setEntity ] = useState([])
@@ -26,11 +25,13 @@ const DetailsPage = () => {
     id_event: 1
   })
 
+  const [updateStatus, setUpdateStatus] = useState(true)
+
   useEffect(() => {
     fetch(`https://localhost:3001/relationships/${id}`)
       .then(res => res.json())
       .then(data => {setAssociates(data)})
-  }, [id])
+  }, [id, updateStatus])
 
   useEffect(() => {
     fetch(`https://localhost:3001/events`)
@@ -52,7 +53,7 @@ const DetailsPage = () => {
           })
       })
     
-  }, [])
+  }, []);
 
   useEffect(() => {
     let narrativesToAdd = []
@@ -98,9 +99,10 @@ const DetailsPage = () => {
       },
       body: JSON.stringify(obj)
     }
+    // const updatedAssociates = associates.filter(associate => associate !== obj);
     fetch('https://localhost:3001/interaction', init)
       .then(res => res.json())
-      .then(data => {alert(data.message); window.location.reload()})
+      .then(data => {alert(data.message); setUpdateStatus(!updateStatus);})
   }
 
   const handleAddAssociate = () => {
@@ -142,79 +144,75 @@ const DetailsPage = () => {
       .then(data => console.log(data))
   }
 
+  const handleClose = () => {
+    onClose();
+  };
+
   return (
-    <Container maxWidth='xl' className='details-page-container bg-jet'>
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth='xl'>
+      <Container maxWidth='xl' className='details-page-container bg-jet'>
       {MyFunctions.renderAssociateForm(addAssociateToggle, handleOnSubmitForm, handleChangeForFormEntity, handleChangeForFormEvent, everyone, events, setAddAssociateToggle)}
       {MyFunctions.renderNarrativeForm(addNarrToggle, setAddNarrToggle)}
-      <Grid container>
-        <Grid container item xs={6}>
-          <Grid item xs={5} className='details-item-container'>
-            <img src={placeholderImg} alt="user" className='details-image' />
-          </Grid>
-          <Grid item xs={7} className='details-item-container'>
-            <Box className='data-box'>
-              <Typography variant='h4' gutterBottom>
-                User Profile
-              </Typography>
-              <Stack direction='row' spacing={1} useFlexGap flexWrap={'wrap'}>
-                {MyFunctions.returnBiography(biography)}
-              </Stack>
-            </Box>
-          </Grid>
-          <Grid item xs={12} className='details-item-container'>
-            <Box className='data-box'>
-              <Stack direction='row' justifyContent='space-between' alignItems={'center'}>
+        <Grid container>
+          <Grid container item xs={6}>
+            <Grid item xs={5} className='details-item-container'>
+              <img src={placeholderImg} alt="user" className='details-image' />
+            </Grid>
+            <Grid item xs={7} className='details-item-container'>
+              <Box className='data-box'>
                 <Typography variant='h4' gutterBottom>
-                  Known Associates
+                  User Profile
                 </Typography>
-                <Button
-                  variant="outlined"
-                  startIcon={<AddCircleIcon />}
-                  onClick={() => handleAddAssociate()}
-                  className='rounded-button'>
-                  Add Associate
-                </Button>
-              </Stack>
-              <Stack direction='row' spacing={1} useFlexGap flexWrap={'wrap'}>
-                {MyFunctions.returnChipsForAssociates(associates, handleClickAssociate, handleDeleteAssociate)}
-              </Stack>
-            </Box>
+                <Stack direction='row' spacing={1} useFlexGap flexWrap={'wrap'}>
+                  {MyFunctions.returnBiography(biography)}
+                </Stack>
+              </Box>
+            </Grid>
+            <Grid item xs={12} className='details-item-container'>
+              <Box className='data-box'>
+                <Stack direction='row' justifyContent='space-between' alignItems={'center'}>
+                  <Typography variant='h4' gutterBottom>
+                    Known Associates
+                  </Typography>
+                  <Button
+                    variant="outlined"
+                    startIcon={<AddCircleIcon />}
+                    onClick={() => handleAddAssociate()}
+                    className='rounded-button'>
+                    Add Associate
+                  </Button>
+                </Stack>
+                <Stack direction='row' spacing={1} useFlexGap flexWrap={'wrap'}>
+                  {MyFunctions.returnChipsForAssociates(associates)}
+                </Stack>
+              </Box>
+            </Grid>
+            <Grid item xs={12} className='details-item-container'>
+              <Box className='data-box'>
+                <Typography variant='h4' gutterBottom>
+                    Events
+                </Typography>
+                <Stack direction='row' spacing={1} useFlexGap flexWrap={'wrap'}>
+                  {MyFunctions.returnEvents(entity)}
+                </Stack>
+              </Box>
+            </Grid>
           </Grid>
-          <Grid item xs={12} className='details-item-container'>
-            <Box className='data-box'>
-              <Typography variant='h4' gutterBottom>
-                  Events
-              </Typography>
-              <Stack direction='row' spacing={1} useFlexGap flexWrap={'wrap'}>
-                {MyFunctions.returnEvents(entity)}
-              </Stack>
-            </Box>
-          </Grid>
-        </Grid>
-        <Grid container item xs={6}>
-          <Grid item xs={12} className='details-item-container'>
-            <Box className='data-box'>
-            <Stack direction='row' justifyContent='space-between' alignItems={'center'}>
+          <Grid container item xs={6}>
+            <Grid item xs={12} className='details-item-container'>
+              <Box className='data-box'>
                 <Typography variant='h4' gutterBottom>
                   Narratives
                 </Typography>
-                <Button
-                  variant="outlined"
-                  startIcon={<AddCircleIcon />}
-                  className='rounded-button'
-                  onClick={() => setAddNarrToggle(true)}
-                  >
-                  Add narrative
-                </Button>
-              </Stack>
-              <Typography variant='body1' gutterBottom>
-              </Typography>
-                {MyFunctions.returnNarratives(narratives)}
-            </Box>
+                <Typography variant='body1' gutterBottom>
+                </Typography>
+                  {MyFunctions.returnNarratives(narratives)}
+              </Box>
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-    </Container>
+      </Container>
+    </Dialog>
   );
 }
 

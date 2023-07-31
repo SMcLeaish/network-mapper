@@ -6,22 +6,48 @@ const https = require('https');
 const fs = require('fs');
 const app = express();
 const port = 3001;
-
+const { startNetworkQuery }= require('./network-query');
+const { eventNames } = require('process');
 app.use(cors());
 app.use(express.json());
 
 const options = {
-    key: fs.readFileSync(process.env.SSL_KEY_PATH),
-    cert: fs.readFileSync(process.env.SSL_CERT_PATH),
-    ca: [
-      fs.readFileSync(process.env.SSL_CA_ROOT_PATH), 
-//      fs.readFileSync(process.env.SSL_LETSENCRYPT_CA_PATH)
-    ],
-    // requestCert: true, 
-    // rejectUnauthorized: false 
+  key: fs.readFileSync(process.env.SSL_KEY_PATH),
+  cert: fs.readFileSync(process.env.SSL_CERT_PATH),
+  ca: [
+    fs.readFileSync(process.env.SSL_CA_ROOT_PATH),
+    //      fs.readFileSync(process.env.SSL_LETSENCRYPT_CA_PATH)
+  ],
+  // requestCert: true, 
+  // rejectUnauthorized: false 
 };
 
+
 const knex = require('knex')(require('./knexfile.js')['development'])
+
+
+app.get('/network/:name', (req, res) => {
+  const { name } = req.params;
+  const nodes = [];
+  const totalEntitiesSet = new Set();
+  const processedSet = new Set();
+  const edges = [];
+  const names = [];
+  startNetworkQuery(name, nodes, edges, totalEntitiesSet, processedSet, names)
+    .then(() => {
+      res.json({
+        nodes: nodes,
+        edges: edges,
+        //names: names
+      });
+    })
+    .catch(error => {
+      res.status(500).json({ error: 'An error occurred while fetching data.' });
+      console.error(error);
+    });
+});
+
+
 
 app.get('/users', (req, res) => {
   knex('user_data')
@@ -38,26 +64,26 @@ app.post('/users', async (req, res) => {
     const newUser = {
       username: req.body.username,
       hashed_password: hashedPassword,
-      email: req.body.email,        
+      email: req.body.email,
       user_organization: req.body.user_organization,
       distinguished_name: req.body.distinguished_name,
       cac_approved: req.body.cac_approved
     };
     console.log(newUser)
     knex('user_data')
-    .where('username',req.body.username)
-    .then(data => {
-      if (data.length > 0){ // data
-        res.status(404).json({userCreated: false, message: `Username: *${req.body.username}* already taken!`});
-      } else{
-        knex('user_data')
-          .insert(newUser)
-          .then(() => res.status(201).send({ success: true }))
-          .catch(err => res.status(501).send(err))
-      }
-    })
-      
-  } 
+      .where('username', req.body.username)
+      .then(data => {
+        if (data.length > 0) { // data
+          res.status(404).json({ userCreated: false, message: `Username: *${req.body.username}* already taken!` });
+        } else {
+          knex('user_data')
+            .insert(newUser)
+            .then(() => res.status(201).send({ success: true }))
+            .catch(err => res.status(501).send(err))
+        }
+      })
+
+  }
   catch {
     res.status(500).send();
   }
@@ -96,11 +122,11 @@ app.get('/narratives/:id', (req, res) => {
   let { id } = req.params;
   knex.select('*')
     .from('narrative')
-    .where(function() {
-      this.where({'id_entity': id}).orWhere({'id_event': id})
+    .where(function () {
+      this.where({ 'id_entity': id }).orWhere({ 'id_event': id })
     })
     .then((data) => res.status(200).json(data))
-  })
+})
 
 app.get('/individuals', (req, res) => {
   knex.select('*')
@@ -122,9 +148,9 @@ app.get('/events', (req, res) => {
 
 app.get('/position/:id', (req, res) => {
   let { id } = req.params;
-  knex.select('position.id AS position_id', 'organization.name AS org_name', 'organization_type.type AS org_type','individual.name AS individual_name', 'role.title AS role_title', 'responsibilities.name AS responsibilities')
+  knex.select('position.id AS position_id', 'organization.name AS org_name', 'organization_type.type AS org_type', 'individual.name AS individual_name', 'role.title AS role_title', 'responsibilities.name AS responsibilities')
     .from('position')
-    .where({'individual_id': id})
+    .where({ 'individual_id': id })
     .join('individual', 'position.individual_id', 'individual.id')
     .join('organization', 'position.organization_id', 'organization.id')
     .join('organization_type', 'organization.organization_type_id', 'organization_type.id')
@@ -136,7 +162,7 @@ app.get('/position/:id', (req, res) => {
       } else {
         knex.select('position.id AS position_id', 'individual.name AS individual_name', 'role.title AS role_title', 'responsibilities.name AS responsibilities')
           .from('position')
-          .where({'individual_id': id})
+          .where({ 'individual_id': id })
           .join('individual', 'position.individual_id', 'individual.id')
           .join('role', 'position.role_id', 'role.id')
           .join('responsibilities', 'role.responsibilities_id', 'responsibilities.id')
@@ -177,7 +203,7 @@ app.get('/entity/:name', (req, res) => {
   let { name } = req.params
   knex.select('*')
     .from('individual')
-    .where({'individual.name': name})
+    .where({ 'individual.name': name })
     .then(data => {
       if (data.length !== 0) {
         knex.select('entity.id AS individual_entity_id', 'entity.id AS primary_entity_id','individual.id AS individual_id','interaction.id AS interaction_id', 'individual.name AS individual_name', 'individual.location AS individual_location', 'interaction.weight', 
@@ -185,25 +211,25 @@ app.get('/entity/:name', (req, res) => {
         'event.location AS event_location', 'event.date AS event_date', 'event_type.type AS event_type', 'user_data.username', 'user_data.user_organization')
           .from('individual')
           .join('entity', 'individual.id', 'entity.id_individual')
-          .join('interaction', function() {
-            this 
-            .on('interaction.id_entity_1', '=', 'entity.id')
-            .orOn('interaction.id_entity_2', '=', 'entity.id')
+          .join('interaction', function () {
+            this
+              .on('interaction.id_entity_1', '=', 'entity.id')
+              .orOn('interaction.id_entity_2', '=', 'entity.id')
           })
           .join('event', 'interaction.id_event', 'event.id')
           .join('event_type', 'event.event_type_id', 'event_type.id')
           .join('user_data', 'individual.id_user_data', 'user_data.id')
-          .where({'individual.name': name})
+          .where({ 'individual.name': name })
           .then((data) => res.status(200).json(data))
       } else {
         knex.select('entity.id AS organization_entity_id', 'entity.id AS primary_entity_id', 'organization.id AS org_id', 'interaction.id AS interaction_id', 'organization.name', 'organization.location AS organization_location', 'interaction.weight', 
         'interaction.id_entity_1', 'interaction.id_entity_2', 'interaction.id_event', 'event.event_name', 
         'event.location AS event_location', 'event.date AS event_date', 'event_type.type AS event_type', 'user_data.username', 'user_data.user_organization')
           .from('organization')
-          .where({'organization.name': name})
+          .where({ 'organization.name': name })
           .join('entity', 'organization.id', 'entity.id_organization')
-          .join('interaction', function() {
-            this 
+          .join('interaction', function () {
+            this
               .on('id_entity_1', '=', 'entity.id')
               .orOn('id_entity_2', '=', 'entity.id')
           })
@@ -228,7 +254,7 @@ app.get('/entity/id/:id', (req, res) => {
   knex.select('*')
     .from('entity')
     .join('individual', 'entity.id_individual', 'individual.id')
-    .where({'entity.id': id})
+    .where({ 'entity.id': id })
     .then((data) => {
       if (data.length !== 0) {
         res.status(200).json(data)
@@ -236,9 +262,43 @@ app.get('/entity/id/:id', (req, res) => {
         knex.select('*')
           .from('entity')
           .join('organization', 'entity.id_organization', 'organization.id')
-          .where({'entity.id': id})
+          .where({ 'entity.id': id })
           .then(data => res.status(200).json(data))
       }
+    })
+  })
+app.get('/relationships/:id', (req, res) => {
+  let { id } = req.params
+  let entityIds = [];
+  let returnData = [];
+  knex.select('*')
+    .from('interaction')
+    .where({'interaction.id_entity_1': id})
+    .orWhere({'interaction.id_entity_2': id})
+    .then(data => {
+      let allIds = []
+      data.forEach(e => {
+        allIds.push(e.id_entity_1)
+        allIds.push(e.id_entity_2)
+      })
+      entityIds = allIds.filter(eId => eId !== parseInt(id))
+    })
+    .then(() => {
+      knex.select('entity.id AS entity_id', '*')
+        .from('entity')
+        .join('individual', 'entity.id_individual', 'individual.id')
+        .whereIn('entity.id', entityIds)
+        .then(data => returnData = data)
+    })
+    .then(() => {
+      knex.select('entity.id AS entity_id', '*')
+        .from('entity')
+        .join('organization', 'entity.id_organization', 'organization.id')
+        .whereIn('entity.id', entityIds)
+        .then(data => {
+          data.forEach(e => returnData.push(e))
+          res.status(200).json(returnData)
+        })
     })
 })
 
