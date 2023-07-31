@@ -2,10 +2,10 @@ import { TextField, MenuItem, Button, Chip } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 
-export const renderNarrativeForm = (check, setAddNarrToggle) => {
+export const renderNarrativeForm = (check, setAddNarrToggle, handleNarrChange, handeNarrSubmit) => {
     if (check) {
         return (
-            <form className='associate-form bg-jet'>
+            <form className='associate-form bg-jet' onSubmit={handeNarrSubmit}>
                 <TextField
                     required
                     multiline
@@ -14,6 +14,7 @@ export const renderNarrativeForm = (check, setAddNarrToggle) => {
                     defaultValue=""
                     placeholder='Enter your narrative'
                     autoComplete='off'
+                    onChange={(e) => handleNarrChange(e)}
                 />
                 <div>
                     <Button
@@ -55,10 +56,11 @@ export const returnChipsForAssociates = (data, handleClickAssociate, handleDelet
 export const returnNarratives = (data) => {
     return data.map((e) => {
         return (
-            <Chip
-                key={e.id}
-                label={e.narrative_string}
-            />
+                <Chip
+                    key={e.narr_id}
+                    label={`Date: ${e.date}:
+                    ${e.narrative_string}`}
+                />
         )
     })
 }

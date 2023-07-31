@@ -9,7 +9,6 @@ import * as MyFunctions from './DetailsFunctions.js';
 const placeholderImg = 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80';
 
 const DetailsPage = ({ open, onClose, id }) => {
-  console.log(`This is the id: ${id}`)
   const [ associates, setAssociates ] = useState([])
   const [ narratives, setNarratives ] = useState([])
   const [ entity, setEntity ] = useState([])
@@ -24,6 +23,7 @@ const DetailsPage = ({ open, onClose, id }) => {
     id_entity_2: 0,
     id_event: 1
   })
+  const [ narrToAdd, setNarrToAdd ] = useState({})
 
   const [updateStatus, setUpdateStatus] = useState(true)
 
@@ -32,6 +32,8 @@ const DetailsPage = ({ open, onClose, id }) => {
       .then(res => res.json())
       .then(data => {setAssociates(data); setAssociateToAdd({...associateToAdd, id_entity_1: id})})
   }, [id, updateStatus])
+
+
 
   useEffect(() => {
     fetch(`https://localhost:3001/events`)
@@ -63,7 +65,7 @@ const DetailsPage = ({ open, onClose, id }) => {
         narrativesToAdd = data.filter(e => e.id_entity === parseInt(id))
         setNarratives(narrativesToAdd)
       })
-  }, [id])
+  }, [id, updateStatus])
 
   useEffect(() => {
     fetch(`https://localhost:3001/entity/id/${id}`)
@@ -117,7 +119,6 @@ const DetailsPage = ({ open, onClose, id }) => {
         let obj = {...associateToAdd}
         obj.id_entity_2 = entity2
         setAssociateToAdd(obj)
-        console.log(obj)
       })
   }
 
@@ -126,7 +127,6 @@ const DetailsPage = ({ open, onClose, id }) => {
     let obj = {...associateToAdd}
     obj.id_event = event.id
     setAssociateToAdd(obj)
-    console.log(obj)
   }
 
   const handleOnSubmitForm = (e) => {
@@ -147,11 +147,37 @@ const DetailsPage = ({ open, onClose, id }) => {
     onClose();
   };
 
+  const handleNarrChange = (e) => {
+    let date = new Date();
+    let today = date.toISOString()
+    let obj = {
+        date: today.slice(0, 10),
+        narrative_string: e.target.value,
+        id_entity: id
+    }
+    console.log(obj)
+    setNarrToAdd(obj)
+}
+
+  const handeNarrSubmit = (e) => {
+    e.preventDefault()
+    let init = {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(narrToAdd)
+    }
+    fetch('https://localhost:3001/narrative', init)
+      .then(res => res.json())
+      .then(data => {console.log(data); setUpdateStatus(!updateStatus)})
+  }
+
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth='xl'>
       <Container maxWidth='xl' className='details-page-container bg-jet'>
       {MyFunctions.renderAssociateForm(addAssociateToggle, handleOnSubmitForm, handleChangeForFormEntity, handleChangeForFormEvent, everyone, events, setAddAssociateToggle)}
-      {MyFunctions.renderNarrativeForm(addNarrToggle, setAddNarrToggle)}
+      {MyFunctions.renderNarrativeForm(addNarrToggle, setAddNarrToggle, handleNarrChange, handeNarrSubmit)}
         <Grid container>
           <Grid container item xs={6}>
             <Grid item xs={5} className='details-item-container'>
@@ -200,9 +226,19 @@ const DetailsPage = ({ open, onClose, id }) => {
           <Grid container item xs={6}>
             <Grid item xs={12} className='details-item-container'>
               <Box className='data-box'>
+              <Stack direction='row' justifyContent='space-between' alignItems={'center'}>
                 <Typography variant='h4' gutterBottom>
                   Narratives
                 </Typography>
+                <Button
+                  variant="outlined"
+                  startIcon={<AddCircleIcon />}
+                  className='rounded-button'
+                  onClick={() => setAddNarrToggle(true)}
+                  >
+                  Add narrative
+                </Button>
+              </Stack>
                 <Typography variant='body1' gutterBottom>
                 </Typography>
                   {MyFunctions.returnNarratives(narratives)}

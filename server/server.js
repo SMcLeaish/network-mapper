@@ -120,7 +120,7 @@ app.post('/users/login', (req, res) => {
 
 app.get('/narratives/:id', (req, res) => {
   let { id } = req.params;
-  knex.select('*')
+  knex.select('*', 'narrative.id AS narr_id')
     .from('narrative')
     .where(function () {
       this.where({ 'id_entity': id }).orWhere({ 'id_event': id })
