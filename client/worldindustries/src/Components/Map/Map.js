@@ -22,6 +22,7 @@ import GroupsIcon from '@mui/icons-material/Groups'
 import { Circle } from 'react-leaflet';
 import TravelExploreIcon from '@mui/icons-material/TravelExplore'
 import { mgrs, forward, toPoint } from 'mgrs';
+import DetailsPage from '../DetailsPage/DetailsPage';
 
 
 const cityList = require('./Chinacities.json')
@@ -147,7 +148,7 @@ function Map() {
     const [MGRSvalue, setMGRSvalue] = useState('')
     const [MGRSConversion, setMGRSConversion] = useState(null)
     const [searchSet, setSearch] = useState(false)
-    const [entityConnect, setEntityConnect] = useState([])
+    const [entityConnect, setEntityConnect] = useState(1)
     // const [modeValue, setMode] = useState(false)
     // const multipleList = []
  
@@ -523,7 +524,11 @@ function Map() {
                 </div>
             </div>
         </div>
-        
+        <DetailsPage
+            open={open}
+            onClose={handleCloseDetailsDialog}
+            id={entityConnect}
+        />
         </>
     );
 }
