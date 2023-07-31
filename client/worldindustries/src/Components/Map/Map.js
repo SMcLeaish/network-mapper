@@ -216,8 +216,9 @@ function Map() {
     // added for modal
     const [open, setOpen] = useState(false);
 
-    const handleOpenDetailsDialog = () => {
+    const handleOpenDetailsDialog = (name) => {
         setOpen(true);
+        setDetailsSelect(name)
     };
 
     const handleCloseDetailsDialog = () => {
@@ -465,7 +466,7 @@ function Map() {
                                                             <p>Phone: {feature.phone_number}</p>
                                                             <p>Location: {JSON.stringify(feature.location)}</p>
                                                             {/* <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
-                                                            <PersonSearchIcon className='DetailsIcon' onClick={handleOpenDetailsDialog} />
+                                                            <PersonSearchIcon className='DetailsIcon' onClick={() => handleOpenDetailsDialog(feature.name)} />
                                                         </Popup>
                                                     </Marker>
                                                 )},
@@ -485,7 +486,7 @@ function Map() {
                                                             <h3>Name: {feature.name}</h3>
                                                             <p>Location: {JSON.stringify(feature.location)}</p>
                                                             {/* <PersonSearchIcon className='OrgDetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
-                                                            <PersonSearchIcon className='OrgDetailsIcon' onClick={handleOpenDetailsDialog} />
+                                                            <PersonSearchIcon className='OrgDetailsIcon' onClick={() => handleOpenDetailsDialog(feature.name)} />
                                                         </Popup>
                                                     </Marker>
                                                 )},
