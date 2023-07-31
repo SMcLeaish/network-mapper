@@ -9,7 +9,7 @@ import * as MyFunctions from './DetailsFunctions.js';
 const placeholderImg = 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80';
 
 const DetailsPage = ({ open, onClose, id }) => {
-
+  console.log(`This is the id: ${id}`)
   const [ associates, setAssociates ] = useState([])
   const [ narratives, setNarratives ] = useState([])
   const [ entity, setEntity ] = useState([])
@@ -20,7 +20,7 @@ const DetailsPage = ({ open, onClose, id }) => {
   const [ events, setEvents ] = useState([])
   const [ associateToAdd, setAssociateToAdd ] = useState({
     weight: 1,
-    id_entity_1: parseInt(id),
+    id_entity_1: id,
     id_entity_2: 0,
     id_event: 1
   })
@@ -30,7 +30,7 @@ const DetailsPage = ({ open, onClose, id }) => {
   useEffect(() => {
     fetch(`https://localhost:3001/relationships/${id}`)
       .then(res => res.json())
-      .then(data => {setAssociates(data)})
+      .then(data => {setAssociates(data); setAssociateToAdd({...associateToAdd, id_entity_1: id})})
   }, [id, updateStatus])
 
   useEffect(() => {
@@ -89,7 +89,7 @@ const DetailsPage = ({ open, onClose, id }) => {
 
   const handleDeleteAssociate = (entity2) => {
     let obj = {
-      "id_entity_1": parseInt(id),
+      "id_entity_1": id,
       "id_entity_2": entity2
     }
     let init = {
@@ -110,7 +110,6 @@ const DetailsPage = ({ open, onClose, id }) => {
   }
 
   const handleChangeForFormEntity = (e) => {
-    console.log(e.target.value)
     fetch(`https://localhost:3001/entity/${e.target.value}`)
       .then(res => res.json())
       .then(data => {
@@ -118,17 +117,16 @@ const DetailsPage = ({ open, onClose, id }) => {
         let obj = {...associateToAdd}
         obj.id_entity_2 = entity2
         setAssociateToAdd(obj)
-        // console.log(obj)
+        console.log(obj)
       })
   }
 
   const handleChangeForFormEvent = (e) => {
     let event = e.target.value
-    console.log(event)
     let obj = {...associateToAdd}
     obj.id_event = event.id
     setAssociateToAdd(obj)
-    console.log(associateToAdd)
+    console.log(obj)
   }
 
   const handleOnSubmitForm = (e) => {
@@ -141,8 +139,8 @@ const DetailsPage = ({ open, onClose, id }) => {
       body: JSON.stringify(associateToAdd)
     }
     fetch('https://localhost:3001/interaction', init)
-      .then(res => res.json)
-      .then(data => console.log(data))
+      .then(res => res.json())
+      .then(data => {console.log(data); setUpdateStatus(!updateStatus)})
   }
 
   const handleClose = () => {

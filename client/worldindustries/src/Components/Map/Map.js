@@ -168,7 +168,7 @@ function Map() {
         }
     }, [detailsSelect])
 
-        // console.log('ENTITY CONNECT', entityConnect)
+        console.log('ENTITY CONNECT', entityConnect)
 
 
 
