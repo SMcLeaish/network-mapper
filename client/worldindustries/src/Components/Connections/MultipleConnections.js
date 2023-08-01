@@ -8,6 +8,7 @@ import TextField from '@mui/material/TextField';
 
 
 const MultipleConnections = (props) => {
+    const render = props.render
     // console.log('props are', props)
     const targetValue1= props.targetValue1
     const [entityConnect1, setEntityConnect1] = useState([]) 
@@ -32,7 +33,6 @@ const MultipleConnections = (props) => {
     const [id4, setId4] = useState([])
     const [connectDetails4, setConnectDetails4] = useState([])
     const [primaryLocation4 , setPrimaryLocation4] = useState([]) 
-
 
     const targetValue5= props.targetValue5
     const [entityConnect5, setEntityConnect5] = useState([]) 
@@ -66,7 +66,7 @@ useEffect(() => {
 
 useEffect(() => {
     entityConnect1.map((person) =>  (setId1(person.individual_entity_id), setPrimaryLocation1(person.individual_location)))
-},[targetValue1])
+},[targetValue1, entityConnect1])
 
   useEffect(() => {
     fetch(`https://localhost:3001/relationships/${id1}`)
@@ -93,7 +93,7 @@ useEffect(() => {
 
 useEffect(() => {
     entityConnect2.map((person) =>  (setId2(person.individual_entity_id), setPrimaryLocation2(person.individual_location)))
-},[targetValue2])
+},[targetValue2, entityConnect2])
 
   useEffect(() => {
     fetch(`https://localhost:3001/relationships/${id2}`)
@@ -104,7 +104,6 @@ useEffect(() => {
       })
       .catch(error=>console.log('i am not getting the data'))
   },[id2])
-
 
 
 //   this section for user3
@@ -120,7 +119,7 @@ useEffect(() => {
 
 useEffect(() => {
     entityConnect3.map((person) =>  (setId3(person.individual_entity_id), setPrimaryLocation3(person.individual_location)))
-},[targetValue3])
+},[targetValue3,  entityConnect3])
 
   useEffect(() => {
     fetch(`https://localhost:3001/relationships/${id3}`)
@@ -146,7 +145,7 @@ useEffect(() => {
 
 useEffect(() => {
     entityConnect4.map((person) =>  (setId4(person.individual_entity_id), setPrimaryLocation4(person.individual_location)))
-},[targetValue4])
+},[targetValue4,  entityConnect4])
 
   useEffect(() => {
     fetch(`https://localhost:3001/relationships/${id4}`)
@@ -172,7 +171,7 @@ useEffect(() => {
 
 useEffect(() => {
     entityConnect5.map((person) =>  (setId5(person.individual_entity_id), setPrimaryLocation5(person.individual_location)))
-},[targetValue5])
+},[targetValue5,  entityConnect5])
 
   useEffect(() => {
     fetch(`https://localhost:3001/relationships/${id5}`)
@@ -185,7 +184,13 @@ useEffect(() => {
   },[id5])
 
 
+//   useEffect(() => {
+//     entityConnect5.map((person) =>  (setId5(person.individual_entity_id), setPrimaryLocation5(person.individual_location)))
+// },[targetValue5])
 
+  useEffect(() => {
+    console.log('need to render')
+  },[render])
 
   if(dataFetched){
     console.log('primary person1', primaryLocation1);
@@ -200,12 +205,12 @@ useEffect(() => {
     console.log('secondaryperson5 data', connectDetails5)
 }
 
-console.log('realationships',connectDetails1)
-
+// console.log('realationships',connectDetails1)
 
 
   return (
     <>
+    {console.log('realationships',connectDetails1)}
 
         
         <div> 

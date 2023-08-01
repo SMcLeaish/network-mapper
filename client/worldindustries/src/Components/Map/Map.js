@@ -158,8 +158,9 @@ function Map() {
     const [targetValue3, setTargetValue3] = useState()
     const [targetValue4, setTargetValue4] = useState()
     const [targetValue5, setTargetValue5] = useState()
+    const [render, setrender] = useState(false)
     // const multipleList = []
- 
+ console.log(`render value:`, render)
     // console.log('this is the list:', multipleList)
   
     useEffect(() => {
@@ -400,6 +401,7 @@ function Map() {
                                     <Autocomplete 
                                             inputValue={targetValue1}
                                             onInputChange={(event, newtargetValue1) => {
+                                                setrender(!render)
                                                 setTargetValue1(newtargetValue1) }}
                                             disablePortal
                                             id="combo-box-demo"
@@ -410,6 +412,7 @@ function Map() {
                                     <Autocomplete 
                                         inputValue={targetValue2}
                                             onInputChange={(event, newtargetValue2) => {
+                                                setrender(!render)
                                                 setTargetValue2(newtargetValue2) }}
                                             disablePortal
                                             id="combo-box-demo"
@@ -420,6 +423,7 @@ function Map() {
                                     <Autocomplete 
                                             inputValue={targetValue3}
                                             onInputChange={(event, newtargetValue3) => {
+                                                setrender(!render)
                                                 setTargetValue3(newtargetValue3) }}
                                             disablePortal
                                             id="combo-box-demo"
@@ -430,6 +434,7 @@ function Map() {
                                     <Autocomplete 
                                         inputValue={targetValue4}
                                             onInputChange={(event, newtargetValue4) => {
+                                                setrender(!render)
                                                 setTargetValue4(newtargetValue4) }}
                                             disablePortal
                                             id="combo-box-demo"
@@ -440,17 +445,20 @@ function Map() {
                                     <Autocomplete 
                                         inputValue={targetValue5}
                                             onInputChange={(event, newtargetValue5) => {
+                                                setrender(!render)
                                                 setTargetValue5(newtargetValue5) }}
                                             disablePortal
                                             id="combo-box-demo"
                                             options={individualData}
                                             sx={{ width: 300 }}
-                                            renderInput={(params) => <TextField {...params} label="Search Individual 4" margin='normal' />}/>
+                                            renderInput={(params) => <TextField {...params} label="Search Individual 5" margin='normal' />}/>
+
                                 </div>
-                                
+
                                 }
+                                
 
-
+                        
                             <div className='latLongSearch'>
                                 <form className='latLongSearch' autoComplete="off">
                                     <div className='searchfield'>
@@ -599,7 +607,7 @@ function Map() {
                                 </LayersControl.Overlay>
 
                             </LayersControl>
-                            {(modeValue ? <MultipleConnections targetValue1={targetValue1} targetValue2={targetValue2} targetValue3={targetValue3} targetValue4={targetValue4} targetValue5={targetValue5}/> : console.log('no connections for multiple'))}
+                            {(modeValue ? <MultipleConnections render={render} targetValue1={targetValue1} targetValue2={targetValue2} targetValue3={targetValue3} targetValue4={targetValue4} targetValue5={targetValue5}/> : console.log('no connections for multiple'))}
                             {(poly ? <Connections details={detailsSelect}/> : console.log('no connections'))}
                             {(eventpoly ? <EventConnections details={detailsSelect}/> : console.log('no connections'))}
                             {(Orgpoly ? <OrgConnections details={detailsSelect}/> : console.log('no connections'))}
