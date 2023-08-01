@@ -55,7 +55,7 @@ const MultipleConnections = (props) => {
 
 // //   target data for value 1
 useEffect(() => {
-    fetch(`http://localhost:3001/entity/${targetValue1}`)
+    fetch(`https://localhost:3001/entity/${targetValue1}`)
       .then((res) => res.json())
       .then(data => {
         setEntityConnect1(data)
@@ -69,7 +69,7 @@ useEffect(() => {
 },[targetValue1, entityConnect1])
 
   useEffect(() => {
-    fetch(`http://localhost:3001/relationships/${id1}`)
+    fetch(`https://localhost:3001/relationships/${id1}`)
       .then((res) => res.json())
       .then(data => {
         setConnectDetails1(data)
@@ -82,7 +82,7 @@ useEffect(() => {
 //   this is the fetch data for user 2
 
 useEffect(() => {
-    fetch(`http://localhost:3001/entity/${targetValue2}`)
+    fetch(`https://localhost:3001/entity/${targetValue2}`)
       .then((res) => res.json())
       .then(data => {
         setEntityConnect2(data)
@@ -96,7 +96,7 @@ useEffect(() => {
 },[targetValue2, entityConnect2])
 
   useEffect(() => {
-    fetch(`http://localhost:3001/relationships/${id2}`)
+    fetch(`https://localhost:3001/relationships/${id2}`)
       .then((res) => res.json())
       .then(data => {
         setConnectDetails2(data)
@@ -108,7 +108,7 @@ useEffect(() => {
 
 //   this section for user3
 useEffect(() => {
-    fetch(`http://localhost:3001/entity/${targetValue3}`)
+    fetch(`https://localhost:3001/entity/${targetValue3}`)
       .then((res) => res.json())
       .then(data => {
         setEntityConnect3(data)
@@ -122,7 +122,7 @@ useEffect(() => {
 },[targetValue3,  entityConnect3])
 
   useEffect(() => {
-    fetch(`http://localhost:3001/relationships/${id3}`)
+    fetch(`https://localhost:3001/relationships/${id3}`)
       .then((res) => res.json())
       .then(data => {
         setConnectDetails3(data)
@@ -134,7 +134,7 @@ useEffect(() => {
 
   //   this section for user4
 useEffect(() => {
-    fetch(`http://localhost:3001/entity/${targetValue4}`)
+    fetch(`https://localhost:3001/entity/${targetValue4}`)
       .then((res) => res.json())
       .then(data => {
         setEntityConnect4(data)
@@ -148,7 +148,7 @@ useEffect(() => {
 },[targetValue4,  entityConnect4])
 
   useEffect(() => {
-    fetch(`http://localhost:3001/relationships/${id4}`)
+    fetch(`https://localhost:3001/relationships/${id4}`)
       .then((res) => res.json())
       .then(data => {
         setConnectDetails4(data)
@@ -160,7 +160,7 @@ useEffect(() => {
 
   //   this section for user5
   useEffect(() => {
-    fetch(`http://localhost:3001/entity/${targetValue5}`)
+    fetch(`https://localhost:3001/entity/${targetValue5}`)
       .then((res) => res.json())
       .then(data => {
         setEntityConnect5(data)
@@ -174,7 +174,7 @@ useEffect(() => {
 },[targetValue5,  entityConnect5])
 
   useEffect(() => {
-    fetch(`http://localhost:3001/relationships/${id5}`)
+    fetch(`https://localhost:3001/relationships/${id5}`)
       .then((res) => res.json())
       .then(data => {
         setConnectDetails5(data)
