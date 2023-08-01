@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useMap } from "react-leaflet";
-import Map from "../Map/Map";
+// import Map from "../Map/Map";
 import { Circle, Polyline } from 'react-leaflet'
 
 

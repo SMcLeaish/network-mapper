@@ -1,22 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useMap } from "react-leaflet";
-import Map from "../Map/Map";
+// import { useMap } from "react-leaflet";
+// import Map from "../Map/Map";
 import { Circle, Polyline } from 'react-leaflet'
 
 
 const OrgConnections = (props) => {
   const detailsSelect = props.details
-  const [orgConnect, setOrgConnect] = useState([])
-  const [entityConnect, setEntityConnect] = useState([]) 
-  const [id, setId] = useState([])
-  const [connectDetails, setConnectDetails] = useState([])
+//   const [orgConnect, setOrgConnect] = useState([])
+//   const [entityConnect, setEntityConnect] = useState([]) 
+//   const [id, setId] = useState([])
+//   const [connectDetails, setConnectDetails] = useState([])
   const [primaryLocation , setPrimaryLocation] = useState([]) 
   const [secondaryLocations, setSecondaryLocations] = useState([])
-  const [searchData, setsearchData] = useState([])
+//   const [searchData, setsearchData] = useState([])
   const [dataFetched, setdataFetched] = useState(false)
-
-  
-
 
 
 useEffect(() => {
@@ -43,13 +40,12 @@ useEffect(() => {
 
     if(dataFetched){
         console.log('primary', primaryLocation);
-
         console.log('secondary data', secondaryLocations)
     }
 
   return (
     <>
-    
+
         <div> 
         {secondaryLocations.map((location) => 
             // (console.log(location, primaryLocation),
