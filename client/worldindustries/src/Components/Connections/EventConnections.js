@@ -13,7 +13,7 @@ const EventConnections = (props) => {
 
 
   useEffect(() => {
-    fetch('https://localhost:3001/individuals')
+    fetch('http://localhost:3001/individuals')
       .then((res) => res.json())
       .then(data => {
         setIndividualConnect(data)
@@ -24,7 +24,7 @@ const EventConnections = (props) => {
 //   console.log(individualConnect)
 
 useEffect(() => {
-    fetch(`https://localhost:3001/entity/${detailsSelect}`)
+    fetch(`http://localhost:3001/entity/${detailsSelect}`)
       .then((res) => res.json())
       .then(data => {
         setEntityConnect(data)
