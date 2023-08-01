@@ -30,7 +30,6 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 
 const cityList = require('./Chinacities.json')
 
-//this is a small change
 function Map() {
     const filterstyle = {
         color: red,
@@ -46,7 +45,7 @@ function Map() {
     const [individualData, setIndividualData] = useState([])
 
     useEffect(() => {
-        fetch('http://localhost:3001/individuals')
+        fetch('https://localhost:3001/individuals')
             .then((res) => res.json())
             .then(data => {
                 setIndividualData2(data)
@@ -62,7 +61,7 @@ function Map() {
     const [OrganizationData, setOrganizationData] = useState([])
 
     useEffect(() => {
-        fetch('http://localhost:3001/organizations')
+        fetch('https://localhost:3001/organizations')
             .then((res) => res.json())
             .then(data => {
                 setOrganizationData2(data)
@@ -75,7 +74,7 @@ function Map() {
     const [EventData, setEventData] = useState([])
 
     useEffect(() => {
-        fetch('http://localhost:3001/events')
+        fetch('https://localhost:3001/events')
             .then((res) => res.json())
             .then(data => {
                 setEventData2(data)
@@ -159,13 +158,11 @@ function Map() {
     const [targetValue4, setTargetValue4] = useState()
     const [targetValue5, setTargetValue5] = useState()
     const [render, setrender] = useState(false)
-    // const multipleList = []
-    console.log(`render value:`, render)
-    // console.log('this is the list:', multipleList)
+    const [zoom, setZoom] = useState(6)
 
     useEffect(() => {
         if (detailsSelect) {
-            fetch(`http://localhost:3001/entity/${detailsSelect}`)
+            fetch(`https://localhost:3001/entity/${detailsSelect}`)
                 .then((res) => res.json())
                 .then(data => {
                     setEntityConnect(data[0].primary_entity_id)
@@ -183,6 +180,7 @@ function Map() {
 
     const handleSearch = () => {
         setSearchBox(true)
+        // modeValue ? setMode(false) : console.log('already false')
     }
 
     const resetPolyLines = () => {
@@ -240,6 +238,25 @@ function Map() {
     const handleSearchSwitch = (event) => {
         setSearchSwitchChecked(event.target.checked);
         setMode(!modeValue);
+        setDetailsSelect(null);
+        resetPolyLines();
+        setCoord([16.54376,102.98753])
+        setZoom(4)
+    }
+
+    const handleClose = (event) => {
+        setSearchSwitchChecked(false)
+        setSearchBox(false)
+        setMode(false);
+        setDetailsSelect(null);
+        resetPolyLines();
+        setCoord([16.54376,102.98753])
+        setZoom(4)
+        setTargetValue1()
+        setTargetValue2()
+        setTargetValue3()
+        setTargetValue4()
+        setTargetValue5()
     }
 
     console.log('targetvalue1', targetValue1)
@@ -256,7 +273,7 @@ function Map() {
                         {searchbox ?
                             <>
                                 <div className='filterContainer'>
-                                    <CloseIcon className='closeIcon' onClick={() => { setSearchBox(false) }} />
+                                    <CloseIcon className='closeIcon' onClick={() => { handleClose() }} />
                                     <FormControlLabel
                                         control={
                                             <Switch
@@ -467,8 +484,8 @@ function Map() {
 
                                     }
 
-
-
+                                {!modeValue ?
+                                <div>
                                     <div className='latLongSearch'>
                                         <form className='latLongSearch' autoComplete="off">
                                             <div className='searchfield'>
@@ -490,6 +507,8 @@ function Map() {
                                     </div>
                                     {MGRSConversion !== null ? <p className='mgrsConversion'>{`Lat/Long ⮕ MGRS: ${MGRSConversion}`}</p> : console.log('')}
                                 </div>
+                                : console.log('in multiple line mode')}
+                                </div>
                             </>
                             :
                             console.log()
@@ -497,10 +516,10 @@ function Map() {
                     </div>
                     <div>
                         <div>
-                            <MapContainer center={[13.57406, 108.18783]} zoom={6} ref={mapRef} id='map'>
+                            <MapContainer center={[13.57406, 108.18783]} zoom={zoom} ref={mapRef} id='map'>
                                 <LayersControl>
                                     <BaseLayer name="OpenStreetMap">
-                                        <TileLayer url="http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; <a href=&quot;http://www.openstreetmap.org/copyright&quot;>OpenStreetMap</a> contributors" />
+                                        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; <a href=&quot;https://www.openstreetmap.org/copyright&quot;>OpenStreetMap</a> contributors" />
                                     </BaseLayer>
 
                                     {/* <BaseLayer name="World Imagery">
@@ -521,7 +540,7 @@ function Map() {
 
                                     <BaseLayer name="Google Imagery">
                                         <TileLayer
-                                            url='http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'
+                                            url='https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'
                                             maxZoom={20}
                                             subdomains={['mt1', 'mt2', 'mt3']}
                                         />
@@ -622,7 +641,10 @@ function Map() {
                                 {(eventpoly ? <EventConnections details={detailsSelect} /> : console.log('no connections'))}
                                 {(Orgpoly ? <OrgConnections details={detailsSelect} /> : console.log('no connections'))}
                                 {(targetValue !== '' || searchSet === true ?
-                                    <Circle color='blue' fillColor='yellow' weight={2} opacity={.9} center={coord} radius={8000} />
+                                    <>
+                                        <Circle color='blue' fillColor='yellow' weight={2} opacity={.9} center={coord} radius={14000} />
+                                        <Circle color='blue' fillColor='blue' weight={2} opacity={.9} center={coord} radius={200} />
+                                    </>
                                     :
                                     console.log('')
                                 )}
