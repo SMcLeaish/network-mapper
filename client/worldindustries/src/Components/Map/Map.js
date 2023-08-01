@@ -1,5 +1,5 @@
 import { MapContainer, TileLayer, Marker, Popup, LayersControl, LayerGroup } from 'react-leaflet'
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import 'leaflet/dist/leaflet.css'
 import { Icon, divIcon } from "leaflet";
 import MarkerClusterGroup from 'react-leaflet-cluster';
@@ -15,14 +15,16 @@ import { red } from '@mui/material/colors';
 import { useMap } from 'react-leaflet';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {  toast } from 'react-toastify';
+import { UserContext } from '../../App';
 
 
 const cityList = require('./Chinacities.json')
 
 function Map() {
+    const [userInfo,setUserInfo]=useContext(UserContext)
     const navigate=useNavigate()
     const location=useLocation();
-    console.log("location",location.state)
+    console.log("context",userInfo)
     useEffect(()=>{
         
         if(location.state){
@@ -30,6 +32,7 @@ function Map() {
         .then(res=>res.json())
         .then(data=>{
             if(data.success){
+                
                 toast(`Welcome! ${location.state.username} `, {
                     position: "top-center",
                     autoClose: 5000,

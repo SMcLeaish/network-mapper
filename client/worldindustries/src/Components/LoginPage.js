@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import {Grid,Paper,Avatar,FormControlLabel,Checkbox,Button,TextField} from '@mui/material'
 import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import "./LoginPage.css"
 import { toast } from 'react-toastify';
 import PasswordStrengthBar from 'react-password-strength-bar';
+import { UserContext } from '../App'
 
 
 
@@ -12,7 +13,7 @@ import PasswordStrengthBar from 'react-password-strength-bar';
 
 const Login = () => {
 
-
+  const [userInfo,setUserInfo]=useContext(UserContext)
   const [username,setUsername]=useState("")
   const [password,setPassword]=useState("")
   const [email,setEmail]=useState("")
@@ -33,8 +34,9 @@ useEffect(()=>{
     .then(res=>res.json())
     .then(data=>{
       if(data.success==true && data.data[0]){
-        
-         (navigate("/map",{state:data.data[0]}))
+        console.log(data.data[0])
+          setUserInfo(data.data[0])
+         navigate("/map",{state:data.data[0]})
        
       }
       else{
@@ -107,7 +109,7 @@ useEffect(()=>{
       }).then(res=>res.json())
       .then( async data=>{
         if(data.success){
-          
+          setUserInfo(sendUser)
           navigate('/map',{state: sendUser})
         }
       })
