@@ -56,9 +56,11 @@ app.post('/users', async (req, res) => {
           .catch(err => res.status(501).send(err))
       }
     })
-      
-  } 
-  catch {
+    const loggedInUser = req.user;
+    res.json({ entity: createdEntity,
+       user: loggedInUser });
+
+  } catch (error) {
     res.status(500).send();
   }
 });
@@ -293,6 +295,18 @@ app.delete('/interaction', (req, res) => {
     .del()
     .then(() => res.status(201).json({message: 'Interaction has been deleted'}))
 })
+
+
+app.post('/entity',(req,res)=>{
+  let {association,organization,events,narrative}=req.body
+  console.log("entity is ready to post",req.body)
+
+})
+
+
+
+
+
 
 
 https.createServer(options, app).listen(port, () => {
