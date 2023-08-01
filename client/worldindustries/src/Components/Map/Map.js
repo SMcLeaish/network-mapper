@@ -5,6 +5,7 @@ import { Icon, divIcon } from "leaflet";
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import './Map.css';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
+import InsightsIcon from '@mui/icons-material/Analyze'
 import CloseIcon from '@mui/icons-material/Close';
 import { Autocomplete } from '@mui/material';
 import TextField from '@mui/material/TextField';
@@ -26,6 +27,7 @@ import DetailsPage from '../DetailsPage/DetailsPage';
 import MultipleConnections from '../Connections/MultipleConnections';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import GraphDialog from '../Graph/GraphDialog';
 
 
 const cityList = require('./Chinacities.json')
@@ -234,7 +236,11 @@ function Map() {
         setOpen(false);
     };
     // end added for modal
+    const [analyzeDialogOpen, setAnalyzeDialogOpen] = useState(false)
+    const handleAnalyzeDialogOpen = (name) => {
+        setAnalyzeDialogOpen(true);
 
+    }
     const [searchSwitchChecked, setSearchSwitchChecked] = useState(false);
 
     const handleSearchSwitch = (event) => {
@@ -361,6 +367,7 @@ function Map() {
                                                                 <GroupsIcon className={eventpoly ? 'Eventactiveline' : 'EventnotActiveLines'} onClick={() => { seteventPolyLine(!eventpoly) }} />
                                                                 {/* <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
                                                                 <PersonSearchIcon className='DetailsIcon' onClick={handleOpenDetailsDialog} />
+                                                                <IconButton onClick={handleAnalyzeDialogOpen}><InsightsIcon/></IconButton>
                                                             </>
                                                             : console.log(`member not found`)
                                                         )}
