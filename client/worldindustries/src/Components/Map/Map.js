@@ -264,7 +264,7 @@ function Map() {
                                                 onChange={handleSearchSwitch}
                                             />
                                         }
-                                        label="Search Multiple Individuals"
+                                        label="Map Multiple Relationships"
                                         className='searchSwitch'
                                     />
 
@@ -413,7 +413,7 @@ function Map() {
                                                 id="combo-box-demo"
                                                 options={individualData}
                                                 sx={{ width: 300 }}
-                                                renderInput={(params) => <TextField {...params} label="Search Individual 1" margin='normal' />} />
+                                                renderInput={(params) => <TextField {...params} label="Individual 1" margin='normal' />} />
 
                                             <Autocomplete
                                                 inputValue={targetValue2}
@@ -425,7 +425,7 @@ function Map() {
                                                 id="combo-box-demo"
                                                 options={individualData}
                                                 sx={{ width: 300 }}
-                                                renderInput={(params) => <TextField {...params} label="Search Individual 2" margin='normal' />} />
+                                                renderInput={(params) => <TextField {...params} label="Individual 2" margin='normal' />} />
 
                                             <Autocomplete
                                                 inputValue={targetValue3}
@@ -437,7 +437,7 @@ function Map() {
                                                 id="combo-box-demo"
                                                 options={individualData}
                                                 sx={{ width: 300 }}
-                                                renderInput={(params) => <TextField {...params} label="Search Individual 3" margin='normal' />} />
+                                                renderInput={(params) => <TextField {...params} label="Individual 3" margin='normal' />} />
 
                                             <Autocomplete
                                                 inputValue={targetValue4}
@@ -449,7 +449,7 @@ function Map() {
                                                 id="combo-box-demo"
                                                 options={individualData}
                                                 sx={{ width: 300 }}
-                                                renderInput={(params) => <TextField {...params} label="Search Individual 4" margin='normal' />} />
+                                                renderInput={(params) => <TextField {...params} label="Individual 4" margin='normal' />} />
 
                                             <Autocomplete
                                                 inputValue={targetValue5}
@@ -461,7 +461,7 @@ function Map() {
                                                 id="combo-box-demo"
                                                 options={individualData}
                                                 sx={{ width: 300 }}
-                                                renderInput={(params) => <TextField {...params} label="Search Individual 5" margin='normal' />} />
+                                                renderInput={(params) => <TextField {...params} label="Individual 5" margin='normal' />} />
 
                                         </div>
 
