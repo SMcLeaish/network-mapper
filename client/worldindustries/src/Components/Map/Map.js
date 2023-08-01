@@ -30,7 +30,6 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 
 const cityList = require('./Chinacities.json')
 
-//this is a small change
 function Map() {
     const filterstyle = {
         color: red,
