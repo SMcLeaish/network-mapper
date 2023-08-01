@@ -159,10 +159,15 @@ function Map() {
     const [targetValue4, setTargetValue4] = useState()
     const [targetValue5, setTargetValue5] = useState()
     const [render, setrender] = useState(false)
+<<<<<<< Updated upstream
     // const multipleList = []
  console.log(`render value:`, render)
     // console.log('this is the list:', multipleList)
   
+=======
+    const [zoom, setZoom] = useState(6)
+
+>>>>>>> Stashed changes
     useEffect(() => {
         if (detailsSelect) {
         fetch(`https://localhost:3001/entity/${detailsSelect}`)
@@ -182,7 +187,12 @@ function Map() {
 
     const handleSearch = () => {
         setSearchBox(true)
+<<<<<<< Updated upstream
         }
+=======
+        // modeValue ? setMode(false) : console.log('already false')
+    }
+>>>>>>> Stashed changes
 
     const resetPolyLines = () => {
         // if (modeValue !== true) {
@@ -238,6 +248,25 @@ function Map() {
     const handleSearchSwitch = (event) => {
         setSearchSwitchChecked(event.target.checked);
         setMode(!modeValue);
+        setDetailsSelect(null);
+        resetPolyLines();
+        setCoord([16.54376,102.98753])
+        setZoom(4)
+    }
+
+    const handleClose = (event) => {
+        setSearchSwitchChecked(false)
+        setSearchBox(false)
+        setMode(false);
+        setDetailsSelect(null);
+        resetPolyLines();
+        setCoord([16.54376,102.98753])
+        setZoom(4)
+        setTargetValue1()
+        setTargetValue2()
+        setTargetValue3()
+        setTargetValue4()
+        setTargetValue5()
     }
 
     console.log('targetvalue1', targetValue1)
@@ -245,6 +274,7 @@ function Map() {
 
     return (
         <>
+<<<<<<< Updated upstream
         <div className="Map">
             <div className='Container'>
                 <div className='ManageSearch'>
@@ -260,6 +290,27 @@ function Map() {
                                     <Switch
                                         checked={searchSwitchChecked}
                                         onChange={handleSearchSwitch}
+=======
+            <div className="Map">
+                <div className='Container'>
+                    <div className='ManageSearch'>
+                        <ManageSearchIcon onClick={() => { handleSearch() }} />
+                    </div>
+                    <div>
+                        {searchbox ?
+                            <>
+                                <div className='filterContainer'>
+                                    <CloseIcon className='closeIcon' onClick={() => { handleClose() }} />
+                                    <FormControlLabel
+                                        control={
+                                            <Switch
+                                                checked={searchSwitchChecked}
+                                                onChange={handleSearchSwitch}
+                                            />
+                                        }
+                                        label="Map Multiple Relationships"
+                                        className='searchSwitch'
+>>>>>>> Stashed changes
                                     />
                                 }
                                 label="Search Multiple Individuals"
@@ -371,10 +422,19 @@ function Map() {
                                                 <ShareIcon className= {Orgpoly ? 'activelines' : 'notActiveLines'} onClick={() => {setOrgPolyLine(!Orgpoly)}}/>
                                                 <PersonSearchIcon className='OrgDetailsIcon' onClick={handleOpenDetailsDialog}/>
 
+<<<<<<< Updated upstream
 
                                             </>
                                             : console.log(`member not found`)
                                             )}
+=======
+                                {!modeValue ?
+                                <div>
+                                    <div className='latLongSearch'>
+                                        <form className='latLongSearch' autoComplete="off">
+                                            <div className='searchfield'>
+                                                <TextField label='Latitude' onChange={(e) => setLat(e.target.value)} />
+>>>>>>> Stashed changes
                                             </div>
                                         :
                                         (inputValue === 'Event' ? 
@@ -396,6 +456,7 @@ function Map() {
                                         ))}
                                     </div>
                                 </div>
+<<<<<<< Updated upstream
                                 : 
                                 <div>
                                     <Autocomplete 
@@ -419,6 +480,22 @@ function Map() {
                                             options={individualData}
                                             sx={{ width: 300 }}
                                             renderInput={(params) => <TextField {...params} label="Search Individual 2" margin='normal' />}/>
+=======
+                                : console.log('in multiple line mode')}
+                                </div>
+                            </>
+                            :
+                            console.log()
+                        }
+                    </div>
+                    <div>
+                        <div>
+                            <MapContainer center={[13.57406, 108.18783]} zoom={zoom} ref={mapRef} id='map'>
+                                <LayersControl>
+                                    <BaseLayer name="OpenStreetMap">
+                                        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; <a href=&quot;https://www.openstreetmap.org/copyright&quot;>OpenStreetMap</a> contributors" />
+                                    </BaseLayer>
+>>>>>>> Stashed changes
 
                                     <Autocomplete 
                                             inputValue={targetValue3}
@@ -606,6 +683,7 @@ function Map() {
                                     </LayerGroup>
                                 </LayersControl.Overlay>
 
+<<<<<<< Updated upstream
                             </LayersControl>
                             {(modeValue ? <MultipleConnections render={render} targetValue1={targetValue1} targetValue2={targetValue2} targetValue3={targetValue3} targetValue4={targetValue4} targetValue5={targetValue5}/> : console.log('no connections for multiple'))}
                             {(poly ? <Connections details={detailsSelect}/> : console.log('no connections'))}
@@ -619,6 +697,25 @@ function Map() {
                             <MapController coord={coord}/>
                             <ScaleControl position='topleft' />    
                         </MapContainer>
+=======
+                                </LayersControl>
+                                {(modeValue ? <MultipleConnections render={render} targetValue1={targetValue1} targetValue2={targetValue2} targetValue3={targetValue3} targetValue4={targetValue4} targetValue5={targetValue5} /> : console.log('no connections for multiple'))}
+                                {(poly ? <Connections details={detailsSelect} /> : console.log('no connections'))}
+                                {(eventpoly ? <EventConnections details={detailsSelect} /> : console.log('no connections'))}
+                                {(Orgpoly ? <OrgConnections details={detailsSelect} /> : console.log('no connections'))}
+                                {(targetValue !== '' || searchSet === true ?
+                                    <>
+                                        <Circle color='blue' fillColor='yellow' weight={2} opacity={.9} center={coord} radius={14000} />
+                                        <Circle color='blue' fillColor='blue' weight={2} opacity={.9} center={coord} radius={200} />
+                                    </>
+                                    :
+                                    console.log('')
+                                )}
+                                <MapController coord={coord} />
+                                <ScaleControl position='topleft' />
+                            </MapContainer>
+                        </div>
+>>>>>>> Stashed changes
                     </div>
                 </div>
             </div>
