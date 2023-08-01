@@ -358,7 +358,15 @@ app.post('/narrative', (req, res) => {
   let body = req.body
   knex('narrative')
     .insert(body)
-    .then(()=> res.status(201).json({message: 'narrative has been added'}))
+    .then(()=> res.status(201).json({message: 'Narrative has been added'}))
+})
+
+app.delete('/narrative/:id', (req, res) => {
+  let { id } = req.params
+  knex('narrative')
+    .where({'id_entity': id})
+    .del()
+    .then(() => res.status(200).send({message: 'Narrative was deleted'}))
 })
 
 

@@ -53,13 +53,14 @@ export const returnChipsForAssociates = (data, handleClickAssociate, handleDelet
     })
 }
 
-export const returnNarratives = (data) => {
+export const returnNarratives = (data, handleDeleteNarr) => {
     return data.map((e) => {
         return (
                 <Chip
                     key={e.narr_id}
                     label={`Date: ${e.date}:
                     ${e.narrative_string}`}
+                    onDelete={() => handleDeleteNarr()}
                 />
         )
     })

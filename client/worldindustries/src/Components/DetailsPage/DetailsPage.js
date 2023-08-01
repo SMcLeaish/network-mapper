@@ -155,7 +155,6 @@ const DetailsPage = ({ open, onClose, id }) => {
         narrative_string: e.target.value,
         id_entity: id
     }
-    console.log(obj)
     setNarrToAdd(obj)
 }
 

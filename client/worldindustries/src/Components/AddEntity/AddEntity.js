@@ -11,7 +11,7 @@ const AddEntity = () => {
     const [events, setEvents] = useState('');
     const [name, setName] = useState('')
     const [option, setOption] = useState([]);
-    
+
     //  UPLOAD PHOTO - CHILD FUNCTION
     const profilePictureUpload = (event) => {
         const file = event.target.files[0];
@@ -22,9 +22,9 @@ const AddEntity = () => {
     const SettingName = () => {
         useEffect(() => {
             fetch('http://localhost:8080/name/')
-            .then(response => response.json())
-            .then(data => setName(data))
-            .catch(error => console.log(error));
+                .then(response => response.json())
+                .then(data => setName(data))
+                .catch(error => console.log(error));
         }, []);
 
         return (
@@ -33,23 +33,23 @@ const AddEntity = () => {
                     Name
                 </h3>
                 <p>
-                    { name }
+                    {name}
                 </p>
             </div>
         );
     };
-    
+
     const AutoComplete = () => {
         useEffect(() => {
             fetch(" ")
-            .then((response) => response.json())
-            .then((data) => {
-                setOption(data);
-            })
-            .catch((error) => {
-            console.error('Error fetching data:', error);
-        });
-        },[]);
+                .then((response) => response.json())
+                .then((data) => {
+                    setOption(data);
+                })
+                .catch((error) => {
+                    console.error('Error fetching data:', error);
+                });
+        }, []);
     };
 
     //  SET ORGANIZATION - CHILD FUNCTION
@@ -72,7 +72,7 @@ const AddEntity = () => {
 
     //  SET NARRATIVE - CHILD FUNCTION
     const SettingNarrative = () => {
-        
+
         //  NARRATIVE UPDATE - GRANDCHILD FUNCTION
         const narrativeUpdate = (event) => {
             const { value } = event.target;
@@ -80,8 +80,8 @@ const AddEntity = () => {
         };
         const maxCharacters = 500;
         const remainingCharacters = maxCharacters - narrative.length;
-        
-            return (
+
+        return (
             <div>
                 <textarea value={narrative} onChange={narrativeUpdate} maxLength={maxCharacters} />
                 <div>
@@ -90,7 +90,7 @@ const AddEntity = () => {
             </div>
         )
     }
-  
+    
     return (
         <div>
             <header>
@@ -98,14 +98,13 @@ const AddEntity = () => {
                     Add Entity
                 </h1>
             </header>
-
             <div>
                 <h2>
                     Upload a Profile Picture
                 </h2>
                 {profilePicture ? (
                     <img src={URL.createObjectURL(profilePicture)} alt='ProfilePicture' />
-                    ) : (
+                ) : (
                     <p>
                         No photo uploaded
                     </p>
@@ -121,48 +120,39 @@ const AddEntity = () => {
                 </h3>
                 <input type='text' value={organization} onChange={settingOrganization} />
             </div>
-                 <Container maxWidth="lg">
-                 <h3> Association </h3> 
-                  <AutoComplete
-                    option={option} 
+            <Container maxWidth="lg">
+                <h3> Association </h3>
+                <AutoComplete
+                    option={option}
                     getOptionLabel={(option) => option.label}
-                  renderInput={(params) => ( 
-                    <TextField {...params} label="Select a option" 
-                   classname="auto-complete" />
-                  )}
-                    
-                  
-                  
-                  />
-                </Container>
-                
+                    renderInput={(params) => (
+                        <TextField {...params} label="Select a option"
+                            classname="auto-complete" />
+                    )}
+                />
+            </Container>
             <div>
                 <input type='text' value={association} onChange={settingAssociation} />
             </div>
-            
             <div>
                 <h3> Events </h3>
                 <Grid item xs={7} className='details-item-container'>
-            <Box className='events-box'>
-           
-            </Box>
-          </Grid>
+                    <Box className='events-box'>
+                    </Box>
+                </Grid>
                 <input type='text' value={events} onChange={settingEvents} />
             </div>
-
             <div>
                 <h3>
                     Narrative:
                 </h3>
                 <SettingNarrative />
             </div>
-            
             <Button onClick={AddEntity} class="mdc-button mdc-button-outlined">
-              <span class="mdc-button__label">Outlined Button </span>
-                 Save
+                <span class="mdc-button__label">Outlined Button </span>
+                Save
             </Button>
         </div>
-
     );
 };
 
