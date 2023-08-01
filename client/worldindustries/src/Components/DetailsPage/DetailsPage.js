@@ -153,6 +153,7 @@ const DetailsPage = ({ open, onClose, id }) => {
         narrative_string: e.target.value,
         id_entity: id
     }
+    console.log(obj)
     setNarrToAdd(obj)
 }
 
@@ -166,6 +167,18 @@ const DetailsPage = ({ open, onClose, id }) => {
       body: JSON.stringify(narrToAdd)
     }
     fetch('http://localhost:3001/narrative', init)
+      .then(res => res.json())
+      .then(data => {console.log(data); setUpdateStatus(!updateStatus)})
+  }
+
+  const handleDeleteNarr = (e) => {
+    let init = {
+      method: 'DELETE',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+    }
+    fetch(`http://localhost:3001/narrative/${e}`, init)
       .then(res => res.json())
       .then(data => {console.log(data); setUpdateStatus(!updateStatus)})
   }
@@ -238,7 +251,7 @@ const DetailsPage = ({ open, onClose, id }) => {
               </Stack>
                 <Typography variant='body1' gutterBottom>
                 </Typography>
-                  {MyFunctions.returnNarratives(narratives)}
+                  {MyFunctions.returnNarratives(narratives, handleDeleteNarr)}
               </Box>
             </Grid>
           </Grid>

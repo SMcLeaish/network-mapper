@@ -319,10 +319,10 @@ app.post('/narrative', (req, res) => {
     .then(()=> res.status(201).json({message: 'Narrative has been added'}))
 })
 
-app.delete('/narrative/:id', (req, res) => {
-  let { id } = req.params
+app.delete('/narrative/:string', (req, res) => {
+  let { string } = req.params
   knex('narrative')
-    .where({'id_entity': id})
+    .where({'narrative_string': string})
     .del()
     .then(() => res.status(200).send({message: 'Narrative was deleted'}))
 })

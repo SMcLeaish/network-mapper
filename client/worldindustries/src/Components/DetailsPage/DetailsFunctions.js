@@ -60,7 +60,7 @@ export const returnNarratives = (data, handleDeleteNarr) => {
                     key={e.narr_id}
                     label={`Date: ${e.date}:
                     ${e.narrative_string}`}
-                    onDelete={() => handleDeleteNarr()}
+                    onDelete={() => handleDeleteNarr(e.narrative_string)}
                 />
         )
     })
