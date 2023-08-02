@@ -209,6 +209,7 @@ app.get('/entity/:name', (req, res) => {
         knex.select('entity.id AS individual_entity_id', 'entity.id AS primary_entity_id','individual.id AS individual_id','interaction.id AS interaction_id', 'individual.name AS individual_name', 'individual.location AS individual_location', 'interaction.weight', 
         'interaction.id_entity_1', 'interaction.id_entity_2', 'interaction.id_event', 'event.event_name', 
         'event.location AS event_location', 'event.date AS event_date', 'event_type.type AS event_type', 'user_data.username', 'user_data.user_organization')
+        // knex.select('*')
           .from('individual')
           .join('entity', 'individual.id', 'entity.id_individual')
           .join('interaction', function () {
@@ -296,7 +297,7 @@ app.get('/relationships/:id', (req, res) => {
           })
       })
 })
-
+https
 app.post('/interaction', (req, res) => {
   knex('interaction')
     .insert(req.body)
@@ -328,8 +329,8 @@ app.delete('/narrative/:string', (req, res) => {
 })
 
 
-https.createServer(options, app).listen(port, () => {
-  console.log('HTTPS server running on port 3001');
-});
+// https.createServer(options, app).listen(port, () => {
+//   console.log('HTTPS server running on port 3001');
+// });
 
-// app.listen(port, () => console.log(`listening on port: ${port}`))
+app.listen(port, () => console.log(`listening on port: ${port}`))

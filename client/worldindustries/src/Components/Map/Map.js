@@ -45,7 +45,7 @@ function Map() {
     const [individualData, setIndividualData] = useState([])
 
     useEffect(() => {
-        fetch('https://localhost:3001/individuals')
+        fetch('http://localhost:3001/individuals')
             .then((res) => res.json())
             .then(data => {
                 setIndividualData2(data)
@@ -61,7 +61,7 @@ function Map() {
     const [OrganizationData, setOrganizationData] = useState([])
 
     useEffect(() => {
-        fetch('https://localhost:3001/organizations')
+        fetch('http://localhost:3001/organizations')
             .then((res) => res.json())
             .then(data => {
                 setOrganizationData2(data)
@@ -74,7 +74,7 @@ function Map() {
     const [EventData, setEventData] = useState([])
 
     useEffect(() => {
-        fetch('https://localhost:3001/events')
+        fetch('http://localhost:3001/events')
             .then((res) => res.json())
             .then(data => {
                 setEventData2(data)
@@ -162,7 +162,7 @@ function Map() {
 
     useEffect(() => {
         if (detailsSelect) {
-            fetch(`https://localhost:3001/entity/${detailsSelect}`)
+            fetch(`http://localhost:3001/entity/${detailsSelect}`)
                 .then((res) => res.json())
                 .then(data => {
                     setEntityConnect(data[0].primary_entity_id)
@@ -519,7 +519,7 @@ function Map() {
                             <MapContainer center={[13.57406, 108.18783]} zoom={zoom} ref={mapRef} id='map'>
                                 <LayersControl>
                                     <BaseLayer name="OpenStreetMap">
-                                        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; <a href=&quot;https://www.openstreetmap.org/copyright&quot;>OpenStreetMap</a> contributors" />
+                                        <TileLayer url="http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; <a href=&quot;http://www.openstreetmap.org/copyright&quot;>OpenStreetMap</a> contributors" />
                                     </BaseLayer>
 
                                     {/* <BaseLayer name="World Imagery">
@@ -540,7 +540,7 @@ function Map() {
 
                                     <BaseLayer name="Google Imagery">
                                         <TileLayer
-                                            url='https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'
+                                            url='http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'
                                             maxZoom={20}
                                             subdomains={['mt1', 'mt2', 'mt3']}
                                         />
