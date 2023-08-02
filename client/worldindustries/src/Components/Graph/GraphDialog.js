@@ -14,7 +14,7 @@ function GraphDialog({ open, onClose }) {
       <DialogContent dividers>
         <LayoutSettingsContext.Provider value={{ layoutSettings, setLayoutSettings }}>
           <Graph />
-          {/* <SettingsPopup /> */}
+          <SettingsPopup />
         </LayoutSettingsContext.Provider>
       </DialogContent>
     </Dialog>

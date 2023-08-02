@@ -14,13 +14,13 @@ import constructGraph from './Graphology';
 import { personSvg } from './SVG/person.js';
 import { corporationSvg } from './SVG/corporation';
 import { layoutDefaults } from './CytoScapeDefaults';
-
+import SettingsPopup from './SettingsPopup'
 
 cytoscape.use(fcose);
 cytoscape.use(cola);
 
 function Graph() {
-	const { layoutSettings } = useContext(LayoutSettingsContext);
+	const { layoutSettings, setLayoutSettings } = useContext(LayoutSettingsContext);
 	const cyRef = useRef();
 	const [elements, setElements] = useState([]);
 	const [loading, setLoading] = useState(true);
@@ -41,7 +41,7 @@ function Graph() {
 			layout.stop();
 			layout.run();
 		}
-	}, [selectedLayout, layoutSettings]);
+	}, []);
 
 	useEffect(() => {
 		fetch('https://localhost:3001/network/John Doe')
