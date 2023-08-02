@@ -9,14 +9,20 @@ const placeholderImg = 'https://images.unsplash.com/photo-1633332755192-727a05c4
 
 const EventPage = () => {
     let { id } = useParams();
-    const [event, setEvent] = useState([])
-    const [narratives, setNarratives] = useState([])
-    const [entityList, setEntityList] = useState([])
-    const [checkForAttendie, setCheckForAttendie] = useState(false)
+    const [ event, setEvent ] = useState([])
+    const [ narratives, setNarratives ] = useState([])
+    const [ entityList, setEntityList ] = useState([])
+    const [ checkForAttendie, setCheckForAttendie ] = useState(false)
+    const [ checkForNarr, setCheckForNarr ] = useState(false)
     const [ attendieToAdd, setAttendieToAdd ] = useState({
         weight: 1,
         id_entity_1: 0,
         id_entity_2: 0,
+        id_event: parseInt(id)
+    })
+    const [ narrToAdd, setNarrToAdd ] = useState({
+        date: '',
+        narrative_string: '',
         id_event: parseInt(id)
     })
     const [updateStatus, setUpdateStatus] = useState(true)
@@ -31,7 +37,7 @@ const EventPage = () => {
         fetch(`http://localhost:3001/narratives/event/${id}`)
             .then(res => res.json())
             .then(data => { setNarratives(data); console.log(data) })
-    }, [id])
+    }, [id, updateStatus])
 
     useEffect(() => {
         let allData = []
@@ -53,6 +59,7 @@ const EventPage = () => {
     return (
         <Container maxWidth='xl' className='details-page-container bg-jet'>
             {MyFunctions.renderAttendieForm(checkForAttendie, entityList, setCheckForAttendie, attendieToAdd, setAttendieToAdd, setUpdateStatus, updateStatus)}
+            {MyFunctions.renderNarrativeForm(checkForNarr, setCheckForNarr, narrToAdd, setNarrToAdd, setUpdateStatus, updateStatus)}
             <Grid container>
                 <Grid container item xs={6}>
                     <Grid item xs={5} className='details-item-container'>
@@ -99,7 +106,7 @@ const EventPage = () => {
                                     variant="outlined"
                                     startIcon={<AddCircleIcon />}
                                     className='rounded-button'
-
+                                    onClick={() => setCheckForNarr(!checkForNarr)}
                                 >
                                     Add narrative
                                 </Button>

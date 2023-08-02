@@ -132,3 +132,64 @@ export const renderAttendieForm = (check, everyone, setCheckForAttendie, obj, se
         )
     }
 }
+
+const handleChangeNarr = (e, narrToAdd, setNarrToAdd ) => {
+    let obj = {...narrToAdd}
+    let date = new Date();
+    date = date.toISOString().slice(0, 10)
+    obj[e.target.id] = e.target.value
+    obj.date = date
+    setNarrToAdd(obj)
+}
+
+const handleSubmitNarr = (e, narrToAdd, setUpdateStatus, updateStatus) => {
+    e.preventDefault();
+    let init = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(narrToAdd)
+    } 
+    fetch('http://localhost:3001/narrative', init)
+        .then(res => res.json())
+        .then(data => {console.log(data.message); setUpdateStatus(!updateStatus)})
+}
+
+export const renderNarrativeForm = (check, setCheckForNarr, narrToAdd, setNarrToAdd, setUpdateStatus, updateStatus) => {
+    if (check) {
+        return (
+            <form className='associate-form bg-jet' onSubmit={(e) => handleSubmitNarr(e, narrToAdd, setUpdateStatus, updateStatus)}>
+                <TextField
+                    required
+                    multiline
+                    id="narrative_string"
+                    label="Required"
+                    defaultValue=""
+                    placeholder='Enter your narrative'
+                    autoComplete='off'
+                    onChange={(e) => handleChangeNarr(e, narrToAdd, setNarrToAdd)}
+                />
+                <div>
+                    <Button
+                        variant="outlined"
+                        startIcon={<AddCircleIcon />}
+                        className='rounded-button'
+                        type='submit'
+                    >
+                        Add Narrative
+                    </Button>
+                    <Button
+                        variant="outlined"
+                        startIcon={<CancelIcon />}
+                        className='rounded-button'
+                        type='button'
+                        onClick={() => setCheckForNarr(false)}
+                    >
+                        Cancel
+                    </Button>
+                </div>
+            </form>
+        )
+    }
+}
