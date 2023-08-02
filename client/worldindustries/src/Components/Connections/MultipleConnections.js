@@ -230,7 +230,7 @@ useEffect(() => {
         <div> 
             {connectDetails3.map((person3) => 
                 (console.log(person3.location, primaryLocation3),
-                    <Polyline positions={[primaryLocation2, person3.location]} color="green" />
+                    <Polyline positions={[primaryLocation3, person3.location]} color="green" />
                 ))
             } 
         </div> 

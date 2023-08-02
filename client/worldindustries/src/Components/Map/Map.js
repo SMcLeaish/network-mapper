@@ -240,7 +240,7 @@ function Map() {
         setMode(!modeValue);
         setDetailsSelect(null);
         resetPolyLines();
-        setCoord([16.54376,102.98753])
+        // setCoord([16.54376,102.98753])
         setZoom(4)
     }
 
