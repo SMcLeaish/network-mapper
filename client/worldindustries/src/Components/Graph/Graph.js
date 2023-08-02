@@ -11,31 +11,37 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import { LayoutSettingsContext } from './GraphDialog';
 import constructGraph from './Graphology';
-import './Graph.css';
 import { personSvg } from './SVG/person.js';
 import { corporationSvg } from './SVG/corporation';
+import { layoutDefaults } from './CytoScapeDefaults';
+
 
 cytoscape.use(fcose);
 cytoscape.use(cola);
 
 function Graph() {
 	const { layoutSettings } = useContext(LayoutSettingsContext);
-	const layoutConfig = layoutSettings
-
-	let person = 'data:image/svg+xml;utf8,' + encodeURIComponent(personSvg);
-	let corporation = 'data:image/svg+xml;utf8,' + encodeURIComponent(corporationSvg);
 	const cyRef = useRef();
 	const [elements, setElements] = useState([]);
-	const [currentMetric, setCurrentMetric] = useState('degreeCentrality');
 	const [loading, setLoading] = useState(true);
-	const [layout, setLayout] = useState(layoutConfig);
-
+	const [selectedLayout, setSelectedLayout] = useState(layoutSettings);
+	const person = 'data:image/svg+xml;utf8,' + encodeURIComponent(personSvg);
+	const corporation = 'data:image/svg+xml;utf8,' + encodeURIComponent(corporationSvg);
+	const [currentMetric, setCurrentMetric] = useState('degreeCentrality');
 	const cytoStyle = {
 		width: '100%',
 		height: '100%',
 		position: 'absolute',
 		fit: true,
 	};
+	console.log(selectedLayout)
+	useEffect(() => {
+		if (cyRef.current) {
+			const layout = cyRef.current.layout(selectedLayout);
+			layout.stop();
+			layout.run();
+		}
+	}, [selectedLayout, layoutSettings]);
 
 	useEffect(() => {
 		fetch('https://localhost:3001/network/John Doe')
@@ -83,7 +89,23 @@ function Graph() {
 	} else {
 		return (
 			<div style={{ position: 'relative', height: '100%', width: '100%' }}>
-				<FormControl style={{ position: 'absolute', top: '10px', left: '10px', zIndex: 1, width: '120px' }}>
+				<FormControl style={{ position: 'absolute', top: '10px', left: '1px', zIndex: 1, width: '120px' }}>
+					<InputLabel id="layout-label" shrink>Layout</InputLabel>
+					<Select
+						labelId="layout-label"
+						value={selectedLayout}
+						onChange={(event) => setSelectedLayout(layoutDefaults[event.target.value])}
+						style={{ height: '30px' }}
+					>
+						<MenuItem value="fcose">Fcose</MenuItem>
+						<MenuItem value="circle">Circle</MenuItem>
+						<MenuItem value="cose">Cose</MenuItem>
+					</Select>
+
+				</FormControl>
+
+
+				<FormControl style={{ position: 'absolute', top: '10px', left: '130px', zIndex: 1, width: '120px' }}>
 					<InputLabel id="metric-label" shrink>Metric</InputLabel>
 					<Select
 						labelId="metric-label"
@@ -96,13 +118,13 @@ function Graph() {
 					</Select>
 				</FormControl>
 
-				{/* Additional form controls if needed */}
 				<CytoscapeComponent
+					key={selectedLayout.name}
 					cy={(cy) => {
 						cyRef.current = cy;
 					}}
 					elements={CytoscapeComponent.normalizeElements(elements)}
-					layout={layout}
+					layout={selectedLayout}
 					style={cytoStyle}
 					stylesheet={[
 						{
@@ -140,7 +162,7 @@ function Graph() {
 							},
 						},
 					]}
-					userPanningEnabled={false}
+					userPanningEnabled={true}
 				/>
 			</div>
 		);
