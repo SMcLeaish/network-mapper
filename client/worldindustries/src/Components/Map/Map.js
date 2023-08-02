@@ -5,7 +5,8 @@ import { Icon, divIcon } from "leaflet";
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import './Map.css';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
-import InsightsIcon from '@mui/icons-material/Analyze'
+import IconButton from '@mui/material/IconButton';
+import InsightsIcon from '@mui/icons-material/Insights'
 import CloseIcon from '@mui/icons-material/Close';
 import { Autocomplete } from '@mui/material';
 import TextField from '@mui/material/TextField';
@@ -28,6 +29,7 @@ import MultipleConnections from '../Connections/MultipleConnections';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import GraphDialog from '../Graph/GraphDialog';
+import Tooltip from '@mui/material/Tooltip'
 
 
 const cityList = require('./Chinacities.json')
@@ -241,6 +243,9 @@ function Map() {
         setAnalyzeDialogOpen(true);
 
     }
+    const handleAnalyzeDialogClose = (name) => {
+        setAnalyzeDialogOpen(false);
+    }
     const [searchSwitchChecked, setSearchSwitchChecked] = useState(false);
 
     const handleSearchSwitch = (event) => {
@@ -366,8 +371,13 @@ function Map() {
                                                                 <ShareIcon className={poly ? 'activelines' : 'notActiveLines'} onClick={() => { setPolyLine(!poly) }} />
                                                                 <GroupsIcon className={eventpoly ? 'Eventactiveline' : 'EventnotActiveLines'} onClick={() => { seteventPolyLine(!eventpoly) }} />
                                                                 {/* <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
+                                                                <Tooltip title="Details">
                                                                 <PersonSearchIcon className='DetailsIcon' onClick={handleOpenDetailsDialog} />
+                                                                </Tooltip>
+                                                                <Tooltip title="Analyze">
+
                                                                 <IconButton onClick={handleAnalyzeDialogOpen}><InsightsIcon/></IconButton>
+                                                                </Tooltip>
                                                             </>
                                                             : console.log(`member not found`)
                                                         )}
@@ -645,6 +655,8 @@ function Map() {
                 onClose={handleCloseDetailsDialog}
                 id={entityConnect}
             />
+            <GraphDialog open={analyzeDialogOpen} onClose={handleAnalyzeDialogClose} />
+
         </>
     );
 }

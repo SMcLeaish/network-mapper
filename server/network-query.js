@@ -10,7 +10,7 @@ async function startNameQuery(name) {
         .where({ 'individual.name': name });
   
       if (data.length === 0) {
-        data = await knex.select('entity.id AS id', 'organization.name AS orgName', 'organization.location AS organization_location', 'interaction.weight',
+        data = await knex.select('entity.id AS id', 'organization.name AS orgName', 'organization.organization_type_id AS orgType', 'organization.location AS organization_location', 'interaction.weight',
           'interaction.id_entity_1', 'interaction.id_entity_2', 'interaction.id_event', 'event.event_name',
           'event.location AS event_location', 'event.date AS event_date', 'event_type.type AS event_type', 'user_data.username', 'user_data.user_organization')
           .from('organization')
@@ -130,6 +130,7 @@ async function startNameQuery(name) {
       let firstEntry = data[0];
       let nameField = firstEntry.individualName ? 'individualName' : 'orgName';
       let typeField = firstEntry.individualName ? 'individual' : 'organization';
+      let organizationType = firstEntry.orgType;
       let location = firstEntry.individual_location || firstEntry.organization_location;
       let latitude = location[0]
       let longitude = location[1]
@@ -140,6 +141,7 @@ async function startNameQuery(name) {
         id: firstEntry.id,
         name: firstEntry[nameField],
         type: typeField,
+        organizationType: organizationType,
         latitude: latitude,
         longitude: longitude,
         location: location,

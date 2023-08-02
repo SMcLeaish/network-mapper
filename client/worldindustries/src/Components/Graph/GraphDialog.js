@@ -1,46 +1,25 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import Graph from './Graph'
+import Graph from './Graph';
+import SettingsPopup from './SettingsPopup';
+import {circle} from './CytoScapeDefaults';
 
-function GraphDialog() {
-  const [open, setOpen] = React.useState(true); // change this to false if you want the dialog to be initially closed
+export const LayoutSettingsContext = React.createContext(); // Exporting for use in other components
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+function GraphDialog({ open, onClose }) {
+  let [layoutSettings, setLayoutSettings] = useState(circle);
 
   return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      fullWidth={true}
-      maxWidth={'lg'} 
-      PaperProps={{
-        style: {
-          height: '100vh',
-          overflowY: 'unset',
-        },
-      }}
-    >
-      {/* <DialogTitle>
-        Your Dialog Title */}
-        {/* <IconButton
-          edge="end"
-          color="inherit"
-          onClick={handleClose}
-          aria-label="close"
-        >
-          <CloseIcon /> */}
-        {/* </IconButton> */}
-      {/* </DialogTitle> */}
+    <Dialog open={open} onClose={onClose} fullWidth={true} maxWidth={'lg'} PaperProps={{ style: { height: '100vh', overflowY: 'unset' } }}>
       <DialogContent dividers>
-        <Graph />
+        <LayoutSettingsContext.Provider value={{ layoutSettings, setLayoutSettings }}>
+          <Graph />
+          <SettingsPopup />
+        </LayoutSettingsContext.Provider>
       </DialogContent>
     </Dialog>
   );
 }
-export default GraphDialog 
+
+export default GraphDialog;
