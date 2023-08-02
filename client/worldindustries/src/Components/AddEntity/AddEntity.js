@@ -1,115 +1,187 @@
 import { useState, useEffect } from 'react';
+import { styled, TextField, Box, Button, Container, Grid, Paper, Autocomplete, Typography, Stack, FormControl, FormLabel, RadioGroup, Radio } from '@mui/material';
+import { FormControlLabel, Checkbox } from '@mui/material';
 import './AddEntity.css';
-import { styled, TextField, Box, Button, Container, Grid, Paper, AutoComplete, Typography } from '@mui/material';
-
 //  ADD ENTITY - PARENT FUNCTION
 const AddEntity = () => {
     const [profilePicture, setProfilePicture] = useState(null);
     const [narrative, setNarrative] = useState('');
     const [organization, setOrganization] = useState('');
     const [association, setAssociation] = useState('');
+    const [date,setDate]=useState('');
     const [events, setEvents] = useState('');
     // const [name, setName] = useState('')
     const [option, setOption] = useState([]);
-    // const [users, setUsers] = useState([]);
+    const [eventType,setEventType]=useState('')
     const [orgId, setOrgId] = useState([]);
     const [loggedInUser, setLoggedInUser] = useState(null);
+    const [indOrOrg,setIndOrOrg]=useState(true);
+    const [phonenumber,setPhonenumber]=useState('');
+    const [lat, setLat] = useState(0);
+    const [long, setLong] = useState(0);
+    const [location,setLocation]=useState([]);
+    const [entityName, setEntityName] = useState('');
+    const [entityType, setEntityType] = useState('');
+    const [orgType,setOrgType]=useState("individual");
+    // const [userInfo,setUserInfo]=useContext(UserContext)
+    
+   //ToDO: 10 events <- autocomplete. in case of not at 10 create an event
+   // event table in the backend we create it and then link foreing id 
+   // individual or organazation  
+
+    const userInfo={
+        username: 'joe.schmoe.mil@mail.mil',
+        user_organization: 'Army-1st_Brigade_82nd_Airborne',    
+    };
+
+
+    // FETCH association autocomplete options
+    // 'https://localhost:3001/individuals'
 
     
-
-    // LOGGED-IN USER INFORMATION
-    // useEffect(() => {
-    //     fetch('http://localhost:3001/get-logged-in-user', {
-    //         method: 'GET',
-    //         credentials: 'include',
-    //     })
-    //     .then(response => response.json())
-    //     .then(data => {
-    //         setLoggedInUser(data.user);
-    //     })
-    //     .catch(error => console.log(error));
-    // }, []);
-
-    //  UPLOAD PHOTO - CHILD FUNCTION
-    // const profilePictureUpload = (event) => {
-    //     const file = event.target.files[0];
-    //     setProfilePicture(file);
+    // const AutoComplete = () => {
+    //     // steal from chris woeller
+    //  useEffect(() => {
+    // fetch("https://localhost:3001/organization",{
+    //     credentials:"include"})
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //        setOption(data);
+    //        })
+    //        .catch((error) => {
+    //         console.error('Error fetching data:', error);
+    //     });
+    //      },[]);
     // };
-
-    //  SET USER - CHILD FUNCTION
-   
+     //Updates the selcted organization
     
-    const AutoComplete = () => {
-        //steal from chris woeller
-        // useEffect(() => {
-        //     fetch(" ")
-        //     .then((response) => response.json())
-        //     .then((data) => {
-        //         setOption(data);
-        //     })
-        //     .catch((error) => {
-        //     console.error('Error fetching data:', error);
-        // });
-        // },[]);
+    const setNewEvents = (event, newValue) => {
+        const { value } = event.target;
+        setNewEvents(newValue);
+    };
+    
+    
+    const handleOrganizationChange = (event, newValue) => {
+      setOrganization(newValue);
     };
 
     //  SET ORGANIZATION - CHILD FUNCTION
-    const settingOrganization = (event) => {
-        const { value } = event.target;
-        setOrganization(value);
-    };
+    // const settingEvent = (event) => {
+    //     const { value } = event.target;
+    //     setOrganization(value);
+    // };
 
     //  SET ASSOCIATION - CHILD FUNCTION
-    const settingAssociation = (event) => {
+    const setNewAssociation = (event, newValue) => {
         const { value } = event.target;
-        setAssociation(value);
+        setAssociation(newValue);
     };
 
     //  SET EVENTS - CHILD FUNCTION
-    const settingEvents = (event) => {
+    const setting = (event) => {
         const { value } = event.target;
         setEvents(value);
     };
 
     //  SET NARRATIVE - CHILD FUNCTION
-    const SettingNarrative = () => {
+    
         
-        //  NARRATIVE UPDATE - GRANDCHILD FUNCTION
-        const narrativeUpdate = (event) => {
-            const { value } = event.target;
-            setNarrative(value);
-        };
         const maxCharacters = 500;
         const remainingCharacters = maxCharacters - narrative.length;
         
-            return (
-            <div>
-                <textarea value={narrative} onChange={narrativeUpdate} maxLength={maxCharacters} />
-                <div>
-                    {remainingCharacters}/{maxCharacters}
-                </div>
-            </div>
-        )
-    }
+            
     
-    const handleSubmit=()=>{
-        console.log(association,organization,events,narrative)
-        fetch("https://localhost:3001/entity",{
-            credentials:'include',
-            headers:{ 'Content-Type': 'application/json'},
-            method:'POST',
-            body:JSON.stringify({
-                association:association,
-                organization:organization,
-                events:events,
-                narrative:narrative
-            })
-        }).then(res=>res.json())
+    
+    const handleSubmit=async ()=>{
+        console.log("This is your submiited indOrorg",indOrOrg)
+        setLocation([Number(lat),Number(long)])
+        await fetch("https://localhost:3001/entity",{
+            credentials:"include",
+            method:"POST",
+            headers:{ 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                //will update to userInfo.id
+            user_id:1,
+            indOrOrg:indOrOrg,
+            association:association,
+            date: new Date(),
+            organization:entityName,
+            narrative:narrative,
+            events:events,
+            phonenumber:phonenumber,
+            location:location,
+            orgType:orgType,
+            eventType:eventType
+
+          })
+        })
+        .then(res=>res.json())
         
     }
 
 
+    const showIndividualFields = () => {
+        return (
+            <>
+            <TextField
+                margin='dense'
+                id="outlined-controlled"
+                label="Latitude"
+                value={lat}
+                onChange={(event) => setLat(event.target.value)}
+            />
+            <TextField
+                margin='dense'
+                id="outlined-controlled"
+                label="Longitude"
+                value={long}
+                onChange={(event) => setLong(event.target.value)}
+            />
+            <TextField
+                margin='dense'
+                id="outlined-controlled"
+                label="Phone Number"
+                value={phonenumber}
+                onChange={(event) => setPhonenumber(event.target.value)}
+            />
+            </>
+        )
+    }
 
+    const showOrganizationFields = () => {
+        return (
+            <>
+            <TextField
+                margin='dense'
+                id="outlined-controlled"
+                label="Latitude"
+                value={lat}
+                onChange={(event) => setLat(event.target.value)}
+            />
+            <TextField
+                margin='dense'
+                id="outlined-controlled"
+                label="Longitude"
+                value={long}
+                onChange={(event) => setLong(event.target.value)}
+            />
+            <TextField
+                margin='dense'
+                id="outlined-controlled"
+                label="Phone Number"
+                value={phonenumber}
+                onChange={(event) => setPhonenumber(event.target.value)}
+            />
+            <TextField
+                margin='dense'
+                id="outlined-controlled"
+                label="Organization Type"
+                value={orgType}
+                onChange={(event) => setOrgType(event.target.value)}
+            />
+            </>
+        )
+    }
   
     return (
         <div>
@@ -133,69 +205,100 @@ const AddEntity = () => {
                         )}
                         {/* <input type='file' accept='image/*' onChange={profilePictureUpload} /> */}
                     </div>
-                    <div>
-                        <h3>
-                            Logged-in User Information:
-                        </h3>
-                        {loggedInUser ? (
-                            <div>
-                                <p>
-                                    Username: {loggedInUser.username}
-                                </p>
-                                <p>
-                                    User Organization: {loggedInUser.user_organization}
-                                </p>
-                            </div>
-                        ) : (
-                            <p>
-                                Loading user information...
+                    
+                    <Box sx={{width: 800}}>
+                        <h3>User Information</h3>
+                        <div>
+                            <p>Username: {userInfo.username}</p>
+                            <p>User Organization: {userInfo.user_organization}
                             </p>
-                        )}
                     </div>
-                    <div>
-                   
-                    </div>
-                    <div>
-                        <h3>
-                            Organization:
-                        </h3>
-                        <input type='text' value={organization} onChange={settingOrganization} />
-                    </div>    
-                    <Box maxWidth="500px" maxclassName='association-box'>
-                        <h3>
-                            Association:
-                        </h3> 
-                        {/* { <AutoComplete
-                            option={option} 
-                            getOptionLabel={(option) => option.label}
-                            renderInput={(params) => ( 
-                            <TextField {...params} label="Select a option" 
-                            classname="auto-complete" />
-                        )}
-                        /> */}
-                        <div> 
-                            <input type='text' value={association} onChange={settingAssociation} />
-                            
-                        </div>
+                  
                     </Box>
-                    <Grid item xs={7} className='details-item-container'>
-                        <h3>
-                            Events:
-                        </h3>
-                            <Box className='events-box'>
+                <hr></hr>
+                    {/* {TOdo: if individual checkbox, display phone number, location 
+                    orgaanization type} */}
+                    <Box sx={{ width: 400}} className="individual-org">
+                        <h3>Individual/Organization</h3>
                         
-                            </Box>
-                        <input type='text' value={events} onChange={async (e)=>await setEvents(e.target.value)} />
-                    </Grid>
+                        <FormControl>
+                            <FormLabel id="demo-row-radio-buttons-group-label">Entity Type</FormLabel>
+                            <RadioGroup
+                                row
+                                aria-labelledby="row-radio-buttons-group-label"
+                                name="row-radio-buttons-group"
+                                
+                                
+                            >   
+                                <FormControlLabel value={true} control={<Radio />} label="Individual" onClick={() => setIndOrOrg(true)} />
+                                <FormControlLabel value={false} control={<Radio />} label="Organization" onClick={() => setIndOrOrg(false)}/>
+                            </RadioGroup>
+                        </FormControl>
 
+                        <TextField
+                            margin='dense'
+                            id="outlined-controlled"
+                            label="Entity Name"
+                            value={entityName}
+                            onChange={(event) => setEntityName(event.target.value)}
+                        />
+
+                        {/* name, location, phone number, type */}
+                        
+                        {console.log(indOrOrg)}
+                        {(indOrOrg === true ? showIndividualFields() : showOrganizationFields()  )}
+
+
+                     </Box>
+                    
+                    
+                    <hr></hr>
+                   
+                    
+                    <Box className='association-box'> 
+                    
+                    <h3>Association</h3> 
+                         
+                        <Autocomplete 
+                            
+                            disablePortal
+                            id="association-autocomplete"
+                            options={['test', 'test2', 'test3']}
+                            value={association}
+                            renderInput={(params) => <TextField {...params} label="Select an Association"/>}
+                            />
+                    </Box>
+
+                       <Box className='event-box'>
+                          <h3> Event </h3>    
+                          
+                            <Autocomplete
+                            disablePortal
+                            id="event-autocomplete"
+                            options={['test', 'test2', 'test3']}
+                            
+                            onChange={(event, newValue) => {
+                                setEvents(newValue);
+                                
+                              }}
+                            onInputChange={(e)=>setEvents(e.target.value)}
+                            renderInput={(params) => <TextField {...params} label="Select an Event"/>}
+                        />
+                     </Box>   
+                <hr></hr>
                     <div>
                         <h3>
                             Narrative:
                         </h3>
-                        <SettingNarrative />
+                        <div>
+                <textarea className='narrative-textfield' onChange={(e)=>setNarrative(e.target.value)} maxLength={maxCharacters} />
+                <div>
+                    {remainingCharacters}/{maxCharacters}
+                </div>
+            </div>
                     </div>
                     
-                    <Button onClick={()=>handleSubmit()} class="save-button">
+                    <Button onClick={async ()=> await handleSubmit()} class="save-button">
                         Save
                     </Button>
             

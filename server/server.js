@@ -7,8 +7,18 @@ const fs = require('fs');
 const app = express();
 const port = 3001;
 
-app.use(cors());
+
+
+let corsOptions = {
+  origin: 'http://localhost:3000',  //front end url
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  credentials: true,
+}
+app.use(cors(corsOptions));
 app.use(express.json());
+
+
+
 
 const options = {
     key: fs.readFileSync(process.env.SSL_KEY_PATH),
@@ -218,11 +228,11 @@ app.get('/entity/:name', (req, res) => {
 })
 
 app.get('/entity', (req, res) => {
-  let { array } = req.body
+  
   knex.select('*')
-    .from('individual')
-    .whereIn('name', array)
-    .then(data => res.status(200).json(data))
+    .from('entity')
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(404).send(err))
 })
 
 app.get('/entity/id/:id', (req, res) => {
@@ -297,11 +307,327 @@ app.delete('/interaction', (req, res) => {
 })
 
 
-app.post('/entity',(req,res)=>{
-  let {association,organization,events,narrative}=req.body
-  console.log("entity is ready to post",req.body)
+app.post('/entity', (req,res)=>{
+  let {user_id,association,organization,events,narrative,date,indOrOrg,phonenumber,location,orgType,eventType} = req.body
+  console.log(location)
+  let event_true;
+  let event_id;
+  let individual_id;
+  let organization_id;
+  let eventTypeId;
+  let orgTypeId;
+  let Organization;
+  let eventField
+  console.log("this is the indOrOrg",indOrOrg)
+      knex('event')
+        .select('*')
+        .where('event_name',events)
+        .then(data=>{
+          if(data.length>0){
+            
+            console.log("im in events")
+            event_true=true
+            event_id=data.id
+          }
+          else{
+            
+            event_true=false
+          }
+        }).then(()=>{
+          if(event_true==false){
+            console.log("the event does now exist",event_true)
+            knex('event_type')
+              .select('*')
+              .where('type',eventType)
+              .then(data=>{
+                if(data.length>0){  
+                  
+                  eventTypeId=data[0].id 
+                  
+                  let eventField={
+                    event_name:events,
+                    date:date,
+                    location:location,
+                    event_type_id:eventTypeId,
+                    id_user_data:user_id
+                  }
+                  knex('event')
+                  .select('*')
+                  .insert(eventField,['id'])
+                  .then(data=>{
+                    event_id=data[0].id
+                    res.status(200)})
+                }
+                else{
+                  knex('event_type')
+                  .select('*')
+                  .insert({type:eventType},['id'])
+                  .then(data=>{
+                    
+                    eventTypeId=data[0].id
+                   
+                     eventField={
+                      event_name:events,
+                      date:date,
+                      location:location,
+                      event_type_id:eventTypeId,
+                      id_user_data:user_id
+                    }
+                    knex('event')
+                    .select('*')
+                    .insert(eventField,['id'])
+                    .then(data=>{
+                      event_id=data[0].id
+                      res.status(200)})
+                    
+                  })
+                }
+              })
+                .then(()=>{
+                  
+                  if(indOrOrg==true){
+                    console.log("i'm making an individual",indOrOrg)
+                  let individual={
+                    name:organization,
+                    location:location,
+                    phone_number:phonenumber,
+                    id_user_data:user_id
+      
+                  }
+                  knex('individual')
+                  .select('*')
+                  .insert(individual,['id'])
+                  .then(data => {
+                  console.log("individual data", data)
+                  individual_id=data[0].id;
+                  res.status(201).send({ success: true })
+                  })
+                  .then(()=>{
+                    knex('entity')
+                      .select('*')
+                      .insert({
+                        id_individual:individual_id,
+                        id_organization:null
+                      },['id']).then(data=>{
+                       let narrativeField={
+                        user_data_id:user_id,
+                        date:date,
+                        narrative_string:narrative,
+                        id_entity:data[0].id,
+                        id_event:event_id
+                       }
+                       knex('narrative')
+                       .select('*')
+                       .insert(narrativeField)
+                       .then(()=>console.log("added"))
+                      })
+                    
+                  })
+          
+                }
+              else {
+                console.log("i'm making an organization",indOrOrg)
+                let orgTypeId; 
+               knex('organization_type')
+              .select('*')
+              .where('type',orgType)
+              .then(data=>
+                {
+                if(data.length>0){  
+                  
+                  orgTypeId=data[0].id
+                  
+                }
+                  else{
+                  knex('organization_type')
+                  .select('*')
+                  .insert({type:orgType},['id'])
+                  .then(data=>{
+                    
+                    orgTypeId=data[0].id;
+                    Organization={
+                      name:organization,
+                      location: location,
+                      organization_type_id: orgTypeId,
+                      id_user_data:user_id
+                    }
+                    knex('organization')
+                    .select('*')
+                    .insert(Organization, ['id'])
+                    .then(data => {
+                    
+                    organization_id=data[0].id
+                    
+                    })
+                  })
+                }
+              })
+              .then(()=>{
+                  console.log("entity")
+                  knex('entity')
+                    .select('*')
+                    .insert({
+                      id_organization:organization_id,
+                      id_individual:null
+                    },['id']).then(data=>{
+                      let narrativeField={
+                       user_data_id:user_id,
+                       date:date,
+                       narrative_string:narrative,
+                       id_entity:data[0].id,
+                       id_event:event_id
+                      }
+                      knex('narrative')
+                      .select('*')
+                      .insert(narrativeField)
+                      .then(()=>console.log("added"))
+                     })
+                    .then(()=>console.log("insert"))
+                    .catch((err=>console.log(err)))
+                })
 
+              
+           
+          }
+
+        })
+        
+                  
+              
+          }
+         else if((event_true==true)&&(indOrOrg==true)){
+            let individual={
+              name:organization,
+              location:location,
+              phone_number:phonenumber,
+              id_user_data:user_id
+
+            }
+            knex('individual')
+            .select('*')
+            .insert(individual,['id'])
+           .then(data => {
+            individual_id=data[0].id
+            res.status(201).send({ success: true })})
+            .then(()=>{
+              knex('entity')
+                .select('*')
+                .insert({
+                  id_individual:individual_id,
+                  id_organization:null
+                }).then(()=>console.log("insert"))
+            })
+          }
+          else if((event_true==true)&&(indOrOrg==false)){
+            let orgTypeId;
+            
+            knex('organization_type')
+              .select('*')
+              .where('type',orgType)
+              .then(data=>{
+                if(data.length>0){  
+                  
+                  orgTypeId=data[0].id
+                  
+                }
+                else{
+                  knex('organization_type')
+                  .select('*')
+                  .insert({type:orgType},['id'])
+                  .then(data=>{
+                    
+                    orgTypeId=data[0].id
+                    
+                  })
+                }
+              }).then(()=>{
+                
+                let Organization={
+                  name:organization,
+                  location: location,
+                  organization_type_id: orgTypeId,
+                  id_user_data:user_id
+                }
+                knex('organization')
+                .select('*')
+                .insert(Organization, ['id'])
+                .then(data => {
+                
+                organization_id=data[0].id
+                
+                })
+                .then(()=>{
+                  console.log("entity")
+                  knex('entity')
+                    .select('*')
+                    .insert({
+                      id_organization:organization_id,
+                      id_individual:null
+                    },['id']).then(data=>{
+                      let narrativeField={
+                       user_data_id:user_id,
+                       date:date,
+                       narrative_string:narrative,
+                       id_entity:data[0].id,
+                       id_event:event_id
+                      }
+                      knex('narrative')
+                      .select('*')
+                      .insert(narrativeField)
+                      .then(()=>console.log("added"))
+                     })
+                    .then(()=>console.log("insert"))
+                    .catch((err=>console.log(err)))
+                })
+
+              })
+           
+          }
+
+        })
+        
+      })
+
+app.get('/individuals',(req,res)=>{
+  knex('individual')
+    .select('*')
+      .then(data=>res.status(200).send(data))
 })
+   
+app.get('/organizations',(req,res)=>{
+  knex('organization')
+    .select('*')
+      .then(data=>res.status(200).send(data))
+})
+
+
+app.get('/organizations/type',(req,res)=>{
+  knex('organization_type')
+    .select('*')
+      .then(data=>res.status(200).send(data))
+})
+
+app.get('/events', (req,res)=>{
+  knex('events')
+    .select('*')
+      .then(data=>res.status(200).send(data))
+})
+
+app.get('/events/types', (req,res)=> {
+  knex('event_type')
+   .select('*')
+    .then(data=> res.status(200).send(data))
+})
+
+app.get('/narratives',(req,res)=>{
+  knex('narrative')
+  .select('*')
+    .then(data=> res.status(200).send(data))
+})
+
+    
+
+
 
 
 

@@ -1,25 +1,19 @@
 .association-grid{
   border: 2px solid red;
   padding: 10px;
-  background-color: antiquewhite; 
-}
-.association-box{
-  flex: 1;
-  max-width: 100px;
-  border: 1px solid black;
-  padding:20px;
-  height: 200px;
-  float: right;
+  background-color: rgb(216, 159, 84); 
 }
 .save-button {
-  background-color: red;
+  background-color: #3f88c5;
   border: none;
-  color: white;
+  color: #f8f4e3;
   width: 75px;
   height: 30px;
   border-radius: 15px;
   font-size: 19px;
+  font-weight: bolder;
   margin-left: 35px;
+  margin-top: 15px;
 }
 .AddEntity-page-container {
   padding-top: 20px;
@@ -42,4 +36,43 @@
   color: black;
   text-align: center;
   justify-content: center;
+}
+.organization{
+  border-radius: 1px solid black;
+  width: 160px;
+  height: 80px;
+}
+.outlined-controlled{
+  border-radius: 1px solid black;
+
+}
+.narrative-textfield{
+  width: 40%;
+  height: 200px;
+  border: 1px solid rgb(243, 162, 10);
+  padding: 40px;
+  font-size: 8px;
+  box-shadow: 50px;
+  text-size-adjust: 50px;
+}
+.individual-org{
+  float: right;
+  border-radius: 1px solid black;
+  text-align: center;
+}
+.association-box{
+  width:500px;
+  border: 1px solid rgb(216, 159, 84);
+  padding: 8px;
+}
+.association-autocomplete{
+  width: 50px;
+  /* height: 40px; */
+ 
+}
+.event-box{
+  width: 500px;
+  border: 1px solid rgb(216, 159, 84);
+  padding: 10px;
+
 }

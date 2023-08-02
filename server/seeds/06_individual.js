@@ -12,6 +12,7 @@ exports.seed = function(knex) {
         { name: 'Emily Miller', location: [15.55411, 102.18788], phone_number: '8901234567', id_user_data: Math.floor(Math.random() * 5) + 1 },
         { name: 'Benjamin Wilson', location: [15.55416, 102.18793], phone_number: '9012345678', id_user_data: Math.floor(Math.random() * 5) + 1 },
         { name: 'Emma Moore', location: [15.55421, 102.18798], phone_number: '0123456789', id_user_data: Math.floor(Math.random() * 5) + 1 },
+        
       ]);
     })
     .then(function(){
