@@ -9,6 +9,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 //import Details from './Components/Details/Details';
 import { useState } from 'react';
 import { Dialog } from '@mui/material';
+import EventPage from './Components/EventPage/EventPage';
 
 const latte = '#F8F4E3';
 const steelBlue = '#3F88C5';
@@ -86,6 +87,7 @@ function App() {
           <Route path='details/:id' element={<DetailsPage />} />
           {/* <Route path='/graph' element={<GraphDialog />} /> */}
           <Route path='/add-entity' element={<AddEntity />} />
+          <Route path='/event/:id' element={<EventPage />} />
         </Routes>
       </div>
     </ThemeProvider>

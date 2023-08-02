@@ -7,7 +7,6 @@ const fs = require('fs');
 const app = express();
 const port = 3001;
 const { startNetworkQuery }= require('./network-query');
-const { eventNames } = require('process');
 app.use(cors());
 app.use(express.json());
 
@@ -118,13 +117,19 @@ app.post('/users/login', (req, res) => {
     .catch(err => res.status(500).send(err))
 });
 
-app.get('/narratives/:id', (req, res) => {
+app.get('/narratives/entity/:id', (req, res) => {
   let { id } = req.params;
   knex.select('*', 'narrative.id AS narr_id')
     .from('narrative')
-    .where(function () {
-      this.where({ 'id_entity': id }).orWhere({ 'id_event': id })
-    })
+    .where({'id_entity': id})
+    .then((data) => res.status(200).json(data))
+})
+
+app.get('/narratives/event/:id', (req, res) => {
+  let { id } = req.params;
+  knex.select('*', 'narrative.id AS narr_id')
+    .from('narrative')
+    .where({'id_event': id})
     .then((data) => res.status(200).json(data))
 })
 
@@ -326,6 +331,52 @@ app.delete('/narrative/:string', (req, res) => {
     .where({'narrative_string': string})
     .del()
     .then(() => res.status(200).send({message: 'Narrative was deleted'}))
+})
+
+app.get('/event/:id', (req ,res) => {
+  let { id } = req.params
+  let dataToReturn = []
+  let individuals = []
+  let orgs = []
+  let attendies = []
+  knex.select('event.id AS event_id', 'event_name', 'event.date AS event_date', 'event.location AS event_location', 'event_type.type', 'id_entity_1', 'id_entity_2')
+    .from('event')
+    .where({'event.id': id})
+    .join('event_type', 'event.event_type_id', 'event_type.id')
+    .join('interaction', 'event.id', 'interaction.id_event')
+    .then((data) => {
+      let { id_entity_1, id_entity_2, ...mainEvent } = data[0]
+      dataToReturn.push(mainEvent)
+      data.forEach(e => {
+        attendies.push(e.id_entity_1); attendies.push(e.id_entity_2)
+      })
+      attendies = [...new Set(attendies)]
+      knex.select('*')
+        .from('entity')
+        .whereIn('entity.id', attendies)
+        .then(data => {
+          data.forEach(e => {
+            if (e.id_individual) individuals.push(e.id_individual)
+          })
+          data.forEach(e => {
+            if (e.id_organization) orgs.push(e.id_organization)
+          })
+          knex.select('individual.id AS individual_id', 'individual.name AS primary_name')
+            .from('individual')
+            .whereIn('individual.id', individuals)
+            .then(data => {
+              data.forEach(e => dataToReturn.push(e))
+              knex.select('organization.id AS organization_id', 'organization.name AS primary_name')
+                .from('organization')
+                .whereIn('organization.id', orgs)
+                .then(data => {
+                  data.forEach(e => dataToReturn.push(e))
+                  res.status(200).json(dataToReturn); 
+                })
+            })
+        })
+    })
+    .catch(err => res.status(400).send({message: 'This event does not exist or no one attended it'}))
 })
 
 
