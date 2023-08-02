@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { styled, TextField, Box, Button, Container, Grid, Paper, Autocomplete, Typography, Stack, FormControl, FormLabel, RadioGroup, Radio } from '@mui/material';
 import { FormControlLabel, Checkbox } from '@mui/material';
+
 import './AddEntity.css';
 //  ADD ENTITY - PARENT FUNCTION
 const AddEntity = () => {
@@ -10,7 +11,7 @@ const AddEntity = () => {
     const [association, setAssociation] = useState('');
     const [date,setDate]=useState('');
     const [events, setEvents] = useState('');
-    // const [name, setName] = useState('')
+    const [image,setImage]=useState('')
     const [option, setOption] = useState([]);
     const [eventType,setEventType]=useState('')
     const [orgId, setOrgId] = useState([]);
@@ -23,6 +24,7 @@ const AddEntity = () => {
     const [entityName, setEntityName] = useState('');
     const [entityType, setEntityType] = useState('');
     const [orgType,setOrgType]=useState("individual");
+    const [eventOptions,setEventOptions]=useState([])
     // const [userInfo,setUserInfo]=useContext(UserContext)
     
    //ToDO: 10 events <- autocomplete. in case of not at 10 create an event
@@ -39,20 +41,20 @@ const AddEntity = () => {
     // 'https://localhost:3001/individuals'
 
     
-    // const AutoComplete = () => {
-    //     // steal from chris woeller
-    //  useEffect(() => {
-    // fetch("https://localhost:3001/organization",{
-    //     credentials:"include"})
-    //     .then((response) => response.json())
-    //     .then((data) => {
-    //        setOption(data);
-    //        })
-    //        .catch((error) => {
-    //         console.error('Error fetching data:', error);
-    //     });
-    //      },[]);
-    // };
+    
+     useEffect(() => {
+    fetch("https://localhost:3001/events",{
+        credentials:"include"})
+        .then((response) => response.json())
+        .then((data) => {
+           setEventOptions(data);
+           })
+           .catch((error) => {
+            console.error('Error fetching data:', error);
+        });
+         },[]);
+    
+
      //Updates the selcted organization
     
     const setNewEvents = (event, newValue) => {
@@ -89,11 +91,19 @@ const AddEntity = () => {
         const maxCharacters = 500;
         const remainingCharacters = maxCharacters - narrative.length;
         
-            
+    const handleMulter=()=>{
+        fetch('https://localhost:3001/images',{
+            credentials:"include",
+            method:"POST",
+            headers:{ 'Content-Type': 'application/json' },
+            body: JSON.stringify({imgage:image})
+        })
+        .then(res=>res.json())
+    }        
     
     
     const handleSubmit=async ()=>{
-        console.log("This is your submiited indOrorg",indOrOrg)
+        console.log("This is your submiited image",image)
         setLocation([Number(lat),Number(long)])
         await fetch("https://localhost:3001/entity",{
             credentials:"include",
@@ -111,7 +121,8 @@ const AddEntity = () => {
             phonenumber:phonenumber,
             location:location,
             orgType:orgType,
-            eventType:eventType
+            eventType:eventType,
+            image:image,
 
           })
         })
@@ -182,30 +193,15 @@ const AddEntity = () => {
             </>
         )
     }
-  
+    let temp=eventOptions.map(elem=>elem.event_name)
+    console.log(temp)
     return (
         <div>
             <header class="entity-header">
                <h1 class="header-title">Create an Entity</h1> 
             </header>
 
-            <Container maxWidth='xl' className='AddEntity-page-container bg-jet'>
-            
-                
-                    <div>
-                        <h2>
-                            Upload a Profile Picture
-                        </h2>
-                        {profilePicture ? (
-                            <img src={URL.createObjectURL(profilePicture)} alt='ProfilePicture' />
-                            ) : (
-                            <p>
-                                No photo uploaded
-                            </p>
-                        )}
-                        {/* <input type='file' accept='image/*' onChange={profilePictureUpload} /> */}
-                    </div>
-                    
+            <Container maxWidth='xl' className='AddEntity-page-container bg-jet'>  
                     <Box sx={{width: 800}}>
                         <h3>User Information</h3>
                         <div>
@@ -250,17 +246,13 @@ const AddEntity = () => {
 
 
                      </Box>
-                    
-                    
-                    <hr></hr>
-                   
-                    
+                     <Stack spacing={2} width={'200px'}>
                     <Box className='association-box'> 
                     
                     <h3>Association</h3> 
                          
                         <Autocomplete 
-                            
+                            freeSolo
                             disablePortal
                             id="association-autocomplete"
                             options={['test', 'test2', 'test3']}
@@ -275,7 +267,8 @@ const AddEntity = () => {
                             <Autocomplete
                             disablePortal
                             id="event-autocomplete"
-                            options={['test', 'test2', 'test3']}
+                            options={temp}
+                            freeSolo
                             
                             onChange={(event, newValue) => {
                                 setEvents(newValue);
@@ -284,7 +277,19 @@ const AddEntity = () => {
                             onInputChange={(e)=>setEvents(e.target.value)}
                             renderInput={(params) => <TextField {...params} label="Select an Event"/>}
                         />
-                     </Box>   
+                     </Box>
+                     </Stack>
+                       
+                       <Button>Pick a photo</Button> 
+                       <input type="file" onChange={(e)=>
+                        {setImage(e.target.files[0]);
+                            handleMulter();
+                        }}/>
+                     <Box className='entity-image'>
+                     
+                        <img src={`http://localhost:3000/individual/${image.name}`} alt='Img broken' style={{height:"100%"}}/>
+                     </Box>
+                     
                 <hr></hr>
                     <div>
                         <h3>
@@ -308,3 +313,5 @@ const AddEntity = () => {
 };
 
 export default AddEntity;
+
+

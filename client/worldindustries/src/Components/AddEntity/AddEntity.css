@@ -56,7 +56,7 @@
   text-size-adjust: 50px;
 }
 .individual-org{
-  float: right;
+
   border-radius: 1px solid black;
   text-align: center;
 }
@@ -64,6 +64,7 @@
   width:500px;
   border: 1px solid rgb(216, 159, 84);
   padding: 8px;
+  float: right;
 }
 .association-autocomplete{
   width: 50px;
@@ -74,5 +75,15 @@
   width: 500px;
   border: 1px solid rgb(216, 159, 84);
   padding: 10px;
-
+  float: right; 
 }
+.entity-image{
+  height:300px;
+  right:20%;
+  top:40%;
+  border: 2px dotted red;
+  position: absolute;
+  float: none;
+}
+
+
