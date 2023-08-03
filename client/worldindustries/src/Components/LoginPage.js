@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react'
-import { Grid, Paper, Avatar, FormControlLabel, Checkbox, Button, TextField } from '@mui/material'
+import { Container, Box, Typography, Grid, Paper, Avatar, FormControlLabel, Checkbox, Button, TextField } from '@mui/material'
 import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import "./LoginPage.css"
@@ -142,54 +142,114 @@ const Login = () => {
     setNewUser(true)
   }
 
-
-  const paperStyle = { padding: 50, height: '80vh', width: 280, margin: "20px auto", }
+  const handleSignIn = () => {
+    setNewUser(false);
+  }
 
   return (
     <>
 
       {newUser == false ?
 
-        <Grid>
-          <Paper elevation={10} style={paperStyle} sx={{ backgroundColor: "#2D2D2A" }}>
-            <Grid align="center">
-              <Avatar>Pic</Avatar>
-              <h1>Sign In</h1>
+
+        <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+        className='bg-jet'
+        >
+          <Paper elevation={24} sx={{ borderRadius: '20px' }}>
+            <Grid container maxWidth='md'>
+              <Grid container item xs={6} className='login-grid login-grid-left' justifyContent='center'>
+                <Grid item xs={8}>
+                  <Typography variant="h6" gutterBottom textAlign={'center'}>
+                    <img src='/nm-logo-horizontal.png' alt='network mapper' className='mock-image' />
+                  </Typography>
+                </Grid>
+                <Grid item xs={8}>
+                  <Typography variant="h5" gutterBottom textAlign={'center'}>
+                    Sign In
+                  </Typography>
+                </Grid>
+                <Grid container item xs={8} justifyContent='center'>
+                  <form id="form" onSubmit={handleLogin} style={{ backgroundColorcolor: "black" }}>
+                    <TextField id="loginText" label='username' placeholder="Username" margin='dense' fullWidth required onChange={(e) => { setUsername(e.target.value) }} sx={{ color: 'red' }} />
+                    <TextField id="loginText" label='password' placeholder="Enter Password" type='password' className='extra-margin' margin='dense' fullWidth required onChange={(e) => { setPassword(e.target.value) }} />
+                    <Button type='submit' color='primary' variant='contained' fullWidth onSubmit={handleLogin}>Sign In</Button>
+                  </form>
+                  <Button type='NewAccount' color='primary' onClick={() => handleNewUser()}> New User </Button>
+                </Grid>
+              </Grid>
+              <Grid item xs={6} className='login-grid login-grid-right'>
+                <Grid item xs={12}>
+                  <Typography variant="h5" gutterBottom textAlign={'center'}>
+                    Welcome to Network Mapper
+                  </Typography>
+                  <Typography variant="body1" gutterBottom textAlign={'center'}>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                    do eiusmod tempor incididunt ut labore et dolore.
+                  </Typography>
+                </Grid>
+                <Container className='mock-container'>
+                  <img src='/nm-mock.png' alt='network mapper' className='mock-image' />
+                </Container>
+              </Grid>
             </Grid>
-            <form id="form" onSubmit={handleLogin} style={{ backgroundColorcolor: "black" }}>
-              <TextField id="loginText" label='username' placeholder="Username" fullWidth required onChange={(e) => { setUsername(e.target.value) }} sx={{ color: 'red' }} />
-              <TextField id="loginText" label='password' placeholder="Enter Password" type='password' fullWidth required onChange={(e) => { setPassword(e.target.value) }} />
-
-
-              <Button type='submit' color='primary' variant='contained' fullWidth onSubmit={handleLogin}>Sign In</Button>
-            </form>
-            <Button type='NewAccount' color='primary' onClick={() => handleNewUser()}> New User </Button>
-
           </Paper>
-
-        </Grid>
+        </Box>
 
         :
-        <Grid>
-          <Paper elevation={10} style={paperStyle}>
-            <Grid align="center">
-              <Avatar>Pic</Avatar>
-              <h1>Create New Account</h1>
+
+        <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+        className='bg-jet'
+        >
+          <Paper elevation={24} sx={{ borderRadius: '20px' }}>
+            <Grid container maxWidth='md'>
+              <Grid container item xs={6} className='login-grid login-grid-left' justifyContent='center'>
+                <Grid item xs={8}>
+                  <Typography variant="h6" gutterBottom textAlign={'center'}>
+                    <img src='/nm-logo-horizontal.png' alt='network mapper' className='mock-image' />
+                  </Typography>
+                </Grid>
+                <Grid item xs={8}>
+                  <Typography variant="h5" gutterBottom textAlign={'center'}>
+                    Create New Account
+                  </Typography>
+                </Grid>
+                <Grid container item xs={8} justifyContent='center'>
+                  <form onSubmit={handleLogin}>
+                    <TextField label='Username' placeholder="Username" type='text' margin='dense' fullWidth required onChange={(e) => { setUsername(e.target.value) }} />
+                    <TextField label='Password' placeholder="Enter Password" type='password' margin='dense' fullWidth required onChange={(e) => { setPassword(e.target.value) }} />
+                    <PasswordStrengthBar password={password} minLength={5} />
+                    <TextField label='User Org' placeholder="Enter Organization" type='text' margin='dense' fullWidth required onChange={(e) => { setuser_organization(e.target.value) }} />
+                    <TextField label='email' placeholder="Enter Email" type='email' margin='dense' className='extra-margin' fullWidth required onChange={(e) => { setEmail(e.target.value) }} />
+                    <Button type='submit' color='primary' variant='contained' fullWidth onSubmit={handleLogin}>Create Account</Button>
+                  </form>
+                  <Button type='SignIn' color='primary' onClick={() => handleSignIn()}> Already Have An Account </Button>
+                </Grid>
+              </Grid>
+              <Grid item xs={6} className='login-grid login-grid-right'>
+                <Grid item xs={12}>
+                  <Typography variant="h5" gutterBottom textAlign={'center'}>
+                    Welcome to Network Mapper
+                  </Typography>
+                  <Typography variant="body1" gutterBottom textAlign={'center'}>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                    do eiusmod tempor incididunt ut labore et dolore.
+                  </Typography>
+                </Grid>
+                <Container className='mock-container'>
+                  <img src='/nm-mock.png' alt='network mapper' className='mock-image' />
+                </Container>
+              </Grid>
             </Grid>
-            <form onSubmit={handleLogin}>
-              <TextField label='Username' placeholder="Username" type='text' fullWidth required onChange={(e) => { setUsername(e.target.value) }} />
-              <TextField label='Password' placeholder="Enter Password" type='password' fullWidth required onChange={(e) => { setPassword(e.target.value) }} />
-              <PasswordStrengthBar password={password} minLength={5} />
-              <TextField label='User Org' placeholder="Enter Organization" type='text' fullWidth required onChange={(e) => { setuser_organization(e.target.value) }} />
-              <TextField label='email' placeholder="Enter Email" type='email' fullWidth required onChange={(e) => { setEmail(e.target.value) }} />
-
-              <Button type='submit' color='primary' variant='contained' fullWidth onSubmit={handleLogin}>Create</Button>
-            </form>
-
-
           </Paper>
-
-        </Grid>
+        </Box>
       }
 
     </>
