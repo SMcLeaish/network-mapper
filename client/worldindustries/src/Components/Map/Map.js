@@ -47,7 +47,7 @@ function Map() {
     // useEffect(() => {
 
     //     if (location.state) {
-    //         fetch("http://localhost:3001/cookietest", { credentials: "include" })
+    //         fetch("https://localhost:3001/cookietest", { credentials: "include" })
     //             .then(res => res.json())
     //             .then(data => {
 
@@ -109,7 +109,7 @@ function Map() {
     const [individualData, setIndividualData] = useState([])
 
     useEffect(() => {
-        fetch('http://localhost:3001/individuals')
+        fetch('https://localhost:3001/individuals')
             .then((res) => res.json())
             .then(data => {
                 setIndividualData2(data)
@@ -125,7 +125,7 @@ function Map() {
     const [OrganizationData, setOrganizationData] = useState([])
 
     useEffect(() => {
-        fetch('http://localhost:3001/organizations')
+        fetch('https://localhost:3001/organizations')
             .then((res) => res.json())
             .then(data => {
                 setOrganizationData2(data)
@@ -138,7 +138,7 @@ function Map() {
     const [EventData, setEventData] = useState([])
 
     useEffect(() => {
-        fetch('http://localhost:3001/events')
+        fetch('https://localhost:3001/events')
             .then((res) => res.json())
             .then(data => {
                 setEventData2(data)
@@ -226,7 +226,7 @@ function Map() {
 
     useEffect(() => {
         if (detailsSelect) {
-            fetch(`http://localhost:3001/entity/${detailsSelect}`)
+            fetch(`https://localhost:3001/entity/${detailsSelect}`)
                 .then((res) => res.json())
                 .then(data => {
                     setEntityConnect(data[0].primary_entity_id)
@@ -613,12 +613,12 @@ function Map() {
                                 <MapContainer center={[13.57406, 108.18783]} zoom={zoom} ref={mapRef} id='map'>
                                     <LayersControl>
                                         <BaseLayer name="OpenStreetMap">
-                                            <TileLayer url="http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; <a href=&quot;http://www.openstreetmap.org/copyright&quot;>OpenStreetMap</a> contributors" />
+                                            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; <a href=&quot;https://www.openstreetmap.org/copyright&quot;>OpenStreetMap</a> contributors" />
                                         </BaseLayer>
 
                                         {/* <BaseLayer name="World Imagery">
                                     <TileLayer
-                                    url="http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                                    url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
                                     attribution="&copy; Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
                                     maxNativeZoom={8}
                                     />
@@ -626,7 +626,7 @@ function Map() {
 
                                 <BaseLayer name="NASA Gibs Blue Marble">
                                     <TileLayer
-                                    url="http://gibs-{s}.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_ShadedRelief_Bathymetry/default//EPSG3857_500m/{z}/{y}/{x}.jpeg"
+                                    url="https://gibs-{s}.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_ShadedRelief_Bathymetry/default//EPSG3857_500m/{z}/{y}/{x}.jpeg"
                                     attribution="&copy; NASA Blue Marble, image service by OpenGeo"
                                     maxNativeZoom={8}
                                     />
@@ -634,7 +634,7 @@ function Map() {
 
                                         <BaseLayer name="Google Imagery">
                                             <TileLayer
-                                                url='http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'
+                                                url='https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'
                                                 maxZoom={20}
                                                 subdomains={['mt1', 'mt2', 'mt3']}
                                             />
@@ -642,7 +642,7 @@ function Map() {
 
                                         <BaseLayer checked name="Terrain">
                                             <TileLayer
-                                                url='http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}'
+                                                url='https://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}'
                                                 maxZoom={20}
                                                 subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
                                             />

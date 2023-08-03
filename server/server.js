@@ -890,8 +890,8 @@ app.get('/narratives', (req, res) => {
 })
 
 
-// https.createServer(options, app).listen(port, () => {
-//   console.log('HTTPS server running on port 3001');
-// });
+https.createServer(options, app).listen(port, () => {
+  console.log('HTTPS server running on port 3001');
+});
 
-app.listen(port, () => console.log(`listening on port: ${port}`))
+// app.listen(port, () => console.log(`listening on port: ${port}`))

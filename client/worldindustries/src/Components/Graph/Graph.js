@@ -64,7 +64,7 @@ function Graph({ name }) {
 
 
 	useEffect(() => {
-		fetch(`http://localhost:3001/network/${name}`)
+		fetch(`httpss://localhost:3001/network/${name}`)
 			.then((response) => response.json())
 			.then((data) => {
 				const graphData = constructGraph(data);
