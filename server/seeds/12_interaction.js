@@ -83,7 +83,13 @@ exports.seed = function(knex) {
         {weight: 1, id_entity_1: 16, id_entity_2: 26, id_event: 9},
         {weight: 1, id_entity_1: 16, id_entity_2: 21, id_event: 9},
         {weight: 1, id_entity_1: 18, id_entity_2: 21, id_event: 9},
-
+        {weight: 1, id_entity_1: 19, id_entity_2: 20, id_event: 9},
+        {weight: 1, id_entity_1: 21, id_entity_2: 22, id_event: 9},
+        {weight: 1, id_entity_1: 23, id_entity_2: 24, id_event: 9},
+        {weight: 1, id_entity_1: 25, id_entity_2: 26, id_event: 9},
+        {weight: 1, id_entity_1: 27, id_entity_2: 28, id_event: 9},
+        {weight: 1, id_entity_1: 29, id_entity_2: 30, id_event: 9},
+        {weight: 1, id_entity_1: 31, id_entity_2: 4, id_event: 9},
 
       ])
       .then(function(){
