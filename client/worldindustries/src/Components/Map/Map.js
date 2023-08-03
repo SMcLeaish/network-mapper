@@ -482,7 +482,7 @@ function Map() {
                                                                         <p>Date: {org.date}</p>
                                                                         <p>ID: {org.id}</p>
                                                                         <p>Location: {JSON.stringify(org.location)}</p>
-                                                                        <PersonSearchIcon className='DetailsIcon' onClick={handleOpenEventDialog}/>
+                                                                        <PersonSearchIcon className='DetailsIcon' onClick={() => handleOpenEventDialog(org.id)}/>
                                                                     </>
                                                                     : console.log(`member not found`)
                                                                 )}

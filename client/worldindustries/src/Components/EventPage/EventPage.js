@@ -2,13 +2,11 @@ import { Dialog, Container, Grid, Typography, Stack, Button, Box } from '@mui/ma
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useEffect, useState } from 'react';
 import * as MyFunctions from './EventPageFunctions.js';
-import { useParams } from 'react-router-dom';
 import '../DetailsPage/DetailsPage.css';
 
 const placeholderImg = 'http://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80';
 
 const EventPage = ({ open, onClose, id }) => {
-    // let { id } = useParams();
     const [event, setEvent] = useState([])
     const [narratives, setNarratives] = useState([])
     const [entityList, setEntityList] = useState([])
@@ -18,19 +16,20 @@ const EventPage = ({ open, onClose, id }) => {
         weight: 1,
         id_entity_1: 0,
         id_entity_2: 0,
-        id_event: parseInt(id)
+        id_event: id
     })
     const [narrToAdd, setNarrToAdd] = useState({
         date: '',
         narrative_string: '',
-        id_event: parseInt(id)
+        id_event: id
     })
     const [updateStatus, setUpdateStatus] = useState(true)
 
     useEffect(() => {
+        console.log(`This is the passed id: ${id}`)
         fetch(`http://localhost:3001/event/${id}`)
             .then(res => res.json())
-            .then(data => setEvent(data))
+            .then(data => {setEvent(data);})
     }, [id, updateStatus])
 
     useEffect(() => {
