@@ -7,7 +7,6 @@ const fs = require('fs');
 const nodemailer=require('nodemailer')
 const app = express();
 const port = 3001;
-<<<<<<< HEAD
 const { startNetworkQuery } = require('./network-query');
 
 
@@ -21,25 +20,11 @@ let corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-=======
 const crypto=require("crypto")
 const cookieParser = require('cookie-parser')
 const uuid=require('uuid').v4
 
-
-
-
-let corsOptions = {
-  origin: 'http://localhost:3000',  //front end url
-  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-  credentials: true,
-}
-app.use(cors(corsOptions));
-
-app.use(express.json());
-
 app.use(cookieParser())
->>>>>>> loginGroup
 
 
 
@@ -55,7 +40,6 @@ const options = {
 };
 
 
-<<<<<<< HEAD
 const knex = require('knex')(require('./knexfile.js')['development'])
 
 
@@ -80,7 +64,6 @@ app.get('/network/:name', (req, res) => {
     });
 });
 
-=======
 // setting up the method to send the email
 let transporter = nodemailer.createTransport({
   service: "gmail",
@@ -92,13 +75,6 @@ let transporter = nodemailer.createTransport({
     refreshToken: process.env.OAUTH_REFRESH_TOKEN,
   },
  });
-
-
-
-const knex = require('knex')(require('./knexfile.js')['development'])
-
-
-
 
 app.get('/cookietest',(req,res)=>{
   if(req.headers.cookie){
@@ -119,7 +95,6 @@ app.get('/cookietest',(req,res)=>{
 }
 })
 
->>>>>>> loginGroup
 
 
 app.get('/users', (req, res) => {
@@ -165,26 +140,6 @@ app.post('/users', async (req, res) => {
       isVerified:false
     };
     knex('user_data')
-<<<<<<< HEAD
-      .where('username', req.body.username)
-      .then(data => {
-        if (data.length > 0) { // data
-          res.status(404).json({ userCreated: false, message: `Username: *${req.body.username}* already taken!` });
-        } else {
-          knex('user_data')
-            .insert(newUser)
-            .then(() => res.status(201).send({ success: true }))
-            .catch(err => res.status(501).send(err))
-        }
-      })
-    const loggedInUser = req.user;
-    res.json({
-      entity: createdEntity,
-      user: loggedInUser
-    });
-
-  } catch (error) {
-=======
     .where('username',req.body.username)
     .then(data => {
       
@@ -203,7 +158,6 @@ app.post('/users', async (req, res) => {
     })
   } 
   catch {
->>>>>>> loginGroup
     res.status(500).send();
   }
 });
@@ -288,11 +242,7 @@ app.post('/users/login', (req, res) => {
     .catch(err => res.status(500).send(err))
 });
 
-<<<<<<< HEAD
-app.get('/narratives/entity/:id', (req, res) => {
-=======
 // this will verify the user and update the 2 object fields
-
 app.put('/users/:id',(req,res)=>{
   console.log("verified")
   knex('user_data')
@@ -318,8 +268,7 @@ app.put('/users/:id',(req,res)=>{
 
 
 
-app.get('/narratives/:id', (req, res) => {
->>>>>>> loginGroup
+app.get('/narratives/entity/:id', (req, res) => {
   let { id } = req.params;
   knex.select('*', 'narrative.id AS narr_id')
     .from('narrative')
