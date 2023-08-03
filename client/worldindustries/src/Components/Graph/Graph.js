@@ -49,18 +49,18 @@ function Graph({ name }) {
 			layout.run();
 		}
 	}, []);
-	const handleNodeTap = (event) => {
-		const node = event.target;
-		const renderedPosition = node.renderedPosition();
-		const cyContainer = cyRef.current.container();
-		const boundingBox = cyContainer.getBoundingClientRect();
+	// const handleNodeTap = (event) => {
+	// 	const node = event.target;
+	// 	const renderedPosition = node.renderedPosition();
+	// 	const cyContainer = cyRef.current.container();
+	// 	const boundingBox = cyContainer.getBoundingClientRect();
 	  
-		setAnchorPosition({
-		  top: renderedPosition.y + boundingBox.top,
-		  left: renderedPosition.x + boundingBox.left,
-		});
-		setPopoverOpen(true);
-	  };
+	// 	setAnchorPosition({
+	// 	  top: renderedPosition.y + boundingBox.top,
+	// 	  left: renderedPosition.x + boundingBox.left,
+	// 	});
+	// 	setPopoverOpen(true);
+	//   };
 	  
 
 	useEffect(() => {
@@ -147,7 +147,7 @@ function Graph({ name }) {
 			  key={layoutSettings.name}
 			  cy={(cy) => {
 				cyRef.current = cy;
-				cy.on('tap', 'node', handleNodeTap);
+				// cy.on('tap', 'node', handleNodeTap);
 			  }}
 			  elements={CytoscapeComponent.normalizeElements(elements)}
 			  layout={layoutSettings}
