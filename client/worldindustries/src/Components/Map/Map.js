@@ -1,5 +1,5 @@
 import { MapContainer, TileLayer, Marker, Popup, LayersControl, LayerGroup } from 'react-leaflet'
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import 'leaflet/dist/leaflet.css'
 import { Icon, divIcon } from "leaflet";
 import MarkerClusterGroup from 'react-leaflet-cluster';
@@ -14,7 +14,6 @@ import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import ShareIcon from '@mui/icons-material/Share';
 import { red } from '@mui/material/colors';
 import { useMap } from 'react-leaflet';
-import { useNavigate } from 'react-router';
 import Connections from '../Connections/Connections';
 import EventConnections from '../Connections/EventConnections';
 import OrgConnections from '../Connections/OrgConnections';
@@ -26,11 +25,67 @@ import DetailsPage from '../DetailsPage/DetailsPage';
 import MultipleConnections from '../Connections/MultipleConnections';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { UserContext } from '../../App';
 
 
 const cityList = require('./Chinacities.json')
 
 function Map() {
+    const [userInfo, setUserInfo] = useContext(UserContext)
+    const navigate = useNavigate()
+    const location = useLocation();
+    console.log("context", userInfo)
+    useEffect(() => {
+
+        if (location.state) {
+            fetch("https://localhost:3001/cookietest", { credentials: "include" })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+
+                        toast(`Welcome! ${location.state.username} `, {
+                            position: "top-center",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+
+                            draggable: true,
+                            progress: undefined,
+                            theme: "light",
+                        });
+                    }
+                    else {
+                        toast("Please sign in", {
+                            position: "top-center",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "light",
+                        });
+                        navigate('/login')
+                    }
+                })
+        } else {
+            toast("Please sign in", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            navigate('/login')
+        }
+
+    }, [])
+
     const filterstyle = {
         color: red,
     }
@@ -135,7 +190,6 @@ function Map() {
     // const location = [29.304, 103.312];
     // const zoom = 4;
     const mapRef = useRef();
-    const navigate = useNavigate()
     const [coord, setCoord] = useState(null)
     const [lat, setLat] = useState(null)
     const [long, setLong] = useState(null)
@@ -250,7 +304,7 @@ function Map() {
         setMode(false);
         setDetailsSelect(null);
         resetPolyLines();
-        setCoord([16.54376,102.98753])
+        setCoord([16.54376, 102.98753])
         setZoom(4)
         setTargetValue1()
         setTargetValue2()
@@ -484,30 +538,30 @@ function Map() {
 
                                     }
 
-                                {!modeValue ?
-                                <div>
-                                    <div className='latLongSearch'>
-                                        <form className='latLongSearch' autoComplete="off">
-                                            <div className='searchfield'>
-                                                <TextField label='Latitude' onChange={(e) => setLat(e.target.value)} />
+                                    {!modeValue ?
+                                        <div>
+                                            <div className='latLongSearch'>
+                                                <form className='latLongSearch' autoComplete="off">
+                                                    <div className='searchfield'>
+                                                        <TextField label='Latitude' onChange={(e) => setLat(e.target.value)} />
+                                                    </div>
+                                                    <div className='searchfield'>
+                                                        <TextField label='Longitude' onChange={(e) => setLong(e.target.value)} />
+                                                    </div>
+                                                    <TravelExploreIcon className='locationSearch' onClick={() => { setCoord([lat, long], handleMGRS(long, lat)) }} />
+                                                </form>
                                             </div>
-                                            <div className='searchfield'>
-                                                <TextField label='Longitude' onChange={(e) => setLong(e.target.value)} />
+                                            <div>
+                                                <form className='latLongSearch' autoComplete="off">
+                                                    <div className='searchfield'>
+                                                        <TextField label='MGRS Search' onChange={(e) => setMGRSvalue(e.target.value)} />
+                                                    </div>
+                                                    <TravelExploreIcon className='locationSearch' onClick={() => { handleMGRSSearch(MGRSvalue) }} />
+                                                </form>
                                             </div>
-                                            <TravelExploreIcon className='locationSearch' onClick={() => { setCoord([lat, long], handleMGRS(long, lat)) }} />
-                                        </form>
-                                    </div>
-                                    <div>
-                                        <form className='latLongSearch' autoComplete="off">
-                                            <div className='searchfield'>
-                                                <TextField label='MGRS Search' onChange={(e) => setMGRSvalue(e.target.value)} />
-                                            </div>
-                                            <TravelExploreIcon className='locationSearch' onClick={() => { handleMGRSSearch(MGRSvalue) }} />
-                                        </form>
-                                    </div>
-                                    {MGRSConversion !== null ? <p className='mgrsConversion'>{`Lat/Long ⮕ MGRS: ${MGRSConversion}`}</p> : console.log('')}
-                                </div>
-                                : console.log('in multiple line mode')}
+                                            {MGRSConversion !== null ? <p className='mgrsConversion'>{`Lat/Long ⮕ MGRS: ${MGRSConversion}`}</p> : console.log('')}
+                                        </div>
+                                        : console.log('in multiple line mode')}
                                 </div>
                             </>
                             :

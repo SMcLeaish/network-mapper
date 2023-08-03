@@ -9,9 +9,13 @@ exports.up = function(knex) {
                 table.increments('id').primary();
                 table.string('username');
                 table.string('hashed_password');
+                table.string("email");
                 table.string('user_organization');
                 table.string('distinguished_name');
                 table.boolean('cac_approved').defaultTo(false);
+                table.string("emailToken").nullable()
+                table.boolean("isVerified")
+                table.string("session_cookie").nullable()
             });
         }
     });

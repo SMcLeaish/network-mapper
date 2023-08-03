@@ -4,8 +4,10 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const https = require('https');
 const fs = require('fs');
+const nodemailer=require('nodemailer')
 const app = express();
 const port = 3001;
+<<<<<<< HEAD
 const { startNetworkQuery } = require('./network-query');
 
 
@@ -19,6 +21,25 @@ let corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
+=======
+const crypto=require("crypto")
+const cookieParser = require('cookie-parser')
+const uuid=require('uuid').v4
+
+
+
+
+let corsOptions = {
+  origin: 'http://localhost:3000',  //front end url
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  credentials: true,
+}
+app.use(cors(corsOptions));
+
+app.use(express.json());
+
+app.use(cookieParser())
+>>>>>>> loginGroup
 
 
 
@@ -34,6 +55,7 @@ const options = {
 };
 
 
+<<<<<<< HEAD
 const knex = require('knex')(require('./knexfile.js')['development'])
 
 
@@ -58,30 +80,92 @@ app.get('/network/:name', (req, res) => {
     });
 });
 
+=======
+// setting up the method to send the email
+let transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    type: "OAuth2",
+    user: process.env.EMAIL,
+    clientId: process.env.OAUTH_CLIENTID,
+    clientSecret: process.env.OAUTH_CLIENT_SECRET,
+    refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+  },
+ });
+
+
+
+const knex = require('knex')(require('./knexfile.js')['development'])
+
+
+
+
+app.get('/cookietest',(req,res)=>{
+  if(req.headers.cookie){
+  let stored=req.headers.cookie.split('=')[1]
+    knex('user_data')
+      .select('*')
+        .where('session_cookie',stored)
+        .then(found => {
+          if (found) {
+            res.send({success:true,data:found})
+          }else{
+            
+            res.send({success:false})
+  }
+})
+}else{
+  res.send({success:false})
+}
+})
+
+>>>>>>> loginGroup
 
 
 app.get('/users', (req, res) => {
-  knex('user_data')
+ 
+     knex('user_data')
     .select('*')
     .then(data => res.status(200).send(data))
     .catch(err => res.status(404).send(err))
+ 
 });
 
+// creating the new user and sends them an email for verification
+
 app.post('/users', async (req, res) => {
-  console.log("here")
+
+  // token for the email params unique everytime and secure, goes in the mailing options
+  let token=crypto.randomBytes(64).toString("hex")
+  const link = `${process.env.BASE_URL}/users/confirm/?emailToken=${token}`;
+  let mailOptions = {
+    from: req.body.email,
+    to: req.body.email,
+    subject: "User Verify",
+    text: link,
+   };
+
+   //sends the email
+
+   transporter.sendMail(mailOptions, link)
+   
   try {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    
+    
     const newUser = {
       username: req.body.username,
       hashed_password: hashedPassword,
       email: req.body.email,
       user_organization: req.body.user_organization,
       distinguished_name: req.body.distinguished_name,
-      cac_approved: req.body.cac_approved
+      cac_approved: req.body.cac_approved,
+      emailToken:token,
+      isVerified:false
     };
-    console.log(newUser)
     knex('user_data')
+<<<<<<< HEAD
       .where('username', req.body.username)
       .then(data => {
         if (data.length > 0) { // data
@@ -100,40 +184,142 @@ app.post('/users', async (req, res) => {
     });
 
   } catch (error) {
+=======
+    .where('username',req.body.username)
+    .then(data => {
+      
+      if (data.length > 0) {
+        res.status(404).json({userCreated: false, message: `Username: *${req.body.username}* already taken!`});
+      } else {
+        
+        knex('user_data')
+          .insert(newUser)
+          .then(() => {
+            // set cookie any user info
+            res.status(201).send( {success: req.cookies})
+          })
+          .catch(err => res.status(501).send(err))
+      }
+    })
+  } 
+  catch {
+>>>>>>> loginGroup
     res.status(500).send();
   }
 });
 
-app.post('/users/login', (req, res) => {
+
+
+app.put('/users/cookie',(req,res)=>{
+  
   knex('user_data')
+    .where('username',req.body.username)
+    .update({session_cookie:req.headers.cookie.split('=')[1]})
+    .then((rowCount) => {
+      if (rowCount === 0) {
+      return res.status(404).json({
+          success: false,
+      });
+      }
+      res.status(200).json({
+     success: true,
+     data:rowCount
+      });
+  })
+  .catch((err) =>
+      res.status(500).json({
+      message: 'An error occurred while updating the user session cookie',
+      error: err,
+      })
+  );
+})
+
+
+// logs in the user and makes sure they are verified, if verified a session cookie is created
+app.post('/users/login', (req, res) => {
+  const sessionId= uuid()
+    knex('user_data')
     .select('*')
     .where('username', req.body.username)
-    .then(data => {
+    .then(data => {   
       if (data.length > 0) {
         bcrypt.compare(req.body.password, data[0].hashed_password)
           .then(found => {
-            if (found) {
+            if (found&&data[0].isVerified) {
+              
+              res.cookie( 'session',sessionId,{ 
+    
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none',
+                path: '/',
+                expires: 0,
+                signed: false,
+            })
+            
+              
+            
+            
               let responseObj = {
                 userExists: found,
                 ...data[0]
               }
+              console.log(responseObj)
               res.send(responseObj);
-            } else {
+            } else if(!found){
+              
               let responseObj = {
-                userExists: found
+                userExists: false
               }
+              console.log(responseObj)
               res.send(responseObj);
             }
           })
           .catch(err => res.status(500).send(err));
-      } else {
-        // response if user is not found in DB
+      }
+      else{
+        let responseObj = {
+          userExists: false
+        }
+        console.log(responseObj)
+        res.send(responseObj);
       }
     })
     .catch(err => res.status(500).send(err))
 });
 
+<<<<<<< HEAD
 app.get('/narratives/entity/:id', (req, res) => {
+=======
+// this will verify the user and update the 2 object fields
+
+app.put('/users/:id',(req,res)=>{
+  console.log("verified")
+  knex('user_data')
+    .where('id',req.body.id)
+    .update({emailToken:null,isVerified:true})
+    .then((rowCount) => {
+      if (rowCount === 0) {
+      return res.status(404).json({
+          message: 'user not found',
+      });
+      }
+      res.status(200).json({
+      message: 'user updated successfully',
+      });
+  })
+  .catch((err) =>
+      res.status(500).json({
+      message: 'An error occurred while updating the user',
+      error: err,
+      })
+  );
+})
+
+
+
+app.get('/narratives/:id', (req, res) => {
+>>>>>>> loginGroup
   let { id } = req.params;
   knex.select('*', 'narrative.id AS narr_id')
     .from('narrative')

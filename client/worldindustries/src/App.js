@@ -1,5 +1,7 @@
 import './App.css';
 import DetailsPage from './Components/DetailsPage/DetailsPage';
+import React from 'react';
+import { useState } from 'react';
 import LoginPage from './Components/LoginPage';
 import Map from './Components/Map/Map';
 // import GraphDialog from './Components/Graph/GraphDialog';
@@ -10,7 +12,12 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useState } from 'react';
 import { Dialog } from '@mui/material';
 import EventPage from './Components/EventPage/EventPage';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Verifyuser from './Components/Verifyuser';
+export const UserContext = React.createContext();
 
+const [userInfo, setUserInfo] = useState({})
 const latte = '#F8F4E3';
 const steelBlue = '#3F88C5';
 const jet = '#2D2D2A';
@@ -81,17 +88,31 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
-        <Routes>
-          <Route path='/login' element={<LoginPage />} />
-          <Route path='/map' element={<Map />} />
-          <Route path='details/:id' element={<DetailsPage />} />
-          {/* <Route path='/graph' element={<GraphDialog />} /> */}
-          <Route path='/add-entity' element={<AddEntity />} />
-          <Route path='/event/:id' element={<EventPage />} />
-        </Routes>
+        <UserContext.Provider value={[userInfo, setUserInfo]}>
+          <Routes>
+            <Route path='/login' element={<LoginPage />} />
+            <Route path='/map' element={<Map />} />
+            <Route path='details/:id' element={<DetailsPage />} />
+            <Route path='/graph' element={<GraphDialog />} />
+            <Route path='/add-entity' element={<AddEntity />} />
+            <Route path='/event/:id' element={<EventPage />} />
+            <Route path='/users/confirm/' element={<Verifyuser />} />
+          </Routes>
+        </UserContext.Provider>
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          pauseOnHover
+          theme="light"
+        />
       </div>
     </ThemeProvider>
-  );
+  )
 }
 
 export default App;
