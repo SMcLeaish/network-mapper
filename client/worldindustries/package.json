@@ -9,6 +9,7 @@
     "@mui/lab": "^5.0.0-alpha.137",
     "@mui/material": "^5.14.2",
     "cytoscape": "^3.25.0",
+    "cytoscape-cise": "^1.0.0",
     "cytoscape-cola": "^2.5.1",
     "cytoscape-fcose": "^2.2.0",
     "graphology": "^0.25.1",

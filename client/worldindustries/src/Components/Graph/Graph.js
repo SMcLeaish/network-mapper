@@ -1,33 +1,75 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import CytoscapeComponent from 'react-cytoscapejs';
 import fcose from 'cytoscape-fcose';
 import cytoscape from 'cytoscape';
 import cola from 'cytoscape-cola';
+import cise from 'cytoscape-cise';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import { LayoutSettingsContext } from './GraphDialog';
 import constructGraph from './Graphology';
-import './Graph.css'; 
+import { personSvg } from './SVG/person.js';
+import { corporationSvg } from './SVG/corporation';
+import { layoutDefaults } from './CytoScapeDefaults';
+import SettingsPopup from './SettingsPopup'
+import { degreeCentrality } from 'graphology-metrics/centrality/degree';
+import Popover from '@mui/material/Popover'
+import DetailsPage from '../DetailsPage/DetailsPage'
 cytoscape.use(fcose);
 cytoscape.use(cola);
-
-function Graph() {
+cytoscape.use(cise)
+function Graph({ name }) {
+	console.log(name)
+	const [layoutSettings, setLayoutSettings] = useContext(LayoutSettingsContext);
 	const cyRef = useRef();
 	const [elements, setElements] = useState([]);
+	const [loading, setLoading] = useState(true);
+	// const [selectedLayout, setSelectedLayout] = useState(layoutSettings);
+	const person = 'data:image/svg+xml;utf8,' + encodeURIComponent(personSvg);
+	const corporation = 'data:image/svg+xml;utf8,' + encodeURIComponent(corporationSvg);
+	const [currentMetric, setCurrentMetric] = useState('degreeCentrality');
+	const [anchorPosition, setAnchorPosition] = useState({ top: 0, left: 0 });
+	const [popoverOpen, setPopoverOpen] = useState(false);
 
-	const [currentMetric, setCurrentMetric] = useState('degreeCentrality');  
-  const [loading, setLoading] = useState(true);
+	const cytoStyle = {
+		width: '100%',
+		height: '100%',
+		position: 'absolute',
+		fit: true,
+	};
+	console.log(layoutSettings)
+	useEffect(() => {
+		if (cyRef.current) {
+			const layout = cyRef.current.layout(layoutSettings);
+			layout.stop();
+			layout.run();
+		}
+	}, []);
+	// const handleNodeTap = (event) => {
+	// 	const node = event.target;
+	// 	const renderedPosition = node.renderedPosition();
+	// 	const cyContainer = cyRef.current.container();
+	// 	const boundingBox = cyContainer.getBoundingClientRect();
 
+	// 	setAnchorPosition({
+	// 	  top: renderedPosition.y + boundingBox.top,
+	// 	  left: renderedPosition.x + boundingBox.left,
+	// 	});
+	// 	setPopoverOpen(true);
+	//   };
 
 
 	useEffect(() => {
-    fetch('http://localhost:3001/network/John Doe')
-			.then(response => response.json())
-			.then(data => {
-				console.log('Data fetched:', data);
+		fetch(`https://localhost:3001/network/${name}`)
+			.then((response) => response.json())
+			.then((data) => {
 				const graphData = constructGraph(data);
-				console.log('Graph data:', graphData);
 				let cytoscapeElements = [];
-				graphData.updatedNodes.forEach(node => {
+				graphData.updatedNodes.forEach((node) => {
 					cytoscapeElements.push({
 						data: {
 							id: node.id,
@@ -35,151 +77,123 @@ function Graph() {
 							degreeCentrality: node.degreeCentrality,
 							closenessCentrality: node.closenessCentrality,
 							betweennessCentrality: node.betweennessCentrality,
-							//	eigenvectorCentrality: node.eigenvectorCentrality,
 							party: node.party,
-						}
+							type: node.type,
+						},
 					});
 				});
-        console.log('Edges:', graphData.edges);
-				graphData.edges.forEach(edge => {
+				graphData.edges.forEach((edge) => {
 					cytoscapeElements.push({
-						data: { id: `edge${edge.source}-${edge.target}`, source: edge.source, target: edge.target }
+						data: { id: `edge${edge.source}-${edge.target}`, source: edge.source, target: edge.target },
 					});
 				});
 
 				setElements(cytoscapeElements);
-        console.log('Elements:', elements);
 				setLoading(false);
 			})
-			.catch(err => console.error(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	const graphMetrics = {
-		degreeCentrality : "Degree Centrality",
-		closenessCentrality : "Closeness Centrality",
-		betweennessCentrality : "Betweenness Centrality",
-		//	eigenvectorCentrality : "Eigenvector Centrality"
-	}
-
-
-	const layoutConfigs = {
-		"grid": { name: 'grid' },
-		"circle": { name: 'circle', animate: true,
-			animationDuration: 500, },
-		"breadthfirst": { name: 'breadthfirst' },
-		"cose": { 
-			name: 'cose',
-			idealEdgeLength: 100,
-			nodeOverlap: 20,
-			refresh: 20,
-			fit: true,
-			padding: 30,
-			randomize: false,
-			componentSpacing: 100,
-			nodeRepulsion: 40000000,
-			edgeElasticity: 100,
-			nestingFactor: 5,
-			gravity: 80,
-			numIter: 1000,
-			initialTemp: 200,
-			coolingFactor: 0.95,
-			minTemp: 1.0,
-			animate: true,
-			animationDuration: 500,
-		},
-		"concentric": { name: 'concentric' },
-		"random": { name: 'random' },
-		"fcose": { name: 'fcose'}
+		degreeCentrality: 'Degree Centrality',
+		closenessCentrality: 'Closeness Centrality',
+		betweennessCentrality: 'Betweenness Centrality',
 	};
 
-
-	const [layout, setLayout] = useState(layoutConfigs.circle);
-	const cytoStyle = {
-		width: '100%',
-		height: '100%',
-		position: 'absolute',
-    fit:true
-	};
-	useEffect(() => {
-		if (cyRef.current) {
-			cyRef.current.ready(function () {
-				this.layout({ name: 'circle' }).run();
-			});
-		}
-	}, []);
-  if (loading) {
-    return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-        <CircularProgress />
-      </Box>
-    );
-  } else {
-	return (
-    <div style={{ position: 'relative', height: '100vh', width: '100%'  }}>
-
-			<select
-				value={layout.name}
-				onChange={(event) => setLayout(layoutConfigs[event.target.value])}
-				style={{
-					position: 'absolute',
-					top: '10px',
-					left: '10px',
-					zIndex: 1
-				}}
-			>
-				{Object.keys(layoutConfigs).map(key =>
-				<option key={key} value={key}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>
-				)}
-			</select>
-
-			<select
-				style={{
-					position: 'absolute',
-					top: '10px',
-					left: '150px',
-					zIndex: 1
-				}}
-				onChange={(event) => setCurrentMetric(event.target.value)}
-			>
-				{Object.entries(graphMetrics).map(([metricKey, metricValue]) =>
-				<option key={metricKey} value={metricKey}>{metricValue}</option>
-				)}
-			</select>
-
-			<CytoscapeComponent
-				cy={cy => { cyRef.current = cy; }}
-				elements={CytoscapeComponent.normalizeElements(elements)}
-				layout={layout}
-				style={cytoStyle}
-				stylesheet={[
-					{
-						selector: 'node',
+	if (loading) {
+		return (
+			<Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+				<CircularProgress />
+			</Box>
+		);
+	} else {
+		return (
+			<div style={{ position: 'relative', height: '100%', width: '100%' }}>
+				<Popover
+					open={popoverOpen}
+					anchorReference="anchorPosition"
+					anchorPosition={anchorPosition}
+					onClose={() => setPopoverOpen(false)}
+				>
+					<div style={{ padding: '10px' }}>Hello, World!</div>
+				</Popover>
+				<FormControl style={{ position: 'absolute', top: '10px', left: '1px', zIndex: 1, width: '120px' }}>
+					<InputLabel id="layout-label" shrink>Layout</InputLabel>
+					<Select
+						labelId="layout-label"
+						value={layoutSettings}
+						onChange={(event) => setLayoutSettings(layoutDefaults[event.target.value])}
+						style={{ height: '30px' }}
+					>
+						<MenuItem value="fcose">fcose</MenuItem>
+						<MenuItem value="circle">circle</MenuItem>
+						<MenuItem value="cise">cise</MenuItem>
+					</Select>
+				</FormControl>
+				<FormControl style={{ position: 'absolute', top: '10px', left: '130px', zIndex: 1, width: '120px' }}>
+					<InputLabel id="metric-label" shrink>Metric</InputLabel>
+					<Select
+						labelId="metric-label"
+						value={degreeCentrality}
+						onChange={(event) => setCurrentMetric(event.target.value)}
+						style={{ height: '30px' }}
+					>
+						{Object.entries(graphMetrics).map(([metricKey, metricValue]) =>
+							<MenuItem key={metricKey} value={metricKey}>{metricValue}</MenuItem>
+						)}
+					</Select>
+				</FormControl>
+				<CytoscapeComponent
+					key={layoutSettings.name}
+					cy={(cy) => {
+						cyRef.current = cy;
+						// cy.on('tap', 'node', handleNodeTap);
+					}}
+					elements={CytoscapeComponent.normalizeElements(elements)}
+					layout={layoutSettings}
+					style={cytoStyle}
+					stylesheet={[
+						{
+							selector: 'node',
 							style: {
+								'background-image': (node) => (node.data('type') === 'individual' ? person : corporation),
+								'background-fit': 'cover cover',
 								'content': 'data(label)',
-									'width': node => (node.data(currentMetric) !== undefined && !isNaN(node.data(currentMetric))) ? 20 + (node.data(currentMetric) *50) : 20,
-									'height': node => (node.data(currentMetric) !== undefined && !isNaN(node.data(currentMetric))) ? 20 + (node.data(currentMetric) *50): 20,
-									'background-color': node => {
-										switch(node.data('party')) {
-											case 'Red': return 'red';
-											case 'Blue': return 'blue';
-											case 'Green': return 'green';
-											default: return 'grey';
-										}
-									},
+								'width': (node) => (node.data(currentMetric) !== undefined && !isNaN(node.data(currentMetric))) ? 20 + node.data(currentMetric) * 50 : 20,
+								'height': (node) => (node.data(currentMetric) !== undefined && !isNaN(node.data(currentMetric))) ? 20 + node.data(currentMetric) * 50 : 20,
+								'background-color': '#3F88C5',
+								'color': '#F8F4E3',
+								'text-valign': 'bottom',
+								'text-halign': 'center',
+								'text-background-color': '#3F88C5',
+								'text-background-opacity': 0.5,
+								'text-background-shape': 'roundrectangle',
+								'text-border-width': 1,
+								'text-border-color': '#3F88C5',
+								'text-border-opacity': 1,
+								'text-wrap': 'ellipsis',
+								'font-family': 'sans-serif',
+								'font-weight': 'normal',
+								'font-size': 10,
+								'text-opacity': 0.7,
 							},
-					},
-					{
-						selector: 'edge',
-						style: {
-							'curve-style': 'bezier',
 						},
-					},
-				]}
+						{
+							selector: 'edge',
+							style: {
+								'line-color': 'black',
+								'line-opacity': 0.5,
+								'width': 1,
+								'curve-style': 'haystack',
+							},
+						},
+					]}
+					userPanningEnabled={true}
+				/>
+			</div>
 
-			/>
-
-		</div>
-	);
+		);
+	}
 }
-} 
+
 export default Graph;
