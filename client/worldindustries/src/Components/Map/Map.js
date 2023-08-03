@@ -297,10 +297,15 @@ function Map() {
     };
     // end added for modal
     const [analyzeDialogOpen, setAnalyzeDialogOpen] = useState(false)
-
-
+    
+    
     const handleAnalyzeDialogOpen = (name) => {
         setAnalyzeDialogOpen(true);
+
+    }
+    const handleAnalyzeDialogClose = (name) => {
+        setAnalyzeDialogOpen(false);
+    }
 
         const [openEvent, setOpenEvent] = useState(false);
 
@@ -762,6 +767,5 @@ function Map() {
             </>
         );
     }
-}
 
     export default Map;
