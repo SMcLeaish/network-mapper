@@ -408,7 +408,7 @@ function Map() {
                                                                         <p>Date: {org.date}</p>
                                                                         {/* <p>Type: {org.type}</p> */}
                                                                         <p>Location: {JSON.stringify(org.location)}</p>
-                                                                        {/* <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
+                                                                        {/* <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/event/${entityConnect}`)}/> */}
                                                                     </>
                                                                     : console.log(`member not found`)
                                                                 )}
