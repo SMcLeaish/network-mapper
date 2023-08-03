@@ -187,8 +187,7 @@ const Login = () => {
                     Welcome to Network Mapper
                   </Typography>
                   <Typography variant="body1" gutterBottom textAlign={'center'}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    do eiusmod tempor incididunt ut labore et dolore.
+                    Discover key players and their relationships in each region with Network Mapper's interactive map and in-depth node view. Gain valuable insights effortlessly.
                   </Typography>
                 </Grid>
                 <Container className='mock-container'>
@@ -239,8 +238,7 @@ const Login = () => {
                     Welcome to Network Mapper
                   </Typography>
                   <Typography variant="body1" gutterBottom textAlign={'center'}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    do eiusmod tempor incididunt ut labore et dolore.
+                    Discover key players and their relationships in each region with Network Mapper's interactive map and in-depth node view. Gain valuable insights effortlessly.
                   </Typography>
                 </Grid>
                 <Container className='mock-container'>
