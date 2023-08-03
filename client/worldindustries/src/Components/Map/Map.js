@@ -239,6 +239,8 @@ function Map() {
     };
     // end added for modal
     const [analyzeDialogOpen, setAnalyzeDialogOpen] = useState(false)
+    
+    
     const handleAnalyzeDialogOpen = (name) => {
         setAnalyzeDialogOpen(true);
 
@@ -655,7 +657,11 @@ function Map() {
                 onClose={handleCloseDetailsDialog}
                 id={entityConnect}
             />
-            <GraphDialog open={analyzeDialogOpen} onClose={handleAnalyzeDialogClose} />
+            <GraphDialog open={analyzeDialogOpen} 
+               
+                onClose={handleAnalyzeDialogClose}
+                name={detailsSelect}
+                 />
 
         </>
     );

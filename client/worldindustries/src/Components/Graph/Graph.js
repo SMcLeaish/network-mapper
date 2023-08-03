@@ -3,6 +3,7 @@ import CytoscapeComponent from 'react-cytoscapejs';
 import fcose from 'cytoscape-fcose';
 import cytoscape from 'cytoscape';
 import cola from 'cytoscape-cola';
+import cise from 'cytoscape-cise';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Select from '@mui/material/Select';
@@ -15,36 +16,55 @@ import { personSvg } from './SVG/person.js';
 import { corporationSvg } from './SVG/corporation';
 import { layoutDefaults } from './CytoScapeDefaults';
 import SettingsPopup from './SettingsPopup'
-
+import { degreeCentrality } from 'graphology-metrics/centrality/degree';
+import Popover from '@mui/material/Popover'
+import DetailsPage from '../DetailsPage/DetailsPage'
 cytoscape.use(fcose);
 cytoscape.use(cola);
-
-function Graph() {
-	const { layoutSettings, setLayoutSettings } = useContext(LayoutSettingsContext);
+cytoscape.use(cise)
+function Graph({ name }) {
+	console.log(name)
+	const [layoutSettings, setLayoutSettings] = useContext(LayoutSettingsContext);
 	const cyRef = useRef();
 	const [elements, setElements] = useState([]);
 	const [loading, setLoading] = useState(true);
-	const [selectedLayout, setSelectedLayout] = useState(layoutSettings);
+	// const [selectedLayout, setSelectedLayout] = useState(layoutSettings);
 	const person = 'data:image/svg+xml;utf8,' + encodeURIComponent(personSvg);
 	const corporation = 'data:image/svg+xml;utf8,' + encodeURIComponent(corporationSvg);
 	const [currentMetric, setCurrentMetric] = useState('degreeCentrality');
+	const [anchorPosition, setAnchorPosition] = useState({ top: 0, left: 0 });
+	const [popoverOpen, setPopoverOpen] = useState(false);
+
 	const cytoStyle = {
 		width: '100%',
 		height: '100%',
 		position: 'absolute',
 		fit: true,
 	};
-	console.log(selectedLayout)
+	console.log(layoutSettings)
 	useEffect(() => {
 		if (cyRef.current) {
-			const layout = cyRef.current.layout(selectedLayout);
+			const layout = cyRef.current.layout(layoutSettings);
 			layout.stop();
 			layout.run();
 		}
 	}, []);
+	const handleNodeTap = (event) => {
+		const node = event.target;
+		const renderedPosition = node.renderedPosition();
+		const cyContainer = cyRef.current.container();
+		const boundingBox = cyContainer.getBoundingClientRect();
+	  
+		setAnchorPosition({
+		  top: renderedPosition.y + boundingBox.top,
+		  left: renderedPosition.x + boundingBox.left,
+		});
+		setPopoverOpen(true);
+	  };
+	  
 
 	useEffect(() => {
-		fetch('https://localhost:3001/network/John Doe')
+		fetch(`https://localhost:3001/network/${name}`)
 			.then((response) => response.json())
 			.then((data) => {
 				const graphData = constructGraph(data);
@@ -89,43 +109,49 @@ function Graph() {
 	} else {
 		return (
 			<div style={{ position: 'relative', height: '100%', width: '100%' }}>
-				<FormControl style={{ position: 'absolute', top: '10px', left: '1px', zIndex: 1, width: '120px' }}>
-					<InputLabel id="layout-label" shrink>Layout</InputLabel>
-					<Select
-						labelId="layout-label"
-						value={selectedLayout}
-						onChange={(event) => setSelectedLayout(layoutDefaults[event.target.value])}
-						style={{ height: '30px' }}
-					>
-						<MenuItem value="fcose">Fcose</MenuItem>
-						<MenuItem value="circle">Circle</MenuItem>
-						<MenuItem value="cose">Cose</MenuItem>
-					</Select>
-
-				</FormControl>
-
-
-				<FormControl style={{ position: 'absolute', top: '10px', left: '130px', zIndex: 1, width: '120px' }}>
-					<InputLabel id="metric-label" shrink>Metric</InputLabel>
-					<Select
-						labelId="metric-label"
-						onChange={(event) => setCurrentMetric(event.target.value)}
-						style={{ height: '30px' }}
-					>
-						{Object.entries(graphMetrics).map(([metricKey, metricValue]) =>
-							<MenuItem key={metricKey} value={metricKey}>{metricValue}</MenuItem>
-						)}
-					</Select>
-				</FormControl>
-
-				<CytoscapeComponent
-					key={selectedLayout.name}
-					cy={(cy) => {
-						cyRef.current = cy;
-					}}
-					elements={CytoscapeComponent.normalizeElements(elements)}
-					layout={selectedLayout}
-					style={cytoStyle}
+			<Popover
+			  open={popoverOpen}
+			  anchorReference="anchorPosition"
+			  anchorPosition={anchorPosition}
+			  onClose={() => setPopoverOpen(false)}
+			>
+			  <div style={{ padding: '10px' }}>Hello, World!</div>
+			</Popover>
+			<FormControl style={{ position: 'absolute', top: '10px', left: '1px', zIndex: 1, width: '120px' }}>
+			  <InputLabel id="layout-label" shrink>Layout</InputLabel>
+			  <Select
+				labelId="layout-label"
+				value={layoutSettings}
+				onChange={(event) => setLayoutSettings(layoutDefaults[event.target.value])}
+				style={{ height: '30px' }}
+			  >
+				<MenuItem value="fcose">fcose</MenuItem>
+				<MenuItem value="circle">circle</MenuItem>
+				<MenuItem value="cise">cise</MenuItem>
+			  </Select>
+			</FormControl>
+			<FormControl style={{ position: 'absolute', top: '10px', left: '130px', zIndex: 1, width: '120px' }}>
+			  <InputLabel id="metric-label" shrink>Metric</InputLabel>
+			  <Select
+				labelId="metric-label"
+				value={degreeCentrality}
+				onChange={(event) => setCurrentMetric(event.target.value)}
+				style={{ height: '30px' }}
+			  >
+				{Object.entries(graphMetrics).map(([metricKey, metricValue]) =>
+				  <MenuItem key={metricKey} value={metricKey}>{metricValue}</MenuItem>
+				)}
+			  </Select>
+			</FormControl>
+			<CytoscapeComponent
+			  key={layoutSettings.name}
+			  cy={(cy) => {
+				cyRef.current = cy;
+				cy.on('tap', 'node', handleNodeTap);
+			  }}
+			  elements={CytoscapeComponent.normalizeElements(elements)}
+			  layout={layoutSettings}
+			  style={cytoStyle}
 					stylesheet={[
 						{
 							selector: 'node',
@@ -165,6 +191,7 @@ function Graph() {
 					userPanningEnabled={true}
 				/>
 			</div>
+			
 		);
 	}
 }

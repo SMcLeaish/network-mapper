@@ -6,14 +6,14 @@ import SettingsPopup from './SettingsPopup';
 import {layoutDefaults} from './CytoScapeDefaults';
 
 export const LayoutSettingsContext = React.createContext();
-function GraphDialog({ open, onClose }) {
+function GraphDialog({ open, onClose, name }) {
   let [layoutSettings, setLayoutSettings] = useState(layoutDefaults.circle);
   
   return (
     <Dialog open={open} onClose={onClose} fullWidth={true} maxWidth={'lg'} PaperProps={{ style: { height: '100vh', overflowY: 'unset' } }}>
       <DialogContent dividers>
-        <LayoutSettingsContext.Provider value={{ layoutSettings, setLayoutSettings }}>
-          <Graph />
+        <LayoutSettingsContext.Provider value={[ layoutSettings, setLayoutSettings ]}>
+          <Graph name={name} />
           <SettingsPopup />
         </LayoutSettingsContext.Provider>
       </DialogContent>

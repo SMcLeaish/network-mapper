@@ -4,9 +4,10 @@ import Popper from '@mui/material/Popper';
 import Paper from '@mui/material/Paper';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Slider from '@mui/material/Slider';
-
+import { LayoutSettingsContext } from './GraphDialog';
+import { layoutDefaults } from './CytoScapeDefaults';
 export default function SettingsPopup() {
-  const {layoutSettings, setLayoutSettings}  = useContext(LayoutSettingsContext);
+  const [layoutSettings, setLayoutSettings] = useContext(LayoutSettingsContext);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -22,24 +23,24 @@ export default function SettingsPopup() {
         <SettingsIcon />
       </Button>
       <Popper id={id} open={open} anchorEl={anchorEl} placement="left-start" style={{ zIndex: 5000 }}>
-        <Paper style={{ padding: '10px', borderRadius: '5px', zIndex: 5001, marginRight: '10px', width: '200px', height: '400px' }}>
+        <Paper style={{ padding: '10px', borderRadius: '5px', zIndex: 5001, marginRight: '10px', width: '200px', height: 'auto' }}>
           {layoutSettings.name === 'fcose' && (
             <div>
               <label>Node Repulsion:</label>
               <Slider
                 min={1000}
-                max={10000}
-                step={100}
-                value={layoutSettings.fcose.nodeRepulsion || 4500}
-                onChange={(e, val) => setLayoutSettings({
-                  ...layoutSettings,
-                  fcose: {
-                    ...layoutSettings.fcose,
+                max={100000}
+                step={1000}
+                value={layoutSettings.nodeRepulsion || 4500}
+                onChange={(e, val) => {
+                  e.preventDefault();
+                  setLayoutSettings({
+                    ...layoutSettings,
                     nodeRepulsion: val,
-                  },
-                })}
+                  });
+                }}
               />
-              {layoutSettings.fcose.nodeRepulsion || 4500}
+              {layoutSettings.nodeRepulsion || 4500}
             </div>
           )}
         </Paper>

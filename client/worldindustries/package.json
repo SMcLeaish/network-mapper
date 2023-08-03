@@ -12,6 +12,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "cytoscape": "^3.25.0",
+    "cytoscape-cise": "^1.0.0",
     "cytoscape-cola": "^2.5.1",
     "cytoscape-fcose": "^2.2.0",
     "graphology": "^0.25.1",
