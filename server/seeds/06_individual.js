@@ -26,7 +26,6 @@ exports.seed = function(knex) {
         { name: 'Leslie Correa', location: [14.9359, 104.0738], phone_number: '9827827899', id_user_data: Math.floor(Math.random() * 5) + 1 },
         { name: 'Legacy Kent', location: [14.82, 104.0738], phone_number: '0298655551', id_user_data: Math.floor(Math.random() * 5) + 1 },
         { name: 'Ryann Bautista', location: [14.9359, 100], phone_number: '0109675142', id_user_data: Math.floor(Math.random() * 5) + 1 },
-
       ]);
     })
     .then(function(){

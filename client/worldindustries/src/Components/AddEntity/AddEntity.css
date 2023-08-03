@@ -1,9 +1,89 @@
 .association-grid{
   border: 2px solid red;
   padding: 10px;
-  background-color: antiquewhite; 
+  background-color: rgb(216, 159, 84); 
 }
-.auto-complete {
+.save-button {
+  background-color: #3f88c5;
+  border: none;
+  color: #f8f4e3;
+  width: 75px;
+  height: 30px;
+  border-radius: 15px;
+  font-size: 19px;
+  font-weight: bolder;
+  margin-left: 35px;
+  margin-top: 15px;
+}
+.AddEntity-page-container {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border: 1px color antiquewhite;
+}
+.entity-header{
   background-color: antiquewhite;
-  color: grey;
+  color: #333;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  height: 40px;
+  text-size-adjust: 50px;
 }
+.header-title{
+  font-size: 28px;
+  font-weight: bold;
+  color: black;
+  text-align: center;
+  justify-content: center;
+}
+.organization{
+  border-radius: 1px solid black;
+  width: 160px;
+  height: 80px;
+}
+.outlined-controlled{
+  border-radius: 1px solid black;
+
+}
+.narrative-textfield{
+  width: 40%;
+  height: 200px;
+  border: 1px solid rgb(243, 162, 10);
+  padding: 40px;
+  font-size: 8px;
+  box-shadow: 50px;
+  text-size-adjust: 50px;
+}
+.individual-org{
+
+  border-radius: 1px solid black;
+  text-align: center;
+}
+.association-box{
+  width:500px;
+  border: 1px solid rgb(216, 159, 84);
+  padding: 8px;
+  float: right;
+}
+.association-autocomplete{
+  width: 50px;
+  /* height: 40px; */
+ 
+}
+.event-box{
+  width: 500px;
+  border: 1px solid rgb(216, 159, 84);
+  padding: 10px;
+  float: right; 
+}
+.entity-image{
+  height:300px;
+  right:20%;
+  top:40%;
+  border: 2px dotted red;
+  position: absolute;
+  float: none;
+}
+
+
