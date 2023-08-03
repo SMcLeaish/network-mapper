@@ -40,56 +40,56 @@ function Map() {
     const navigate = useNavigate()
     const location = useLocation();
     console.log("context", userInfo)
-    useEffect(() => {
+    // useEffect(() => {
 
-        if (location.state) {
-            fetch("http://localhost:3001/cookietest", { credentials: "include" })
-                .then(res => res.json())
-                .then(data => {
+    //     if (location.state) {
+    //         fetch("http://localhost:3001/cookietest", { credentials: "include" })
+    //             .then(res => res.json())
+    //             .then(data => {
                     
-                    if (data.success) {
-                            setUserInfo(data.data);
-                        toast(`Welcome! ${location.state.username} `, {
-                            position: "top-center",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
+    //                 if (data.success) {
+    //                         setUserInfo(data.data);
+    //                     toast(`Welcome! ${location.state.username} `, {
+    //                         position: "top-center",
+    //                         autoClose: 5000,
+    //                         hideProgressBar: false,
+    //                         closeOnClick: true,
 
-                            draggable: true,
-                            progress: undefined,
-                            theme: "light",
-                        });
-                    }
-                    else {
-                        toast("Please sign in", {
-                            position: "top-center",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "light",
-                        });
-                        navigate('/')
-                    }
-                })
-        }
-        else{
-            toast("Please sign in", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
-            navigate('/')
-        } 
+    //                         draggable: true,
+    //                         progress: undefined,
+    //                         theme: "light",
+    //                     });
+    //                 }
+    //                 else {
+    //                     toast("Please sign in", {
+    //                         position: "top-center",
+    //                         autoClose: 5000,
+    //                         hideProgressBar: false,
+    //                         closeOnClick: true,
+    //                         pauseOnHover: true,
+    //                         draggable: true,
+    //                         progress: undefined,
+    //                         theme: "light",
+    //                     });
+    //                     navigate('/')
+    //                 }
+    //             })
+    //     }
+    //     else{
+    //         toast("Please sign in", {
+    //             position: "top-center",
+    //             autoClose: 5000,
+    //             hideProgressBar: false,
+    //             closeOnClick: true,
+    //             pauseOnHover: true,
+    //             draggable: true,
+    //             progress: undefined,
+    //             theme: "light",
+    //         });
+    //         navigate('/')
+    //     } 
 
-    }, [])
+    // }, [])
 
     const filterstyle = {
         color: red,
