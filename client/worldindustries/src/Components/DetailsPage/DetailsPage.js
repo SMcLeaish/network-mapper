@@ -75,7 +75,7 @@ const DetailsPage = ({ open, onClose, id }) => {
             setEntity(data)
           })
       })
-  }, [id])
+  }, [id, updateStatus])
 
   useEffect(() => {
     fetch(`http://localhost:3001/biography/${id}`)
