@@ -28,6 +28,9 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { UserContext } from '../../App';
+import PersonAddIcon from '@mui/icons-material/PersonAdd'
+import PublicIcon from '@mui/icons-material/Public'
+import EventPage from '../EventPage/EventPage';
 
 
 const cityList = require('./Chinacities.json')
@@ -40,11 +43,12 @@ function Map() {
     useEffect(() => {
 
         if (location.state) {
-            fetch("https://localhost:3001/cookietest", { credentials: "include" })
+            fetch("http://localhost:3001/cookietest", { credentials: "include" })
                 .then(res => res.json())
                 .then(data => {
+                    
                     if (data.success) {
-
+                            setUserInfo(data.data);
                         toast(`Welcome! ${location.state.username} `, {
                             position: "top-center",
                             autoClose: 5000,
@@ -67,10 +71,11 @@ function Map() {
                             progress: undefined,
                             theme: "light",
                         });
-                        navigate('/login')
+                        navigate('/')
                     }
                 })
-        } else {
+        }
+        else{
             toast("Please sign in", {
                 position: "top-center",
                 autoClose: 5000,
@@ -81,8 +86,8 @@ function Map() {
                 progress: undefined,
                 theme: "light",
             });
-            navigate('/login')
-        }
+            navigate('/')
+        } 
 
     }, [])
 
@@ -213,6 +218,7 @@ function Map() {
     const [targetValue5, setTargetValue5] = useState()
     const [render, setrender] = useState(false)
     const [zoom, setZoom] = useState(6)
+    const [eventID, setEventID] = useState(1)
 
     useEffect(() => {
         if (detailsSelect) {
@@ -287,6 +293,17 @@ function Map() {
     };
     // end added for modal
 
+    const [openEvent, setOpenEvent] = useState(false);
+
+    const handleOpenEventDialog = (id) => {
+        setOpenEvent(true);
+        setEventID(id)
+    };
+
+    const handleCloseEventDialog = () => {
+        setOpenEvent(false);
+    };
+
     const [searchSwitchChecked, setSearchSwitchChecked] = useState(false);
 
     const handleSearchSwitch = (event) => {
@@ -322,6 +339,9 @@ function Map() {
                 <div className='Container'>
                     <div className='ManageSearch'>
                         <ManageSearchIcon onClick={() => { handleSearch() }} />
+                    </div>
+                    <div className='addPerson'>
+                        <PersonAddIcon onClick={() => navigate('/add-entity')} />
                     </div>
                     <div>
                         {searchbox ?
@@ -460,9 +480,9 @@ function Map() {
                                                                         <h1> Search Summary </h1>
                                                                         <p>Name: {org.event_name}</p>
                                                                         <p>Date: {org.date}</p>
-                                                                        {/* <p>Type: {org.type}</p> */}
+                                                                        <p>ID: {org.id}</p>
                                                                         <p>Location: {JSON.stringify(org.location)}</p>
-                                                                        {/* <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/event/${entityConnect}`)}/> */}
+                                                                        <PersonSearchIcon className='DetailsIcon' onClick={handleOpenEventDialog}/>
                                                                     </>
                                                                     : console.log(`member not found`)
                                                                 )}
@@ -610,7 +630,7 @@ function Map() {
 
                                 </LayersControl>
                                 <LayersControl position='topright' id='custom-icon'>
-                                    <LayersControl.Overlay name="Cities">
+                                    {/* <LayersControl.Overlay name="Cities">
                                         <LayerGroup>
                                             <MarkerClusterGroup
                                                 chunkedLoading
@@ -622,7 +642,7 @@ function Map() {
                                                 )},
                                             </MarkerClusterGroup>
                                         </LayerGroup>
-                                    </LayersControl.Overlay>
+                                    </LayersControl.Overlay> */}
 
                                     <LayersControl.Overlay checked name="Individuals">
                                         <LayerGroup>
@@ -713,6 +733,11 @@ function Map() {
                 open={open}
                 onClose={handleCloseDetailsDialog}
                 id={entityConnect}
+            />
+            <EventPage
+                open={openEvent}
+                onClose={handleCloseEventDialog}
+                id={eventID}
             />
         </>
     );

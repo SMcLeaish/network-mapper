@@ -19,10 +19,10 @@ const Verifyuser=()=>{
 
     useEffect(()=>{
         let user={}
-        fetch("https://localhost:3001/users/",{credentials:'include'})
+        fetch("http://localhost:3001/users/",{credentials:'include'})
         .then(res=>res.json())
         .then(  data=>  user=data.filter(user=>user.emailToken==eToken))
-        .then( ()=> {console.log(user[0]);fetch(`https://localhost:3001/users/${user[0].id}`,{credentials:'include',
+        .then( ()=> {console.log(user[0]);fetch(`http://localhost:3001/users/${user[0].id}`,{credentials:'include',
         headers:{'Content-Type': 'application/json'},
         method:"PUT",body:
         JSON.stringify(user[0])
@@ -33,7 +33,7 @@ const Verifyuser=()=>{
     return(
         <>
         <h1>Congrats, You've been verified. Return to Login</h1>
-        <Button onClick={()=>navigate("/login")}>Return</Button>
+        <Button onClick={()=>navigate("/")}>Return</Button>
         <Avatar> <DoneOutlineIcon sx={{ color:"green",position:"center",  height: '150px', width: '150px' }}/> </Avatar>
         
         </>

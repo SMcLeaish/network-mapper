@@ -4,7 +4,7 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const https = require('https');
 const fs = require('fs');
-const nodemailer=require('nodemailer')
+const nodemailer = require('nodemailer')
 const app = express();
 const port = 3001;
 const { startNetworkQuery } = require('./network-query');
@@ -20,9 +20,9 @@ let corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-const crypto=require("crypto")
+const crypto = require("crypto")
 const cookieParser = require('cookie-parser')
-const uuid=require('uuid').v4
+const uuid = require('uuid').v4
 
 app.use(cookieParser())
 
@@ -74,36 +74,36 @@ let transporter = nodemailer.createTransport({
     clientSecret: process.env.OAUTH_CLIENT_SECRET,
     refreshToken: process.env.OAUTH_REFRESH_TOKEN,
   },
- });
+});
 
-app.get('/cookietest',(req,res)=>{
-  if(req.headers.cookie){
-  let stored=req.headers.cookie.split('=')[1]
+app.get('/cookietest', (req, res) => {
+  if (req.headers.cookie) {
+    let stored = req.headers.cookie.split('=')[1]
     knex('user_data')
       .select('*')
-        .where('session_cookie',stored)
-        .then(found => {
-          if (found) {
-            res.send({success:true,data:found})
-          }else{
-            
-            res.send({success:false})
+      .where('session_cookie', stored)
+      .then(found => {
+        if (found) {
+          res.json({ success: true, data: found })
+        } else {
+
+          res.send({ success: false })
+        }
+      })
+  } else {
+    res.send({ success: false })
   }
-})
-}else{
-  res.send({success:false})
-}
 })
 
 
 
 app.get('/users', (req, res) => {
- 
-     knex('user_data')
+
+  knex('user_data')
     .select('*')
     .then(data => res.status(200).send(data))
     .catch(err => res.status(404).send(err))
- 
+
 });
 
 // creating the new user and sends them an email for verification
@@ -111,24 +111,24 @@ app.get('/users', (req, res) => {
 app.post('/users', async (req, res) => {
 
   // token for the email params unique everytime and secure, goes in the mailing options
-  let token=crypto.randomBytes(64).toString("hex")
+  let token = crypto.randomBytes(64).toString("hex")
   const link = `${process.env.BASE_URL}/users/confirm/?emailToken=${token}`;
   let mailOptions = {
     from: req.body.email,
     to: req.body.email,
     subject: "User Verify",
     text: link,
-   };
+  };
 
-   //sends the email
+  //sends the email
 
-   transporter.sendMail(mailOptions, link)
-   
+  transporter.sendMail(mailOptions, link)
+
   try {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
-    
-    
+
+
     const newUser = {
       username: req.body.username,
       hashed_password: hashedPassword,
@@ -136,27 +136,27 @@ app.post('/users', async (req, res) => {
       user_organization: req.body.user_organization,
       distinguished_name: req.body.distinguished_name,
       cac_approved: req.body.cac_approved,
-      emailToken:token,
-      isVerified:false
+      emailToken: token,
+      isVerified: false
     };
     knex('user_data')
-    .where('username',req.body.username)
-    .then(data => {
-      
-      if (data.length > 0) {
-        res.status(404).json({userCreated: false, message: `Username: *${req.body.username}* already taken!`});
-      } else {
-        
-        knex('user_data')
-          .insert(newUser)
-          .then(() => {
-            // set cookie any user info
-            res.status(201).send( {success: req.cookies})
-          })
-          .catch(err => res.status(501).send(err))
-      }
-    })
-  } 
+      .where('username', req.body.username)
+      .then(data => {
+
+        if (data.length > 0) {
+          res.status(404).json({ userCreated: false, message: `Username: *${req.body.username}* already taken!` });
+        } else {
+
+          knex('user_data')
+            .insert(newUser)
+            .then(() => {
+              // set cookie any user info
+              res.status(201).send({ success: req.cookies })
+            })
+            .catch(err => res.status(501).send(err))
+        }
+      })
+  }
   catch {
     res.status(500).send();
   }
@@ -164,64 +164,64 @@ app.post('/users', async (req, res) => {
 
 
 
-app.put('/users/cookie',(req,res)=>{
-  
+app.put('/users/cookie', (req, res) => {
+
   knex('user_data')
-    .where('username',req.body.username)
-    .update({session_cookie:req.headers.cookie.split('=')[1]})
+    .where('username', req.body.username)
+    .update({ session_cookie: req.headers.cookie.split('=')[1] })
     .then((rowCount) => {
       if (rowCount === 0) {
-      return res.status(404).json({
+        return res.status(404).json({
           success: false,
-      });
+        });
       }
       res.status(200).json({
-     success: true,
-     data:rowCount
+        success: true,
+        data: rowCount
       });
-  })
-  .catch((err) =>
+    })
+    .catch((err) =>
       res.status(500).json({
-      message: 'An error occurred while updating the user session cookie',
-      error: err,
+        message: 'An error occurred while updating the user session cookie',
+        error: err,
       })
-  );
+    );
 })
 
 
 // logs in the user and makes sure they are verified, if verified a session cookie is created
 app.post('/users/login', (req, res) => {
-  const sessionId= uuid()
-    knex('user_data')
+  const sessionId = uuid()
+  knex('user_data')
     .select('*')
     .where('username', req.body.username)
-    .then(data => {   
+    .then(data => {
       if (data.length > 0) {
         bcrypt.compare(req.body.password, data[0].hashed_password)
           .then(found => {
-            if (found&&data[0].isVerified) {
-              
-              res.cookie( 'session',sessionId,{ 
-    
+            if (found && data[0].isVerified) {
+
+              res.cookie('session', sessionId, {
+
                 httpOnly: true,
                 secure: true,
                 sameSite: 'none',
                 path: '/',
                 expires: 0,
                 signed: false,
-            })
-            
-              
-            
-            
+              })
+
+
+
+
               let responseObj = {
                 userExists: found,
                 ...data[0]
               }
               console.log(responseObj)
               res.send(responseObj);
-            } else if(!found){
-              
+            } else if (!found) {
+
               let responseObj = {
                 userExists: false
               }
@@ -231,7 +231,7 @@ app.post('/users/login', (req, res) => {
           })
           .catch(err => res.status(500).send(err));
       }
-      else{
+      else {
         let responseObj = {
           userExists: false
         }
@@ -243,27 +243,27 @@ app.post('/users/login', (req, res) => {
 });
 
 // this will verify the user and update the 2 object fields
-app.put('/users/:id',(req,res)=>{
+app.put('/users/:id', (req, res) => {
   console.log("verified")
   knex('user_data')
-    .where('id',req.body.id)
-    .update({emailToken:null,isVerified:true})
+    .where('id', req.body.id)
+    .update({ emailToken: null, isVerified: true })
     .then((rowCount) => {
       if (rowCount === 0) {
-      return res.status(404).json({
+        return res.status(404).json({
           message: 'user not found',
-      });
+        });
       }
       res.status(200).json({
-      message: 'user updated successfully',
+        message: 'user updated successfully',
       });
-  })
-  .catch((err) =>
+    })
+    .catch((err) =>
       res.status(500).json({
-      message: 'An error occurred while updating the user',
-      error: err,
+        message: 'An error occurred while updating the user',
+        error: err,
       })
-  );
+    );
 })
 
 
@@ -471,6 +471,7 @@ app.delete('/interaction', (req, res) => {
 
 app.post('/narrative', (req, res) => {
   let body = req.body
+  console.log(body)
   knex('narrative')
     .insert(body)
     .then(() => res.status(201).json({ message: 'Narrative has been added' }))
@@ -541,6 +542,10 @@ app.post('/entity', (req, res) => {
   let orgTypeId;
   let Organization;
   let eventField
+  let entity_id;
+  if(narrative.length < 1){
+    narrative=`Created on ${date}`;
+  }
   console.log("this is the indOrOrg", indOrOrg)
   knex('event')
     .select('*')
@@ -550,7 +555,7 @@ app.post('/entity', (req, res) => {
 
         console.log("im in events")
         event_true = true
-        event_id = data.id
+        event_id = data[0].id
       }
       else {
 
@@ -616,7 +621,8 @@ app.post('/entity', (req, res) => {
                 name: organization,
                 location: location,
                 phone_number: phonenumber,
-                id_user_data: user_id
+                id_user_data: user_id,
+                
 
               }
               knex('individual')
@@ -634,6 +640,7 @@ app.post('/entity', (req, res) => {
                       id_individual: individual_id,
                       id_organization: null
                     }, ['id']).then(data => {
+                      entity_id=data[0].id;
                       let narrativeField = {
                         user_data_id: user_id,
                         date: date,
@@ -645,6 +652,14 @@ app.post('/entity', (req, res) => {
                         .select('*')
                         .insert(narrativeField)
                         .then(() => console.log("added"))
+                    }).then(() => {
+                      console.log("I am in interaction")
+                      console.log("I am in interaction")
+                      knex('interaction')
+                      
+                        .select('*')
+                        .insert({weight: 1, id_entity_1: entity_id, id_entity_2: 1, id_event: event_id})
+                        .then(()=>res.status(200))
                     })
 
                 })
@@ -673,7 +688,8 @@ app.post('/entity', (req, res) => {
                           name: organization,
                           location: location,
                           organization_type_id: orgTypeId,
-                          id_user_data: user_id
+                          id_user_data: user_id,
+                          
                         }
                         knex('organization')
                           .select('*')
@@ -694,6 +710,7 @@ app.post('/entity', (req, res) => {
                       id_organization: organization_id,
                       id_individual: null
                     }, ['id']).then(data => {
+                      entity_id=data[0].id;
                       let narrativeField = {
                         user_data_id: user_id,
                         date: date,
@@ -706,8 +723,14 @@ app.post('/entity', (req, res) => {
                         .insert(narrativeField)
                         .then(() => console.log("added"))
                     })
-                    .then(() => console.log("insert"))
-                    .catch((err => console.log(err)))
+                    .then(() => {
+                      
+                      knex('interaction')
+                      
+                        .select('*')
+                        .insert({weight: 1, id_entity_1: entity_id, id_entity_2: 1, id_event: event_id})
+                        .then(()=>res.status(200))
+                    })
                 })
 
 
@@ -720,13 +743,15 @@ app.post('/entity', (req, res) => {
 
       }
       else if ((event_true == true) && (indOrOrg == true)) {
-        let individual = {
+        individual = {
           name: organization,
           location: location,
           phone_number: phonenumber,
-          id_user_data: user_id
+          id_user_data: user_id,
+          
 
         }
+        
         knex('individual')
           .select('*')
           .insert(individual, ['id'])
@@ -735,13 +760,37 @@ app.post('/entity', (req, res) => {
             res.status(201).send({ success: true })
           })
           .then(() => {
-            knex('entity')
-              .select('*')
-              .insert({
-                id_individual: individual_id,
-                id_organization: null
-              }).then(() => console.log("insert"))
+                console.log("entity")
+                knex('entity')
+                  .select('*')
+                  .insert({
+                    id_individual: individual_id,
+                    id_organization: null
+                  }, ['id'])
+                  .then(data => {
+                    entity_id=data[0].id;
+                    let narrativeField = {
+                      user_data_id: user_id,
+                      date: date,
+                      narrative_string: narrative,
+                      id_entity: data[0].id,
+                      id_event: event_id
+                    }
+                    knex('narrative')
+                      .select('*')
+                      .insert(narrativeField)
+                      .then(() => console.log("added"))
+                  }).then(()=>{
+                    console.log("interacting")
+                    knex('interaction')
+                      .select('*')
+                      .insert({weight: 1, id_entity_1: entity_id, id_entity_2: 1, id_event: event_id})
+                      .then(()=>res.status(200))
+                  })
+              
           })
+              
+          
       }
       else if ((event_true == true) && (indOrOrg == false)) {
         let orgTypeId;
@@ -767,11 +816,12 @@ app.post('/entity', (req, res) => {
             }
           }).then(() => {
 
-            let Organization = {
+            Organization = {
               name: organization,
               location: location,
               organization_type_id: orgTypeId,
-              id_user_data: user_id
+              id_user_data: user_id,
+              
             }
             knex('organization')
               .select('*')
@@ -788,7 +838,9 @@ app.post('/entity', (req, res) => {
                   .insert({
                     id_organization: organization_id,
                     id_individual: null
-                  }, ['id']).then(data => {
+                  }, ['id'])
+                  .then(data => {
+                    entity_id=data[0].id;
                     let narrativeField = {
                       user_data_id: user_id,
                       date: date,
@@ -801,8 +853,14 @@ app.post('/entity', (req, res) => {
                       .insert(narrativeField)
                       .then(() => console.log("added"))
                   })
-                  .then(() => console.log("insert"))
-                  .catch((err => console.log(err)))
+                  .then(()=>{
+                    console.log("interacting")
+                    knex('interaction')
+                     
+                      .select('*')
+                      .insert({weight: 1, id_entity_1: entity_id, id_entity_2: 1, id_event: event_id})
+                      .then(()=>res.status(200))
+                  })
               })
 
           })

@@ -24,6 +24,18 @@
     padding-top:10px;
 }
 
+.addPerson {
+  z-index: 3;
+  position: absolute;
+  top: 15px;
+  right: 42%;
+  height: 35px;
+  width: 44px;
+  background-color: white;
+  border-radius: 5px;
+  padding-top:10px;
+}
+
 
 .leaflet-control-layers {
   border: none !important;

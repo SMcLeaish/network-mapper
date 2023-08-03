@@ -1,10 +1,11 @@
 import './DetailsPage.css';
 import { Dialog, Container, Grid, Typography, Stack, Button, Box } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import * as MyFunctions from './DetailsFunctions.js';
+import { UserContext } from '../../App';
 
-const placeholderImg = 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80';
+const placeholderImg = 'http://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80';
 
 const DetailsPage = ({ open, onClose, id }) => {
   const [associates, setAssociates] = useState([])
@@ -15,6 +16,7 @@ const DetailsPage = ({ open, onClose, id }) => {
   const [addNarrToggle, setAddNarrToggle] = useState(false)
   const [everyone, setEveryone] = useState([])
   const [events, setEvents] = useState([])
+  const [userInfo, setUserInfo] = useContext(UserContext)
   const [associateToAdd, setAssociateToAdd] = useState({
     weight: 1,
     id_entity_1: id,
@@ -150,6 +152,7 @@ const DetailsPage = ({ open, onClose, id }) => {
     let date = new Date();
     let today = date.toISOString()
     let obj = {
+      user_data_id: userInfo[0].id,
       date: today.slice(0, 10),
       narrative_string: e.target.value,
       id_entity: id

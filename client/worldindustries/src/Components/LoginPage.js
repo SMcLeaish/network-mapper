@@ -30,7 +30,7 @@ const Login = () => {
   useEffect(() => {
 
 
-    fetch("https://localhost:3001/cookietest", { credentials: "include" })
+    fetch("http://localhost:3001/cookietest", { credentials: "include" })
       .then(res => res.json())
       .then(data => {
         if (data.success == true && data.data[0]) {
@@ -56,7 +56,7 @@ const Login = () => {
     let sendUser = {}
     console.log("submitting", newUser)
     // are you a new user or are you signing in
-    newUser === false ? await fetch("https://localhost:3001/users/login", {
+    newUser === false ? await fetch("http://localhost:3001/users/login", {
       credentials: "include",
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
@@ -68,7 +68,7 @@ const Login = () => {
       .then(res => res.json())
       .then(data => {
         console.log("data");
-        if (data.userExists && !data.isVerified) {
+        if (data.userExists && data.isVerified==false) {
           toast("Verify your email", {
             position: "top-center",
             autoClose: 5000,
@@ -98,7 +98,7 @@ const Login = () => {
           return
         }
       }).then(async () => {
-        fetch("https://localhost:3001/users/cookie", {
+        fetch("http://localhost:3001/users/cookie", {
           credentials: "include",
           method: "PUT",
           headers: { 'Content-Type': 'application/json' },
@@ -116,7 +116,7 @@ const Login = () => {
           })
       })
       :
-      fetch("https://localhost:3001/users", {
+      fetch("http://localhost:3001/users", {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -4,12 +4,11 @@ import React from 'react';
 import { useState } from 'react';
 import LoginPage from './Components/LoginPage';
 import Map from './Components/Map/Map';
-// import GraphDialog from './Components/Graph/GraphDialog';
+import GraphDialog from './Components/Graph/GraphDialog';
 import { Routes, Route } from 'react-router-dom';
 import AddEntity from './Components/AddEntity/AddEntity';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 //import Details from './Components/Details/Details';
-import { useState } from 'react';
 import { Dialog } from '@mui/material';
 import EventPage from './Components/EventPage/EventPage';
 import { ToastContainer } from 'react-toastify';
@@ -17,7 +16,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import Verifyuser from './Components/Verifyuser';
 export const UserContext = React.createContext();
 
-const [userInfo, setUserInfo] = useState({})
 const latte = '#F8F4E3';
 const steelBlue = '#3F88C5';
 const jet = '#2D2D2A';
@@ -84,13 +82,14 @@ const theme = createTheme({
 });
 
 function App() {
+  const [userInfo, setUserInfo] = useState({})
 
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
         <UserContext.Provider value={[userInfo, setUserInfo]}>
           <Routes>
-            <Route path='/login' element={<LoginPage />} />
+            <Route path='/' element={<LoginPage />} />
             <Route path='/map' element={<Map />} />
             <Route path='details/:id' element={<DetailsPage />} />
             <Route path='/graph' element={<GraphDialog />} />

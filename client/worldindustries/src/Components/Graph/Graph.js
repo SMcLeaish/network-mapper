@@ -20,7 +20,7 @@ function Graph() {
 
 
 	useEffect(() => {
-    fetch('https://localhost:3001/network/John Doe')
+    fetch('http://localhost:3001/network/John Doe')
 			.then(response => response.json())
 			.then(data => {
 				console.log('Data fetched:', data);
