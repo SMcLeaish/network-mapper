@@ -14,7 +14,7 @@ const Connections = (props) => {
 
 
   useEffect(() => {
-    fetch('http://localhost:3001/individuals')
+    fetch('https://localhost:3001/individuals')
       .then((res) => res.json())
       .then(data => {
         setIndividualConnect(data)
@@ -25,7 +25,7 @@ const Connections = (props) => {
 //   console.log(individualConnect)
 
 useEffect(() => {
-    fetch(`http://localhost:3001/entity/${detailsSelect}`)
+    fetch(`https://localhost:3001/entity/${detailsSelect}`)
       .then((res) => res.json())
       .then(data => {
         setEntityConnect(data)
@@ -42,7 +42,7 @@ useEffect(() => {
 // console.log(individualConnect, primaryLocation)
 
   useEffect(() => {
-    fetch(`http://localhost:3001/relationships/${id}`)
+    fetch(`https://localhost:3001/relationships/${id}`)
       .then((res) => res.json())
       .then(data => {
         setConnectDetails(data)

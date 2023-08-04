@@ -125,7 +125,7 @@ const AddEntity = () => {
                 phonenumber: phonenumber,
                 location: [Number(lat), Number(long)],
                 orgType: orgType,
-                eventType: eventType,
+                eventType: "eventType",
                 image: image,
             })
         })
@@ -251,7 +251,7 @@ const AddEntity = () => {
 
                 </Box>
                 <Stack spacing={2} width={'200px'}>
-                    <Box className='association-box'>
+                    {/* <Box className='association-box'>
 
                         <h3>Association</h3>
 
@@ -263,7 +263,7 @@ const AddEntity = () => {
                             value={association}
                             renderInput={(params) => <TextField {...params} label="Select an Association" />}
                         />
-                    </Box>
+                    </Box> */}
 
                     <Box className='event-box'>
                         <h3> Event </h3>
@@ -284,7 +284,7 @@ const AddEntity = () => {
                     </Box>
                 </Stack>
 
-                <Button>Pick a photo</Button>
+                {/* <Button>Pick a photo</Button>
                 <input type="file" onChange={(e) => {
                     setImage(e.target.files[0]);
                     handleMulter();
@@ -292,7 +292,7 @@ const AddEntity = () => {
                 <Box className='entity-image'>
 
                     <img src={`https://localhost:3000/individual/${image.name}`} alt='Img broken' style={{ height: "100%" }} />
-                </Box>
+                </Box> */}
 
                 <hr></hr>
                 <div>

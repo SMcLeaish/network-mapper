@@ -17,7 +17,7 @@ const OrgConnections = (props) => {
 
 
 useEffect(() => {
-    fetch(`http://localhost:3001/network/${detailsSelect}`)
+    fetch(`https://localhost:3001/network/${detailsSelect}`)
       .then((res) => res.json())
       .then(data => {
             

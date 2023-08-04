@@ -543,6 +543,7 @@ app.post('/entity', (req, res) => {
   let Organization;
   let eventField
   let entity_id;
+  
   if(narrative.length < 1){
     narrative=`Created on ${date}`;
   }
@@ -665,7 +666,7 @@ app.post('/entity', (req, res) => {
                 })
 
             }
-            else {
+            else if(indOrOrg==false) {
               console.log("i'm making an organization", indOrOrg)
               let orgTypeId;
               knex('organization_type')
@@ -682,7 +683,7 @@ app.post('/entity', (req, res) => {
                       .select('*')
                       .insert({ type: orgType }, ['id'])
                       .then(data => {
-
+                        console.log("starting to create organization")
                         orgTypeId = data[0].id;
                         Organization = {
                           name: organization,
@@ -794,7 +795,7 @@ app.post('/entity', (req, res) => {
       }
       else if ((event_true == true) && (indOrOrg == false)) {
         let orgTypeId;
-
+        console.log("i am creating an organization")
         knex('organization_type')
           .select('*')
           .where('type', orgType)

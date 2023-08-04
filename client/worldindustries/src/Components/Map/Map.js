@@ -168,7 +168,10 @@ function Map() {
     }, [individualData2])
 
 
-
+    const coorporateCustomIcon = new Icon({
+        iconUrl: require('../../img/location.png'),
+        iconSize: [38, 38]
+    })
 
 
     const customIcon = new Icon({
@@ -713,7 +716,7 @@ function Map() {
                                                     chunkedLoading
                                                     iconCreateFunction={createCustomClusterIcon2}>
                                                     {EventData.map(feature =>
-                                                        <Marker position={feature.location} icon={individualsIcon} eventHandlers={{
+                                                        <Marker position={feature.location} icon={coorporateCustomIcon} eventHandlers={{
                                                             click: () => { setCoord(feature.location) },
                                                         }}>
                                                             <Popup>
