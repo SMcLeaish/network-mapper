@@ -35,7 +35,7 @@ import PublicIcon from '@mui/icons-material/Public'
 import EventPage from '../EventPage/EventPage';
 import GraphDialog from '../Graph/GraphDialog';
 import Tooltip from '@mui/material/Tooltip'
-
+import AccountTreeIcon from '@mui/icons-material/AccountTree'
 
 const cityList = require('./Chinacities.json')
 
@@ -44,56 +44,56 @@ function Map() {
     const navigate = useNavigate()
     const location = useLocation();
     console.log("context", userInfo)
-    // useEffect(() => {
+    useEffect(() => {
 
-    //     if (location.state) {
-    //         fetch("https://localhost:3001/cookietest", { credentials: "include" })
-    //             .then(res => res.json())
-    //             .then(data => {
+        if (location.state) {
+            fetch("https://localhost:3001/cookietest", { credentials: "include" })
+                .then(res => res.json())
+                .then(data => {
 
-    //                 if (data.success) {
-    //                         setUserInfo(data.data);
-    //                     toast(`Welcome! ${location.state.username} `, {
-    //                         position: "top-center",
-    //                         autoClose: 5000,
-    //                         hideProgressBar: false,
-    //                         closeOnClick: true,
+                    if (data.success) {
+                            setUserInfo(data.data);
+                        toast(`Welcome! ${location.state.username} `, {
+                            position: "top-center",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
 
-    //                         draggable: true,
-    //                         progress: undefined,
-    //                         theme: "light",
-    //                     });
-    //                 }
-    //                 else {
-    //                     toast("Please sign in", {
-    //                         position: "top-center",
-    //                         autoClose: 5000,
-    //                         hideProgressBar: false,
-    //                         closeOnClick: true,
-    //                         pauseOnHover: true,
-    //                         draggable: true,
-    //                         progress: undefined,
-    //                         theme: "light",
-    //                     });
-    //                     navigate('/')
-    //                 }
-    //             })
-    //     }
-    //     else{
-    //         toast("Please sign in", {
-    //             position: "top-center",
-    //             autoClose: 5000,
-    //             hideProgressBar: false,
-    //             closeOnClick: true,
-    //             pauseOnHover: true,
-    //             draggable: true,
-    //             progress: undefined,
-    //             theme: "light",
-    //         });
-    //         navigate('/')
-    //     } 
+                            draggable: true,
+                            progress: undefined,
+                            theme: "light",
+                        });
+                    }
+                    else {
+                        toast("Please sign in", {
+                            position: "top-center",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "light",
+                        });
+                        navigate('/')
+                    }
+                })
+        }
+        // else{
+        //     toast("Please sign in", {
+        //         position: "top-center",
+        //         autoClose: 5000,
+        //         hideProgressBar: false,
+        //         closeOnClick: true,
+        //         pauseOnHover: true,
+        //         draggable: true,
+        //         progress: undefined,
+        //         theme: "light",
+        //     });
+        //     navigate('/')
+        // } 
 
-    // }, [])
+    }, [])
 
     const filterstyle = {
         color: red,
@@ -465,15 +465,20 @@ function Map() {
                                                                     <p>Name: {person.name}</p>
                                                                     <p>Phone: {person.phone_number}</p>
                                                                     <p>Location: {JSON.stringify(person.location)}</p>
-                                                                    <ShareIcon className={poly ? 'activelines' : 'notActiveLines'} onClick={() => { setPolyLine(!poly) }} />
-                                                                    <GroupsIcon className={eventpoly ? 'Eventactiveline' : 'EventnotActiveLines'} onClick={() => { seteventPolyLine(!eventpoly) }} />
+                                                                    <Tooltip title="Indiv/Org connect">
+                                                                        <ShareIcon className={poly ? 'activelines' : 'notActiveLines'} onClick={() => { setPolyLine(!poly) }} />
+                                                                    </Tooltip>
+                                                                    <Tooltip title="Event connect">
+                                                                        <GroupsIcon className={eventpoly ? 'Eventactiveline' : 'EventnotActiveLines'} onClick={() => { seteventPolyLine(!eventpoly) }} />
+                                                                    </Tooltip>
+
                                                                     {/* <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
                                                                     <Tooltip title="Details">
                                                                         <PersonSearchIcon className='DetailsIcon' onClick={handleOpenDetailsDialog} />
                                                                     </Tooltip>
                                                                     <Tooltip title="Analyze">
-
-                                                                        <IconButton onClick={handleAnalyzeDialogOpen}><InsightsIcon /></IconButton>
+                                                                        <AccountTreeIcon className='AnalyzeIcon' onClick={handleAnalyzeDialogOpen}/>
+                                                                        {/* <IconButton onClick={handleAnalyzeDialogOpen}><InsightsIcon /></IconButton> */}
                                                                     </Tooltip>
                                                                 </>
                                                                 : console.log(`member not found`)

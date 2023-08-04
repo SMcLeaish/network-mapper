@@ -56,12 +56,12 @@ export const returnChipsForAssociates = (data, handleClickAssociate, handleDelet
 export const returnNarratives = (data, handleDeleteNarr) => {
     return data.map((e) => {
         return (
-                <Chip
-                    key={e.narr_id}
-                    label={`Date: ${e.date}:
+            <Chip
+                key={e.narr_id}
+                label={`Date: ${e.date}:
                     ${e.narrative_string}`}
-                    onDelete={() => handleDeleteNarr(e.narrative_string)}
-                />
+                onDelete={() => handleDeleteNarr(e.narrative_string)}
+            />
         )
     })
 }
@@ -79,7 +79,7 @@ export const returnEvents = (data) => {
     })
 }
 
-export const returnBiography = (data) => {
+export const returnBiography = (data, entity) => {
     if (data.length > 0) {
         let bio = data[0]
         if (bio.individual_id) {
@@ -103,6 +103,20 @@ export const returnBiography = (data) => {
                         label={`Organization type: ${bio.type}`}
                     />
                 </>
+            )
+        }
+    } else if (entity.length > 0) {
+        if (entity[0].individual_name) {
+            return (
+                <Chip
+                    label={`Name: ${entity[0].individual_name}`}
+                />
+            )
+        } else {
+            return (
+                <Chip
+                    label={`Name: ${entity[0].name}`}
+                />
             )
         }
     }

@@ -890,6 +890,11 @@ app.get('/narratives', (req, res) => {
     .then(data => res.status(200).send(data))
 })
 
+app.get('/entity', (req, res) => {
+  knex('entity')
+    .select('*')
+    .then(data => res.status(200).send(data))
+})
 
 https.createServer(options, app).listen(port, () => {
   console.log('HTTPS server running on port 3001');

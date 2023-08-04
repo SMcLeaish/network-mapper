@@ -203,7 +203,7 @@ const DetailsPage = ({ open, onClose, id }) => {
                   User Profile
                 </Typography>
                 <Stack direction='row' spacing={1} useFlexGap flexWrap={'wrap'}>
-                  {MyFunctions.returnBiography(biography)}
+                  {MyFunctions.returnBiography(biography, entity)}
                 </Stack>
               </Box>
             </Grid>

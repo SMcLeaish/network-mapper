@@ -221,13 +221,13 @@ const Login = () => {
                   </Typography>
                 </Grid>
                 <Grid container item xs={8} justifyContent='center'>
-                  <form onSubmit={handleLogin}>
+                  <form onSubmit={(e) => {handleLogin(e); alert('Please verify your email!')}}>
                     <TextField label='Username' placeholder="Username" type='text' margin='dense' fullWidth required onChange={(e) => { setUsername(e.target.value) }} />
                     <TextField label='Password' placeholder="Enter Password" type='password' margin='dense' fullWidth required onChange={(e) => { setPassword(e.target.value) }} />
                     <PasswordStrengthBar password={password} minLength={5} />
                     <TextField label='User Org' placeholder="Enter Organization" type='text' margin='dense' fullWidth required onChange={(e) => { setuser_organization(e.target.value) }} />
                     <TextField label='email' placeholder="Enter Email" type='email' margin='dense' className='extra-margin' fullWidth required onChange={(e) => { setEmail(e.target.value) }} />
-                    <Button type='submit' color='primary' variant='contained' fullWidth onSubmit={handleLogin}>Create Account</Button>
+                    <Button type='submit' color='primary' variant='contained' fullWidth>Create Account</Button>
                   </form>
                   <Button type='SignIn' color='primary' onClick={() => handleSignIn()}> Already Have An Account </Button>
                 </Grid>
