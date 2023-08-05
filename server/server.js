@@ -190,46 +190,79 @@ app.put('/users/cookie', (req, res) => {
 
 
 // logs in the user and makes sure they are verified, if verified a session cookie is created
+// app.post('/users/login', (req, res) => {
+//   const sessionId = uuid()
+//   knex('user_data')
+//     .select('*')
+//     .where('username', req.body.username)
+//     .then(data => {
+//       if (data.length > 0) {
+//         bcrypt.compare(req.body.password, data[0].hashed_password)
+//           .then(found => {
+//             if (found && data[0].isVerified) {
+
+//               res.cookie('session', sessionId, {
+
+//                 httpOnly: true,
+//                 secure: true,
+//                 sameSite: 'none',
+//                 path: '/',
+//                 expires: 0,
+//                 signed: false,
+//               })
+
+
+
+
+//               let responseObj = {
+//                 userExists: found,
+//                 ...data[0]
+//               }
+//               console.log(responseObj)
+//               res.send(responseObj);
+//             } else if (!found) {
+
+//               let responseObj = {
+//                 userExists: false
+//               }
+//               console.log(responseObj)
+//               res.send(responseObj);
+//             }
+//           })
+//           .catch(err => res.status(500).send(err));
+//       }
+//       else {
+//         let responseObj = {
+//           userExists: false
+//         }
+//         console.log(responseObj)
+//         res.send(responseObj);
+//       }
+//     })
+//     .catch(err => res.status(500).send(err))
+// });
 app.post('/users/login', (req, res) => {
-  const sessionId = uuid()
+  const sessionId = uuid();
   knex('user_data')
     .select('*')
-    .where('username', req.body.username)
+    .where('id', 1) // fetch user with id 1
     .then(data => {
       if (data.length > 0) {
-        bcrypt.compare(req.body.password, data[0].hashed_password)
-          .then(found => {
-            if (found && data[0].isVerified) {
+        res.cookie('session', sessionId, {
+          httpOnly: true,
+          secure: true,
+          sameSite: 'none',
+          path: '/',
+          expires: 0,
+          signed: false,
+        });
 
-              res.cookie('session', sessionId, {
-
-                httpOnly: true,
-                secure: true,
-                sameSite: 'none',
-                path: '/',
-                expires: 0,
-                signed: false,
-              })
-
-
-
-
-              let responseObj = {
-                userExists: found,
-                ...data[0]
-              }
-              console.log(responseObj)
-              res.send(responseObj);
-            } else if (!found) {
-
-              let responseObj = {
-                userExists: false
-              }
-              console.log(responseObj)
-              res.send(responseObj);
-            }
-          })
-          .catch(err => res.status(500).send(err));
+        let responseObj = {
+          userExists: true,
+          ...data[0]
+        }
+        console.log(responseObj)
+        res.send(responseObj);
       }
       else {
         let responseObj = {
@@ -241,6 +274,7 @@ app.post('/users/login', (req, res) => {
     })
     .catch(err => res.status(500).send(err))
 });
+
 
 // this will verify the user and update the 2 object fields
 app.put('/users/:id', (req, res) => {
