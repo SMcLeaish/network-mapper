@@ -64,16 +64,15 @@ function Graph({ name }) {
 
 
 	useEffect(() => {
-		fetch(`https://localhost:3001/network/${name}`)
+		fetch(`http://localhost:8000/process-network/${name}`)
 			.then((response) => response.json())
 			.then((data) => {
-				const graphData = constructGraph(data);
 				let cytoscapeElements = [];
-				graphData.updatedNodes.forEach((node) => {
+				data.nodes.forEach((node) => {
 					cytoscapeElements.push({
 						data: {
 							id: node.id,
-							label: node.name,
+							label: node.label,
 							degreeCentrality: node.degreeCentrality,
 							closenessCentrality: node.closenessCentrality,
 							betweennessCentrality: node.betweennessCentrality,
@@ -82,17 +81,18 @@ function Graph({ name }) {
 						},
 					});
 				});
-				graphData.edges.forEach((edge) => {
+				data.links.forEach((edge) => {
 					cytoscapeElements.push({
 						data: { id: `edge${edge.source}-${edge.target}`, source: edge.source, target: edge.target },
 					});
 				});
-
+	
 				setElements(cytoscapeElements);
 				setLoading(false);
 			})
 			.catch((err) => console.error(err));
 	}, []);
+	
 
 	const graphMetrics = {
 		degreeCentrality: 'Degree Centrality',
