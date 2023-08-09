@@ -35,6 +35,7 @@ function GraphDialog({ open, onClose, name }) {
             data: { id: `edge${edge.source}-${edge.target}`, source: edge.source, target: edge.target },
           });
         });
+        console.log('Returned data from networkx:', data)
         setAvailableMetrics(data.availableMetrics);
         setElements(cytoscapeElements);
         setLoading(false);

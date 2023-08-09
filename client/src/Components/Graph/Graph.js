@@ -99,7 +99,11 @@ function Graph({ name }) {
                         {
                             selector: 'node',
                             style: {
-                                'background-image': (node) => (node.data('type') === 'individual' ? person : corporation),
+								'background-image': (node) => {
+									
+									return node.data('type') === 'individual' ? person : corporation;
+								},
+
                                 'background-fit': 'cover cover',
                                 'content': 'data(label)',
                                 'width': (node) => (node.data(currentMetric) !== undefined && !isNaN(node.data(currentMetric))) ? 20 + node.data(currentMetric) * 50 : 20,

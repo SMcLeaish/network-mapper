@@ -27,7 +27,7 @@ def construct_graph(data):
 
     # Add nodes
     for node in data['nodes']:
-        g.add_node(node['id'], label=node['name'])
+        g.add_node(node['id'], label=node['name'], type=node['type'])
 
     # Add edges
     for edge in data['edges']:
@@ -53,8 +53,8 @@ def process_network(name):
         "degreeCentrality": "Degree Centrality",
         "closenessCentrality": "Closeness Centrality",
         "betweennessCentrality": "Betweenness Centrality",
-        "clusteringCoefficient": "Clustering Coefficient"
-        # ... Add more as needed
+        "clusteringCoefficient": "Clustering Coefficient",
+        "community": "Community"
     }
 
     # Pretty-print the processed data
