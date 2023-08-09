@@ -2,37 +2,41 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import requests
 import networkx as nx
+from networkx.algorithms.cluster import clustering
+import community as community_louvain
 import json
 
 app = Flask(__name__)
 CORS(app)
 
+def calculate_metrics(g):
+    metrics = {
+        "degreeCentrality": nx.degree_centrality(g),
+        "closenessCentrality": nx.closeness_centrality(g),
+        "betweennessCentrality": nx.betweenness_centrality(g),
+        "clusteringCoefficient": clustering(g),
+        "community": community_louvain.best_partition(g)
+    }
+    # Add more metrics as needed
+    return metrics
+
 # Define the graph construction logic
 def construct_graph(data):
     # Create a new directed graph
-    g = nx.DiGraph()
+    g = nx.Graph()
 
     # Add nodes
     for node in data['nodes']:
-        g.add_node(node['id'], name=node['name'])
-
+        g.add_node(node['id'], label=node['name'])
 
     # Add edges
     for edge in data['edges']:
-        # g.add_edge(edge['source'], edge['target'], relationship=edge['relationship'])
         g.add_edge(edge['source'], edge['target'])
-    # Calculate graph metrics
-    degree_centrality = nx.degree_centrality(g)
-    closeness_centrality = nx.closeness_centrality(g)
-    betweenness_centrality = nx.betweenness_centrality(g)
-    # clustering_coefficient = nx.clustering(g)
 
-    # Update nodes with metric data
+    metrics = calculate_metrics(g)
     for node in g.nodes(data=True):
-        node[1]['degreeCentrality'] = degree_centrality[node[0]]
-        node[1]['closenessCentrality'] = closeness_centrality[node[0]]
-        node[1]['betweennessCentrality'] = betweenness_centrality[node[0]]
-        # node[1]['clusteringCoefficient'] = clustering_coefficient[node[0]]
+        for metric, values in metrics.items():
+            node[1][metric] = values[node[0]]
 
     # Return the graph data
     return nx.node_link_data(g)
@@ -45,6 +49,13 @@ def process_network(name):
     # Construct the graph
     data = response.json()
     processed_data = construct_graph(data)
+    processed_data["availableMetrics"] = {
+        "degreeCentrality": "Degree Centrality",
+        "closenessCentrality": "Closeness Centrality",
+        "betweennessCentrality": "Betweenness Centrality",
+        "clusteringCoefficient": "Clustering Coefficient"
+        # ... Add more as needed
+    }
 
     # Pretty-print the processed data
     print(json.dumps(processed_data, indent=4))

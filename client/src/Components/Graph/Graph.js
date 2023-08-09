@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
+import ReactDOM from 'react-dom';
 import CytoscapeComponent from 'react-cytoscapejs';
 import fcose from 'cytoscape-fcose';
 import cytoscape from 'cytoscape';
@@ -15,13 +16,13 @@ import constructGraph from './Graphology';
 import { personSvg } from './SVG/person.js';
 import { corporationSvg } from './SVG/corporation';
 import { layoutDefaults } from './CytoScapeDefaults';
-import SettingsPopup from './SettingsPopup'
+import SettingsPopup from './SettingsPopup';
 import { degreeCentrality } from 'graphology-metrics/centrality/degree';
-import Popover from '@mui/material/Popover'
-import DetailsPage from '../DetailsPage/DetailsPage'
+import Popover from '@mui/material/Popover';
+import DetailsPage from '../DetailsPage/DetailsPage';
 cytoscape.use(fcose);
 cytoscape.use(cola);
-cytoscape.use(cise)
+cytoscape.use(cise);
 function Graph({ name }) {
 	console.log(name)
 	const [layoutSettings, setLayoutSettings] = useContext(LayoutSettingsContext);
@@ -34,6 +35,7 @@ function Graph({ name }) {
 	const [currentMetric, setCurrentMetric] = useState('degreeCentrality');
 	const [anchorPosition, setAnchorPosition] = useState({ top: 0, left: 0 });
 	const [popoverOpen, setPopoverOpen] = useState(false);
+	const [availableMetrics, setAvailableMetrics] = useState({});
 
 	const cytoStyle = {
 		width: '100%',
@@ -70,15 +72,7 @@ function Graph({ name }) {
 				let cytoscapeElements = [];
 				data.nodes.forEach((node) => {
 					cytoscapeElements.push({
-						data: {
-							id: node.id,
-							label: node.label,
-							degreeCentrality: node.degreeCentrality,
-							closenessCentrality: node.closenessCentrality,
-							betweennessCentrality: node.betweennessCentrality,
-							party: node.party,
-							type: node.type,
-						},
+						data: {...node}
 					});
 				});
 				data.links.forEach((edge) => {
@@ -86,19 +80,19 @@ function Graph({ name }) {
 						data: { id: `edge${edge.source}-${edge.target}`, source: edge.source, target: edge.target },
 					});
 				});
-	
+				setAvailableMetrics(data.availableMetrics);
 				setElements(cytoscapeElements);
 				setLoading(false);
 			})
 			.catch((err) => console.error(err));
 	}, []);
-	
 
-	const graphMetrics = {
-		degreeCentrality: 'Degree Centrality',
-		closenessCentrality: 'Closeness Centrality',
-		betweennessCentrality: 'Betweenness Centrality',
-	};
+
+	// const graphMetrics = {
+	// 	degreeCentrality: 'Degree Centrality',
+	// 	closenessCentrality: 'Closeness Centrality',
+	// 	betweennessCentrality: 'Betweenness Centrality',
+	// };
 
 	if (loading) {
 		return (
@@ -138,7 +132,7 @@ function Graph({ name }) {
 						onChange={(event) => setCurrentMetric(event.target.value)}
 						style={{ height: '30px' }}
 					>
-						{Object.entries(graphMetrics).map(([metricKey, metricValue]) =>
+						{Object.entries(availableMetrics).map(([metricKey, metricValue]) =>
 							<MenuItem key={metricKey} value={metricKey}>{metricValue}</MenuItem>
 						)}
 					</Select>
