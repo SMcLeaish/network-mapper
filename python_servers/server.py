@@ -14,12 +14,13 @@ def construct_graph(data):
 
     # Add nodes
     for node in data['nodes']:
-        g.add_node(node['id'], **node)
+        g.add_node(node['id'], name=node['name'])
+
 
     # Add edges
     for edge in data['edges']:
-        g.add_edge(edge['source'], edge['target'], relationship=edge['relationship'])
-
+        # g.add_edge(edge['source'], edge['target'], relationship=edge['relationship'])
+        g.add_edge(edge['source'], edge['target'])
     # Calculate graph metrics
     degree_centrality = nx.degree_centrality(g)
     closeness_centrality = nx.closeness_centrality(g)
