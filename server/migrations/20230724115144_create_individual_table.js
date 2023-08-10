@@ -11,6 +11,7 @@ exports.up = function(knex) {
             table.string('phone_number', 250);
             table.specificType('location', 'float[]');
             table.string('mgrs', 20);
+            table.string('data_set', 100);
             table.integer('id_user_data');
             table.foreign('id_user_data').references('user_data.id').deferrable('deferred');
             
