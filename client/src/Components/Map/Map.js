@@ -36,6 +36,7 @@ import EventPage from '../EventPage/EventPage';
 import GraphDialog from '../Graph/GraphDialog';
 import Tooltip from '@mui/material/Tooltip'
 import AccountTreeIcon from '@mui/icons-material/AccountTree'
+import EntityDialog from '../AddEntity/AddEntity';
 
 const cityList = require('./Chinacities.json')
 
@@ -52,7 +53,7 @@ function Map() {
                 .then(data => {
 
                     if (data.success) {
-                            setUserInfo(data.data);
+                        setUserInfo(data.data);
                         toast(`Welcome! ${location.state.username} `, {
                             position: "top-center",
                             autoClose: 5000,
@@ -300,8 +301,8 @@ function Map() {
     };
     // end added for modal
     const [analyzeDialogOpen, setAnalyzeDialogOpen] = useState(false)
-    
-    
+    const [entityDialogOpen, setEntityDialogOpen] = useState(false)
+
     const handleAnalyzeDialogOpen = (name) => {
         setAnalyzeDialogOpen(true);
 
@@ -309,322 +310,330 @@ function Map() {
     const handleAnalyzeDialogClose = (name) => {
         setAnalyzeDialogOpen(false);
     }
+    const handleEntityDialogOpen = () => {
+        setEntityDialogOpen(true);
 
-        const [openEvent, setOpenEvent] = useState(false);
+    }
+    const handleEntityDialogClose = () => {
+        setEntityDialogOpen(false);
+    }
 
-        const handleOpenEventDialog = (id) => {
-            setOpenEvent(true);
-            setEventID(id)
-        };
+    const [openEvent, setOpenEvent] = useState(false);
 
-        const handleCloseEventDialog = () => {
-            setOpenEvent(false);
-        };
+    const handleOpenEventDialog = (id) => {
+        setOpenEvent(true);
+        setEventID(id)
+    };
 
-        const [searchSwitchChecked, setSearchSwitchChecked] = useState(false);
+    const handleCloseEventDialog = () => {
+        setOpenEvent(false);
+    };
 
-        const handleSearchSwitch = (event) => {
-            setSearchSwitchChecked(event.target.checked);
-            setMode(!modeValue);
-            setDetailsSelect(null);
-            resetPolyLines();
-            // setCoord([16.54376,102.98753])
-            setZoom(4)
-        }
+    const [searchSwitchChecked, setSearchSwitchChecked] = useState(false);
 
-        const handleClose = (event) => {
-            setSearchSwitchChecked(false)
-            setSearchBox(false)
-            setMode(false);
-            setDetailsSelect(null);
-            resetPolyLines();
-            setCoord([16.54376, 102.98753])
-            setZoom(4)
-            setTargetValue1()
-            setTargetValue2()
-            setTargetValue3()
-            setTargetValue4()
-            setTargetValue5()
-        }
+    const handleSearchSwitch = (event) => {
+        setSearchSwitchChecked(event.target.checked);
+        setMode(!modeValue);
+        setDetailsSelect(null);
+        resetPolyLines();
+        // setCoord([16.54376,102.98753])
+        setZoom(4)
+    }
 
-        console.log('targetvalue1', targetValue1)
-        console.log('targetvalue2', targetValue2)
+    const handleClose = (event) => {
+        setSearchSwitchChecked(false)
+        setSearchBox(false)
+        setMode(false);
+        setDetailsSelect(null);
+        resetPolyLines();
+        setCoord([16.54376, 102.98753])
+        setZoom(4)
+        setTargetValue1()
+        setTargetValue2()
+        setTargetValue3()
+        setTargetValue4()
+        setTargetValue5()
+    }
 
-        return (
-            <>
-                <div className="Map">
-                    <div className='Container'>
-                        <div className='ManageSearch'>
-                            <ManageSearchIcon onClick={() => { handleSearch() }} />
-                        </div>
-                        <div className='addPerson'>
-                            <PersonAddIcon onClick={() => navigate('/add-entity')} />
-                        </div>
-                        <div>
-                            {searchbox ?
-                                <>
-                                    <div className='filterContainer'>
-                                        <CloseIcon className='closeIcon' onClick={() => { handleClose() }} />
-                                        <FormControlLabel
-                                            control={
-                                                <Switch
-                                                    checked={searchSwitchChecked}
-                                                    onChange={handleSearchSwitch}
-                                                />
-                                            }
-                                            label="Map Multiple Relationships"
-                                            className='searchSwitch'
-                                        />
+    console.log('targetvalue1', targetValue1)
+    console.log('targetvalue2', targetValue2)
 
-                                        {/* <ManageSearchIcon className= {modeValue ? 'activelines' : 'notActiveLines'}  onClick={() => {setMode(!modeValue)}}/> */}
+    return (
+        <>
+            <div className="Map">
+                <div className='Container'>
+                    <div className='ManageSearch'>
+                        <ManageSearchIcon onClick={() => { handleSearch() }} />
+                    </div>
+                    <div className='addPerson'>
+                        <PersonAddIcon onClick={handleEntityDialogOpen} />
+
+                    </div>
+                    <div>
+                        {searchbox ?
+                            <>
+                                <div className='filterContainer'>
+                                    <CloseIcon className='closeIcon' onClick={() => { handleClose() }} />
+                                    <FormControlLabel
+                                        control={
+                                            <Switch
+                                                checked={searchSwitchChecked}
+                                                onChange={handleSearchSwitch}
+                                            />
+                                        }
+                                        label="Map Multiple Relationships"
+                                        className='searchSwitch'
+                                    />
+
+                                    {/* <ManageSearchIcon className= {modeValue ? 'activelines' : 'notActiveLines'}  onClick={() => {setMode(!modeValue)}}/> */}
 
 
-                                        {!modeValue ?
-                                            <div>
-                                                <div className='filterHeader'>
-                                                    <Autocomplete
-                                                        inputValue={inputValue}
-                                                        onInputChange={(event, newInputValue) => {
-                                                            setInputValue(newInputValue);
-                                                        }}
+                                    {!modeValue ?
+                                        <div>
+                                            <div className='filterHeader'>
+                                                <Autocomplete
+                                                    inputValue={inputValue}
+                                                    onInputChange={(event, newInputValue) => {
+                                                        setInputValue(newInputValue);
+                                                    }}
+                                                    disablePortal
+                                                    id="combo-box-demo"
+                                                    options={options}
+                                                    sx={{ width: 300 }}
+                                                    renderInput={(params) => <TextField {...params} label="Search Focus" margin='normal' />} />
+                                            </div>
+
+                                            <div className='secondSearch'>
+                                                {/* <FindDetails inputValue={inputValue}/> */}
+                                                {(inputValue === 'Individual') ?
+                                                    <Autocomplete style={filterstyle}
+                                                        inputValue={targetValue}
+                                                        onInputChange={(event, newtargetValue) => {
+                                                            // setTargetValue('')
+                                                            setTargetValue(newtargetValue);
+                                                            setDetailsSelect(newtargetValue);
+                                                            resetPolyLines()                                                // setCoord([29.304, 103.312]);
+                                                            // setZoom(7)
+                                                            individualData.find(info => (info.label === newtargetValue) ? setCoord(info.location) : console.log())
+                                                        }
+                                                        }
                                                         disablePortal
                                                         id="combo-box-demo"
-                                                        options={options}
+                                                        options={individualData}
                                                         sx={{ width: 300 }}
-                                                        renderInput={(params) => <TextField {...params} label="Search Focus" margin='normal' />} />
-                                                </div>
+                                                        renderInput={(params) => <TextField {...params} label="Search Individual" margin='normal' />} />
 
-                                                <div className='secondSearch'>
-                                                    {/* <FindDetails inputValue={inputValue}/> */}
-                                                    {(inputValue === 'Individual') ?
-                                                        <Autocomplete style={filterstyle}
+                                                    :
+                                                    ((inputValue === 'Organization') ?
+                                                        <Autocomplete
                                                             inputValue={targetValue}
                                                             onInputChange={(event, newtargetValue) => {
-                                                                // setTargetValue('')
                                                                 setTargetValue(newtargetValue);
                                                                 setDetailsSelect(newtargetValue);
-                                                                resetPolyLines()                                                // setCoord([29.304, 103.312]);
+                                                                resetPolyLines()
+
+                                                                // setCoord([29.304, 103.312]);
                                                                 // setZoom(7)
-                                                                individualData.find(info => (info.label === newtargetValue) ? setCoord(info.location) : console.log())
+                                                                OrganizationData.find(info => (info.label === newtargetValue) ? setCoord(info.location) : console.log())
                                                             }
                                                             }
                                                             disablePortal
                                                             id="combo-box-demo"
-                                                            options={individualData}
+                                                            options={OrganizationData}
                                                             sx={{ width: 300 }}
-                                                            renderInput={(params) => <TextField {...params} label="Search Individual" margin='normal' />} />
-
+                                                            renderInput={(params) => <TextField {...params} label="Search Organization" margin='normal' />} />
                                                         :
-                                                        ((inputValue === 'Organization') ?
-                                                            <Autocomplete
-                                                                inputValue={targetValue}
-                                                                onInputChange={(event, newtargetValue) => {
-                                                                    setTargetValue(newtargetValue);
-                                                                    setDetailsSelect(newtargetValue);
-                                                                    resetPolyLines()
+                                                        <Autocomplete
+                                                            inputValue={targetValue}
+                                                            onInputChange={(event, newtargetValue) => {
+                                                                setTargetValue(newtargetValue);
+                                                                setDetailsSelect(newtargetValue);
+                                                                resetPolyLines()
 
-                                                                    // setCoord([29.304, 103.312]);
-                                                                    // setZoom(7)
-                                                                    OrganizationData.find(info => (info.label === newtargetValue) ? setCoord(info.location) : console.log())
-                                                                }
-                                                                }
-                                                                disablePortal
-                                                                id="combo-box-demo"
-                                                                options={OrganizationData}
-                                                                sx={{ width: 300 }}
-                                                                renderInput={(params) => <TextField {...params} label="Search Organization" margin='normal' />} />
-                                                            :
-                                                            <Autocomplete
-                                                                inputValue={targetValue}
-                                                                onInputChange={(event, newtargetValue) => {
-                                                                    setTargetValue(newtargetValue);
-                                                                    setDetailsSelect(newtargetValue);
-                                                                    resetPolyLines()
+                                                                // setCoord([29.304, 103.312]);
+                                                                // setZoom(7)
+                                                                EventData.find(info => (info.label === newtargetValue) ? setCoord(info.location) : console.log())
+                                                            }
 
-                                                                    // setCoord([29.304, 103.312]);
-                                                                    // setZoom(7)
-                                                                    EventData.find(info => (info.label === newtargetValue) ? setCoord(info.location) : console.log())
-                                                                }
+                                                            }
+                                                            disablePortal
+                                                            id="combo-box-demo"
+                                                            options={EventData}
 
-                                                                }
-                                                                disablePortal
-                                                                id="combo-box-demo"
-                                                                options={EventData}
+                                                            sx={{ width: 300 }}
+                                                            renderInput={(params) => <TextField {...params} label="Search Event" margin='normal' />} />
+                                                    )}
+                                            </div>
+                                            {/* this is for the small details area */}
+                                            <div className='MapSummary'>
+                                                {inputValue === 'Individual' ?
+                                                    <div>
+                                                        {individualData.map((person) => person.name === detailsSelect ?
+                                                            <>
+                                                                <h1> Search Summary </h1>
+                                                                <p>Name: {person.name}</p>
+                                                                <p>Phone: {person.phone_number}</p>
+                                                                <p>Location: {JSON.stringify(person.location)}</p>
+                                                                <Tooltip title="Indiv/Org connect">
+                                                                    <ShareIcon className={poly ? 'activelines' : 'notActiveLines'} onClick={() => { setPolyLine(!poly) }} />
+                                                                </Tooltip>
+                                                                <Tooltip title="Event connect">
+                                                                    <GroupsIcon className={eventpoly ? 'Eventactiveline' : 'EventnotActiveLines'} onClick={() => { seteventPolyLine(!eventpoly) }} />
+                                                                </Tooltip>
 
-                                                                sx={{ width: 300 }}
-                                                                renderInput={(params) => <TextField {...params} label="Search Event" margin='normal' />} />
+                                                                {/* <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
+                                                                <Tooltip title="Details">
+                                                                    <PersonSearchIcon className='DetailsIcon' onClick={handleOpenDetailsDialog} />
+                                                                </Tooltip>
+                                                                <Tooltip title="Analyze">
+                                                                    <AccountTreeIcon className='AnalyzeIcon' onClick={handleAnalyzeDialogOpen} />
+                                                                    {/* <IconButton onClick={handleAnalyzeDialogOpen}><InsightsIcon /></IconButton> */}
+                                                                </Tooltip>
+                                                            </>
+                                                            : console.log(`member not found`)
                                                         )}
-                                                </div>
-                                                {/* this is for the small details area */}
-                                                <div className='MapSummary'>
-                                                    {inputValue === 'Individual' ?
+                                                    </div>
+                                                    :
+                                                    (inputValue === 'Organization' ?
                                                         <div>
-                                                            {individualData.map((person) => person.name === detailsSelect ?
+                                                            {OrganizationData.map((org) => org.name === detailsSelect ?
                                                                 <>
                                                                     <h1> Search Summary </h1>
-                                                                    <p>Name: {person.name}</p>
-                                                                    <p>Phone: {person.phone_number}</p>
-                                                                    <p>Location: {JSON.stringify(person.location)}</p>
-                                                                    <Tooltip title="Indiv/Org connect">
-                                                                        <ShareIcon className={poly ? 'activelines' : 'notActiveLines'} onClick={() => { setPolyLine(!poly) }} />
-                                                                    </Tooltip>
-                                                                    <Tooltip title="Event connect">
-                                                                        <GroupsIcon className={eventpoly ? 'Eventactiveline' : 'EventnotActiveLines'} onClick={() => { seteventPolyLine(!eventpoly) }} />
-                                                                    </Tooltip>
+                                                                    <p>Name: {org.name}</p>
+                                                                    <p>Location: {JSON.stringify(org.location)}</p>
+                                                                    <ShareIcon className={Orgpoly ? 'activelines' : 'notActiveLines'} onClick={() => { setOrgPolyLine(!Orgpoly) }} />
+                                                                    <PersonSearchIcon className='OrgDetailsIcon' onClick={handleOpenDetailsDialog} />
 
-                                                                    {/* <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
-                                                                    <Tooltip title="Details">
-                                                                        <PersonSearchIcon className='DetailsIcon' onClick={handleOpenDetailsDialog} />
-                                                                    </Tooltip>
-                                                                    <Tooltip title="Analyze">
-                                                                        <AccountTreeIcon className='AnalyzeIcon' onClick={handleAnalyzeDialogOpen}/>
-                                                                        {/* <IconButton onClick={handleAnalyzeDialogOpen}><InsightsIcon /></IconButton> */}
-                                                                    </Tooltip>
+
                                                                 </>
                                                                 : console.log(`member not found`)
                                                             )}
                                                         </div>
                                                         :
-                                                        (inputValue === 'Organization' ?
+                                                        (inputValue === 'Event' ?
                                                             <div>
-                                                                {OrganizationData.map((org) => org.name === detailsSelect ?
+                                                                {EventData.map((org) => org.event_name === detailsSelect ?
                                                                     <>
                                                                         <h1> Search Summary </h1>
-                                                                        <p>Name: {org.name}</p>
+                                                                        <p>Name: {org.event_name}</p>
+                                                                        <p>Date: {org.date}</p>
+                                                                        <p>ID: {org.id}</p>
                                                                         <p>Location: {JSON.stringify(org.location)}</p>
-                                                                        <ShareIcon className={Orgpoly ? 'activelines' : 'notActiveLines'} onClick={() => { setOrgPolyLine(!Orgpoly) }} />
-                                                                        <PersonSearchIcon className='OrgDetailsIcon' onClick={handleOpenDetailsDialog} />
-
-
+                                                                        <PersonSearchIcon className='DetailsIcon' onClick={() => handleOpenEventDialog(org.id)} />
                                                                     </>
                                                                     : console.log(`member not found`)
                                                                 )}
                                                             </div>
                                                             :
-                                                            (inputValue === 'Event' ?
-                                                                <div>
-                                                                    {EventData.map((org) => org.event_name === detailsSelect ?
-                                                                        <>
-                                                                            <h1> Search Summary </h1>
-                                                                            <p>Name: {org.event_name}</p>
-                                                                            <p>Date: {org.date}</p>
-                                                                            <p>ID: {org.id}</p>
-                                                                            <p>Location: {JSON.stringify(org.location)}</p>
-                                                                            <PersonSearchIcon className='DetailsIcon' onClick={() => handleOpenEventDialog(org.id)} />
-                                                                        </>
-                                                                        : console.log(`member not found`)
-                                                                    )}
-                                                                </div>
-                                                                :
-                                                                console.log('none of them match')
-                                                            ))}
-                                                </div>
+                                                            console.log('none of them match')
+                                                        ))}
                                             </div>
-                                            :
+                                        </div>
+                                        :
+                                        <div>
+                                            <Autocomplete
+                                                inputValue={targetValue1}
+                                                onInputChange={(event, newtargetValue1) => {
+                                                    setrender(!render)
+                                                    setTargetValue1(newtargetValue1)
+                                                }}
+                                                disablePortal
+                                                id="combo-box-demo"
+                                                options={individualData}
+                                                sx={{ width: 300 }}
+                                                renderInput={(params) => <TextField {...params} label="Individual 1" margin='normal' />} />
+
+                                            <Autocomplete
+                                                inputValue={targetValue2}
+                                                onInputChange={(event, newtargetValue2) => {
+                                                    setrender(!render)
+                                                    setTargetValue2(newtargetValue2)
+                                                }}
+                                                disablePortal
+                                                id="combo-box-demo"
+                                                options={individualData}
+                                                sx={{ width: 300 }}
+                                                renderInput={(params) => <TextField {...params} label="Individual 2" margin='normal' />} />
+
+                                            <Autocomplete
+                                                inputValue={targetValue3}
+                                                onInputChange={(event, newtargetValue3) => {
+                                                    setrender(!render)
+                                                    setTargetValue3(newtargetValue3)
+                                                }}
+                                                disablePortal
+                                                id="combo-box-demo"
+                                                options={individualData}
+                                                sx={{ width: 300 }}
+                                                renderInput={(params) => <TextField {...params} label="Individual 3" margin='normal' />} />
+
+                                            <Autocomplete
+                                                inputValue={targetValue4}
+                                                onInputChange={(event, newtargetValue4) => {
+                                                    setrender(!render)
+                                                    setTargetValue4(newtargetValue4)
+                                                }}
+                                                disablePortal
+                                                id="combo-box-demo"
+                                                options={individualData}
+                                                sx={{ width: 300 }}
+                                                renderInput={(params) => <TextField {...params} label="Individual 4" margin='normal' />} />
+
+                                            <Autocomplete
+                                                inputValue={targetValue5}
+                                                onInputChange={(event, newtargetValue5) => {
+                                                    setrender(!render)
+                                                    setTargetValue5(newtargetValue5)
+                                                }}
+                                                disablePortal
+                                                id="combo-box-demo"
+                                                options={individualData}
+                                                sx={{ width: 300 }}
+                                                renderInput={(params) => <TextField {...params} label="Individual 5" margin='normal' />} />
+
+                                        </div>
+
+                                    }
+
+                                    {!modeValue ?
+                                        <div>
+                                            <div className='latLongSearch'>
+                                                <form className='latLongSearch' autoComplete="off">
+                                                    <div className='searchfield'>
+                                                        <TextField label='Latitude' onChange={(e) => setLat(e.target.value)} />
+                                                    </div>
+                                                    <div className='searchfield'>
+                                                        <TextField label='Longitude' onChange={(e) => setLong(e.target.value)} />
+                                                    </div>
+                                                    <TravelExploreIcon className='locationSearch' onClick={() => { setCoord([lat, long], handleMGRS(long, lat)) }} />
+                                                </form>
+                                            </div>
                                             <div>
-                                                <Autocomplete
-                                                    inputValue={targetValue1}
-                                                    onInputChange={(event, newtargetValue1) => {
-                                                        setrender(!render)
-                                                        setTargetValue1(newtargetValue1)
-                                                    }}
-                                                    disablePortal
-                                                    id="combo-box-demo"
-                                                    options={individualData}
-                                                    sx={{ width: 300 }}
-                                                    renderInput={(params) => <TextField {...params} label="Individual 1" margin='normal' />} />
-
-                                                <Autocomplete
-                                                    inputValue={targetValue2}
-                                                    onInputChange={(event, newtargetValue2) => {
-                                                        setrender(!render)
-                                                        setTargetValue2(newtargetValue2)
-                                                    }}
-                                                    disablePortal
-                                                    id="combo-box-demo"
-                                                    options={individualData}
-                                                    sx={{ width: 300 }}
-                                                    renderInput={(params) => <TextField {...params} label="Individual 2" margin='normal' />} />
-
-                                                <Autocomplete
-                                                    inputValue={targetValue3}
-                                                    onInputChange={(event, newtargetValue3) => {
-                                                        setrender(!render)
-                                                        setTargetValue3(newtargetValue3)
-                                                    }}
-                                                    disablePortal
-                                                    id="combo-box-demo"
-                                                    options={individualData}
-                                                    sx={{ width: 300 }}
-                                                    renderInput={(params) => <TextField {...params} label="Individual 3" margin='normal' />} />
-
-                                                <Autocomplete
-                                                    inputValue={targetValue4}
-                                                    onInputChange={(event, newtargetValue4) => {
-                                                        setrender(!render)
-                                                        setTargetValue4(newtargetValue4)
-                                                    }}
-                                                    disablePortal
-                                                    id="combo-box-demo"
-                                                    options={individualData}
-                                                    sx={{ width: 300 }}
-                                                    renderInput={(params) => <TextField {...params} label="Individual 4" margin='normal' />} />
-
-                                                <Autocomplete
-                                                    inputValue={targetValue5}
-                                                    onInputChange={(event, newtargetValue5) => {
-                                                        setrender(!render)
-                                                        setTargetValue5(newtargetValue5)
-                                                    }}
-                                                    disablePortal
-                                                    id="combo-box-demo"
-                                                    options={individualData}
-                                                    sx={{ width: 300 }}
-                                                    renderInput={(params) => <TextField {...params} label="Individual 5" margin='normal' />} />
-
+                                                <form className='latLongSearch' autoComplete="off">
+                                                    <div className='searchfield'>
+                                                        <TextField label='MGRS Search' onChange={(e) => setMGRSvalue(e.target.value)} />
+                                                    </div>
+                                                    <TravelExploreIcon className='locationSearch' onClick={() => { handleMGRSSearch(MGRSvalue) }} />
+                                                </form>
                                             </div>
-
-                                        }
-
-                                        {!modeValue ?
-                                            <div>
-                                                <div className='latLongSearch'>
-                                                    <form className='latLongSearch' autoComplete="off">
-                                                        <div className='searchfield'>
-                                                            <TextField label='Latitude' onChange={(e) => setLat(e.target.value)} />
-                                                        </div>
-                                                        <div className='searchfield'>
-                                                            <TextField label='Longitude' onChange={(e) => setLong(e.target.value)} />
-                                                        </div>
-                                                        <TravelExploreIcon className='locationSearch' onClick={() => { setCoord([lat, long], handleMGRS(long, lat)) }} />
-                                                    </form>
-                                                </div>
-                                                <div>
-                                                    <form className='latLongSearch' autoComplete="off">
-                                                        <div className='searchfield'>
-                                                            <TextField label='MGRS Search' onChange={(e) => setMGRSvalue(e.target.value)} />
-                                                        </div>
-                                                        <TravelExploreIcon className='locationSearch' onClick={() => { handleMGRSSearch(MGRSvalue) }} />
-                                                    </form>
-                                                </div>
-                                                {MGRSConversion !== null ? <p className='mgrsConversion'>{`Lat/Long ⮕ MGRS: ${MGRSConversion}`}</p> : console.log('')}
-                                            </div>
-                                            : console.log('in multiple line mode')}
-                                    </div>
-                                </>
-                                :
-                                console.log()
-                            }
-                        </div>
+                                            {MGRSConversion !== null ? <p className='mgrsConversion'>{`Lat/Long ⮕ MGRS: ${MGRSConversion}`}</p> : console.log('')}
+                                        </div>
+                                        : console.log('in multiple line mode')}
+                                </div>
+                            </>
+                            :
+                            console.log()
+                        }
+                    </div>
+                    <div>
                         <div>
-                            <div>
-                                <MapContainer center={[13.57406, 108.18783]} zoom={zoom} ref={mapRef} id='map'>
-                                    <LayersControl>
-                                        <BaseLayer name="OpenStreetMap">
-                                            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; <a href=&quot;https://www.openstreetmap.org/copyright&quot;>OpenStreetMap</a> contributors" />
-                                        </BaseLayer>
+                            <MapContainer center={[13.57406, 108.18783]} zoom={zoom} ref={mapRef} id='map'>
+                                <LayersControl>
+                                    <BaseLayer name="OpenStreetMap">
+                                        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; <a href=&quot;https://www.openstreetmap.org/copyright&quot;>OpenStreetMap</a> contributors" />
+                                    </BaseLayer>
 
-                                        {/* <BaseLayer name="World Imagery">
+                                    {/* <BaseLayer name="World Imagery">
                                     <TileLayer
                                     url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
                                     attribution="&copy; Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
@@ -640,25 +649,25 @@ function Map() {
                                     />
                                 </BaseLayer> */}
 
-                                        <BaseLayer name="Google Imagery">
-                                            <TileLayer
-                                                url='https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'
-                                                maxZoom={20}
-                                                subdomains={['mt1', 'mt2', 'mt3']}
-                                            />
-                                        </BaseLayer>
+                                    <BaseLayer name="Google Imagery">
+                                        <TileLayer
+                                            url='https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'
+                                            maxZoom={20}
+                                            subdomains={['mt1', 'mt2', 'mt3']}
+                                        />
+                                    </BaseLayer>
 
-                                        <BaseLayer checked name="Terrain">
-                                            <TileLayer
-                                                url='https://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}'
-                                                maxZoom={20}
-                                                subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
-                                            />
-                                        </BaseLayer>
+                                    <BaseLayer checked name="Terrain">
+                                        <TileLayer
+                                            url='https://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}'
+                                            maxZoom={20}
+                                            subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
+                                        />
+                                    </BaseLayer>
 
-                                    </LayersControl>
-                                    <LayersControl position='topright' id='custom-icon'>
-                                        {/* <LayersControl.Overlay name="Cities">
+                                </LayersControl>
+                                <LayersControl position='topright' id='custom-icon'>
+                                    {/* <LayersControl.Overlay name="Cities">
                                         <LayerGroup>
                                             <MarkerClusterGroup
                                                 chunkedLoading
@@ -672,108 +681,112 @@ function Map() {
                                         </LayerGroup>
                                     </LayersControl.Overlay> */}
 
-                                        <LayersControl.Overlay checked name="Individuals">
-                                            <LayerGroup>
-                                                <MarkerClusterGroup
-                                                    chunkedLoading
-                                                    iconCreateFunction={createCustomClusterIcon2}>
-                                                    {individualData.map(feature =>
-                                                        <Marker position={feature.location} icon={individualsIcon} eventHandlers={{
-                                                            click: () => { setCoord(feature.location) },
-                                                        }}>
-                                                            <Popup>
-                                                                <h3>Name: {feature.name}</h3>
-                                                                <p>Phone: {feature.phone_number}</p>
-                                                                <p>Location: {JSON.stringify(feature.location)}</p>
-                                                                {/* <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
-                                                                <PersonSearchIcon className='DetailsIcon' onClick={() => handleOpenDetailsDialog(feature.name)} />
-                                                            </Popup>
-                                                        </Marker>
-                                                    )},
-                                                </MarkerClusterGroup>
-                                            </LayerGroup>
-                                        </LayersControl.Overlay>
+                                    <LayersControl.Overlay checked name="Individuals">
+                                        <LayerGroup>
+                                            <MarkerClusterGroup
+                                                chunkedLoading
+                                                iconCreateFunction={createCustomClusterIcon2}>
+                                                {individualData.map(feature =>
+                                                    <Marker position={feature.location} icon={individualsIcon} eventHandlers={{
+                                                        click: () => { setCoord(feature.location) },
+                                                    }}>
+                                                        <Popup>
+                                                            <h3>Name: {feature.name}</h3>
+                                                            <p>Phone: {feature.phone_number}</p>
+                                                            <p>Location: {JSON.stringify(feature.location)}</p>
+                                                            {/* <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
+                                                            <PersonSearchIcon className='DetailsIcon' onClick={() => handleOpenDetailsDialog(feature.name)} />
+                                                        </Popup>
+                                                    </Marker>
+                                                )},
+                                            </MarkerClusterGroup>
+                                        </LayerGroup>
+                                    </LayersControl.Overlay>
 
-                                        <LayersControl.Overlay checked name="Organizations">
-                                            <LayerGroup>
-                                                <MarkerClusterGroup
-                                                    chunkedLoading
-                                                    iconCreateFunction={createCustomClusterIcon2}>
-                                                    {OrganizationData.map(feature =>
-                                                        <Marker position={feature.location} icon={customIcon} eventHandlers={{
-                                                            click: () => { setCoord(feature.location) },
-                                                        }}>
-                                                            <Popup>
-                                                                <h3>Name: {feature.name}</h3>
-                                                                <p>Location: {JSON.stringify(feature.location)}</p>
-                                                                {/* <PersonSearchIcon className='OrgDetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
-                                                                <PersonSearchIcon className='OrgDetailsIcon' onClick={() => handleOpenDetailsDialog(feature.name)} />
-                                                            </Popup>
-                                                        </Marker>
-                                                    )},
-                                                </MarkerClusterGroup>
-                                            </LayerGroup>
-                                        </LayersControl.Overlay>
+                                    <LayersControl.Overlay checked name="Organizations">
+                                        <LayerGroup>
+                                            <MarkerClusterGroup
+                                                chunkedLoading
+                                                iconCreateFunction={createCustomClusterIcon2}>
+                                                {OrganizationData.map(feature =>
+                                                    <Marker position={feature.location} icon={customIcon} eventHandlers={{
+                                                        click: () => { setCoord(feature.location) },
+                                                    }}>
+                                                        <Popup>
+                                                            <h3>Name: {feature.name}</h3>
+                                                            <p>Location: {JSON.stringify(feature.location)}</p>
+                                                            {/* <PersonSearchIcon className='OrgDetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
+                                                            <PersonSearchIcon className='OrgDetailsIcon' onClick={() => handleOpenDetailsDialog(feature.name)} />
+                                                        </Popup>
+                                                    </Marker>
+                                                )},
+                                            </MarkerClusterGroup>
+                                        </LayerGroup>
+                                    </LayersControl.Overlay>
 
-                                        <LayersControl.Overlay checked name="Events">
-                                            <LayerGroup>
-                                                <MarkerClusterGroup
-                                                    chunkedLoading
-                                                    iconCreateFunction={createCustomClusterIcon2}>
-                                                    {EventData.map(feature =>
-                                                        <Marker position={feature.location} icon={coorporateCustomIcon} eventHandlers={{
-                                                            click: () => { setCoord(feature.location) },
-                                                        }}>
-                                                            <Popup>
-                                                                <h3>Name: {feature.event_name}</h3>
-                                                                <p>Date: {feature.date}</p>
-                                                                {/* <p>Type: {feature.type}</p> */}
-                                                                <p>Location: {JSON.stringify(feature.location)}</p>
-                                                                {/* <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
-                                                            </Popup>
-                                                        </Marker>
-                                                    )},
-                                                </MarkerClusterGroup>
-                                            </LayerGroup>
-                                        </LayersControl.Overlay>
+                                    <LayersControl.Overlay checked name="Events">
+                                        <LayerGroup>
+                                            <MarkerClusterGroup
+                                                chunkedLoading
+                                                iconCreateFunction={createCustomClusterIcon2}>
+                                                {EventData.map(feature =>
+                                                    <Marker position={feature.location} icon={coorporateCustomIcon} eventHandlers={{
+                                                        click: () => { setCoord(feature.location) },
+                                                    }}>
+                                                        <Popup>
+                                                            <h3>Name: {feature.event_name}</h3>
+                                                            <p>Date: {feature.date}</p>
+                                                            {/* <p>Type: {feature.type}</p> */}
+                                                            <p>Location: {JSON.stringify(feature.location)}</p>
+                                                            {/* <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
+                                                        </Popup>
+                                                    </Marker>
+                                                )},
+                                            </MarkerClusterGroup>
+                                        </LayerGroup>
+                                    </LayersControl.Overlay>
 
-                                    </LayersControl>
-                                    {(modeValue ? <MultipleConnections render={render} targetValue1={targetValue1} targetValue2={targetValue2} targetValue3={targetValue3} targetValue4={targetValue4} targetValue5={targetValue5} /> : console.log('no connections for multiple'))}
-                                    {(poly ? <Connections details={detailsSelect} /> : console.log('no connections'))}
-                                    {(eventpoly ? <EventConnections details={detailsSelect} /> : console.log('no connections'))}
-                                    {(Orgpoly ? <OrgConnections details={detailsSelect} /> : console.log('no connections'))}
-                                    {(targetValue !== '' || searchSet === true ?
-                                        <>
-                                            <Circle color='blue' fillColor='yellow' weight={2} opacity={.9} center={coord} radius={14000} />
-                                            <Circle color='blue' fillColor='blue' weight={2} opacity={.9} center={coord} radius={200} />
-                                        </>
-                                        :
-                                        console.log('')
-                                    )}
-                                    <MapController coord={coord} />
-                                    <ScaleControl position='topleft' />
-                                </MapContainer>
-                            </div>
+                                </LayersControl>
+                                {(modeValue ? <MultipleConnections render={render} targetValue1={targetValue1} targetValue2={targetValue2} targetValue3={targetValue3} targetValue4={targetValue4} targetValue5={targetValue5} /> : console.log('no connections for multiple'))}
+                                {(poly ? <Connections details={detailsSelect} /> : console.log('no connections'))}
+                                {(eventpoly ? <EventConnections details={detailsSelect} /> : console.log('no connections'))}
+                                {(Orgpoly ? <OrgConnections details={detailsSelect} /> : console.log('no connections'))}
+                                {(targetValue !== '' || searchSet === true ?
+                                    <>
+                                        <Circle color='blue' fillColor='yellow' weight={2} opacity={.9} center={coord} radius={14000} />
+                                        <Circle color='blue' fillColor='blue' weight={2} opacity={.9} center={coord} radius={200} />
+                                    </>
+                                    :
+                                    console.log('')
+                                )}
+                                <MapController coord={coord} />
+                                <ScaleControl position='topleft' />
+                            </MapContainer>
                         </div>
                     </div>
                 </div>
-                <DetailsPage
-                    open={open}
-                    onClose={handleCloseDetailsDialog}
-                    id={entityConnect}
-                />
-                <EventPage
-                    open={openEvent}
-                    onClose={handleCloseEventDialog}
-                    id={eventID}
-                />
-                <GraphDialog open={analyzeDialogOpen}
+            </div>
+            <DetailsPage
+                open={open}
+                onClose={handleCloseDetailsDialog}
+                id={entityConnect}
+            />
+            <EventPage
+                open={openEvent}
+                onClose={handleCloseEventDialog}
+                id={eventID}
+            />
+            <GraphDialog open={analyzeDialogOpen}
 
-                    onClose={handleAnalyzeDialogClose}
-                    name={detailsSelect}
-                />
-            </>
-        );
-    }
+                onClose={handleAnalyzeDialogClose}
+                name={detailsSelect}
+            />
+            <EntityDialog open={entityDialogOpen}
+                onClose={handleEntityDialogClose}
+            />
 
-    export default Map;
+        </>
+    );
+}
+
+export default Map;
