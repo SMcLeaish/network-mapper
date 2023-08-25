@@ -261,6 +261,17 @@ function Map() {
         // }
     }
 
+
+function convertMGRS(location) {
+  const [lat, lon] = location;
+  try {
+    const mgrsStr = forward([lon, lat]);
+    return mgrsStr;
+  } catch (err) {
+    console.error("Error converting coordinates to MGRS:", err);
+    return null;
+  }
+}
     const handleMGRS = (long, lat) => {
         // 17SPU7853083668
 
@@ -473,7 +484,8 @@ function Map() {
                                                                 <h1> Search Summary </h1>
                                                                 <p>Name: {person.name}</p>
                                                                 <p>Phone: {person.phone_number}</p>
-                                                                <p>Location: {JSON.stringify(person.location)}</p>
+                                                                {/* <p>Location: {JSON.stringify(person.location)}</p> */}
+                                                                <p>Location: {convertMGRS(person.location)}</p>
                                                                 <Tooltip title="Indiv/Org connect">
                                                                     <ShareIcon className={poly ? 'activelines' : 'notActiveLines'} onClick={() => { setPolyLine(!poly) }} />
                                                                 </Tooltip>
@@ -693,7 +705,7 @@ function Map() {
                                                         <Popup>
                                                             <h3>Name: {feature.name}</h3>
                                                             <p>Phone: {feature.phone_number}</p>
-                                                            <p>Location: {JSON.stringify(feature.location)}</p>
+                                                            <p>Location: {JSON.stringify(feature.phone_number)}</p>
                                                             {/* <PersonSearchIcon className='DetailsIcon' onClick={(e) => navigate(`/details/${entityConnect}`)}/> */}
                                                             <PersonSearchIcon className='DetailsIcon' onClick={() => handleOpenDetailsDialog(feature.name)} />
                                                         </Popup>
