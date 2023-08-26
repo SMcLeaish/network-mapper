@@ -1,0 +1,41 @@
+.login-container {
+   border-radius: 20px;
+ }
+ 
+ .login-grid {
+   padding: 50px 30px;
+ }
+ 
+ .login-grid-left {
+   background-color: #2d2d2a;
+   border-radius: 20px 0 0 20px;
+   color: #f8f4e3 !important;
+ }
+ 
+ .login-grid-right {
+   background-color: #3f88c5;
+   border-radius: 0 20px 20px 0;
+   color: #f8f4e3 !important;
+ }
+ 
+ .bg-gray {
+   border: 2px solid gray;
+ }
+ 
+ .bg-jet {
+   background-color: #2d2d2a;
+ }
+ 
+ .mock-container {
+   margin-top: 40px;
+ }
+ 
+ .mock-image {
+   max-width: 100%;
+   position: relative;
+   right: 15px;
+ }
+
+ .extra-margin {
+   margin-bottom: 20px !important;
+ }

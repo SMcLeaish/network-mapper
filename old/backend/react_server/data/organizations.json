@@ -1,0 +1,112 @@
+[
+  {
+    "name": "Pineland Innovations LLC",
+    "phone_number": "(220) 386-2706 x051",
+    "data_set": "Zachary's Karate Club",
+    "location": [
+      34.94533222906195,
+      -79.4622811884694
+    ],
+    "organization_type_id": 2,
+    "id_user_data": 2
+  },
+  {
+    "name": "Pineland Financial Group",
+    "phone_number": "966-315-1914 x77263",
+    "data_set": "Zachary's Karate Club",
+    "location": [
+      34.93650861558379,
+      -79.51967117771547
+    ],
+    "organization_type_id": 2,
+    "id_user_data": 1
+  },
+  {
+    "name": "Pineland Energy Solutions",
+    "phone_number": "(678) 401-4995 x6514",
+    "data_set": "Zachary's Karate Club",
+    "location": [
+      34.980552160398524,
+      -79.51448943973388
+    ],
+    "organization_type_id": 2,
+    "id_user_data": 4
+  },
+  {
+    "name": "Pineland Technologies Inc.",
+    "phone_number": "1-219-997-2348 x0400",
+    "data_set": "Zachary's Karate Club",
+    "location": [
+      35.02304221707374,
+      -79.49985476375637
+    ],
+    "organization_type_id": 2,
+    "id_user_data": 4
+  },
+  {
+    "name": "Pineland Community Outreach",
+    "phone_number": "(994) 854-1346 x7571",
+    "data_set": "Zachary's Karate Club",
+    "location": [
+      34.98057595131752,
+      -79.54091555077892
+    ],
+    "organization_type_id": 1,
+    "id_user_data": 1
+  },
+  {
+    "name": "Pineland Wildlife Foundation",
+    "phone_number": "284.341.9084 x816",
+    "data_set": "Zachary's Karate Club",
+    "location": [
+      34.977323410475215,
+      -79.53794758868834
+    ],
+    "organization_type_id": 1,
+    "id_user_data": 3
+  },
+  {
+    "name": "Pineland Human Rights Watch",
+    "phone_number": "928-793-6553 x2478",
+    "data_set": "Zachary's Karate Club",
+    "location": [
+      35.03337150865329,
+      -79.52160569446902
+    ],
+    "organization_type_id": 1,
+    "id_user_data": 3
+  },
+  {
+    "name": "Pineland Environmental Initiative",
+    "phone_number": "729-485-9187 x725",
+    "data_set": "Zachary's Karate Club",
+    "location": [
+      34.95286860506852,
+      -79.48837619422561
+    ],
+    "organization_type_id": 1,
+    "id_user_data": 3
+  },
+  {
+    "name": "Pineland Airborne Regiment",
+    "phone_number": "(590) 501-8904 x19535",
+    "data_set": "Zachary's Karate Club",
+    "location": [
+      35.022136232663215,
+      -79.55096090912139
+    ],
+    "organization_type_id": 3,
+    "id_user_data": 5
+  },
+  {
+    "name": "Pineland 1st Infantry Division",
+    "phone_number": "(258) 733-4165 x831",
+    "data_set": "Zachary's Karate Club",
+    "location": [
+      35.01340650186861,
+      -79.52527559445272
+    ],
+    "organization_type_id": 3,
+    "id_user_data": 1
+  }
+]

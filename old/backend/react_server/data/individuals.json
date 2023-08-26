@@ -1,0 +1,342 @@
+[
+  {
+    "name": "Brett Zieme",
+    "location": [
+      35.00318987371229,
+      -79.54654594247359
+    ],
+    "phone_number": "1-925-744-1079 x986",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 2
+  },
+  {
+    "name": "Jason Klein",
+    "location": [
+      35.01914715062833,
+      -79.4876020964589
+    ],
+    "phone_number": "450-252-1425 x92720",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 4
+  },
+  {
+    "name": "Everett Waters",
+    "location": [
+      35.008697949566475,
+      -79.55305413539804
+    ],
+    "phone_number": "675.867.2801 x073",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 2
+  },
+  {
+    "name": "Brooke Ryan-Funk",
+    "location": [
+      35.00731417178847,
+      -79.53608383408869
+    ],
+    "phone_number": "386-477-7644",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 4
+  },
+  {
+    "name": "Brian Christiansen",
+    "location": [
+      35.03828479239826,
+      -79.46527671792164
+    ],
+    "phone_number": "938-625-0694 x070",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 4
+  },
+  {
+    "name": "Francisco Wintheiser PhD",
+    "location": [
+      35.04244289376837,
+      -79.53293113014423
+    ],
+    "phone_number": "251.952.9469 x4914",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 3
+  },
+  {
+    "name": "Mark Boyer Jr.",
+    "location": [
+      35.03735558664763,
+      -79.53424905228917
+    ],
+    "phone_number": "470-329-2923",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 3
+  },
+  {
+    "name": "Elaine Hackett-Bashirian",
+    "location": [
+      34.99789601451465,
+      -79.50676251402277
+    ],
+    "phone_number": "820.549.6435",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 4
+  },
+  {
+    "name": "Jose Waters",
+    "location": [
+      34.99951597490447,
+      -79.53298297275786
+    ],
+    "phone_number": "(826) 650-7805 x635",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 1
+  },
+  {
+    "name": "Clint Wilkinson PhD",
+    "location": [
+      35.013728744276385,
+      -79.50418794416447
+    ],
+    "phone_number": "428.345.6849 x74922",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 3
+  },
+  {
+    "name": "Stanley Buckridge",
+    "location": [
+      34.97678506600245,
+      -79.54698330319546
+    ],
+    "phone_number": "313.749.4641",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 1
+  },
+  {
+    "name": "Clint White",
+    "location": [
+      35.01165047020626,
+      -79.49892868034975
+    ],
+    "phone_number": "485.222.2698 x149",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 2
+  },
+  {
+    "name": "Lela Leffler",
+    "location": [
+      34.96087623851282,
+      -79.46449153769154
+    ],
+    "phone_number": "752.242.4314 x8506",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 1
+  },
+  {
+    "name": "Loretta Marquardt",
+    "location": [
+      34.966372055688126,
+      -79.52739131292871
+    ],
+    "phone_number": "(677) 918-1441 x3018",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 2
+  },
+  {
+    "name": "Katherine Kerluke",
+    "location": [
+      34.978968983691054,
+      -79.48954756029502
+    ],
+    "phone_number": "(510) 451-0677",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 2
+  },
+  {
+    "name": "Alan Murazik",
+    "location": [
+      35.00791281609804,
+      -79.51609889191336
+    ],
+    "phone_number": "1-786-859-7379",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 4
+  },
+  {
+    "name": "Glen Leffler",
+    "location": [
+      35.02453849158525,
+      -79.55071677700705
+    ],
+    "phone_number": "564-330-5655 x4096",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 2
+  },
+  {
+    "name": "Salvatore Bernier",
+    "location": [
+      35.03749354981174,
+      -79.51585603786108
+    ],
+    "phone_number": "833-806-0183 x93622",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 1
+  },
+  {
+    "name": "Betty Abernathy",
+    "location": [
+      34.99628726209816,
+      -79.51458334206512
+    ],
+    "phone_number": "1-544-973-7464 x88880",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 3
+  },
+  {
+    "name": "Sabrina Kemmer",
+    "location": [
+      35.00653239905625,
+      -79.46262320698159
+    ],
+    "phone_number": "(209) 452-1567 x488",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 5
+  },
+  {
+    "name": "Jorge Wilderman",
+    "location": [
+      34.96636942529839,
+      -79.52443907373947
+    ],
+    "phone_number": "997.791.7767",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 2
+  },
+  {
+    "name": "Jackie Flatley",
+    "location": [
+      35.0476598620901,
+      -79.51179085417498
+    ],
+    "phone_number": "(395) 951-8864 x23972",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 2
+  },
+  {
+    "name": "Jennie Kuhn",
+    "location": [
+      35.035161566055194,
+      -79.48293315987272
+    ],
+    "phone_number": "1-253-685-6959",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 3
+  },
+  {
+    "name": "Dr. Jamie Cummerata",
+    "location": [
+      34.967737412251594,
+      -79.55411120022652
+    ],
+    "phone_number": "400.228.0042 x1161",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 1
+  },
+  {
+    "name": "Mrs. Sheila Wolf PhD",
+    "location": [
+      35.017842490612786,
+      -79.46356207491407
+    ],
+    "phone_number": "279-382-4624 x709",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 1
+  },
+  {
+    "name": "Paul Willms",
+    "location": [
+      35.037822879454815,
+      -79.54581434180753
+    ],
+    "phone_number": "1-431-511-0298 x8930",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 1
+  },
+  {
+    "name": "Spencer Weissnat",
+    "location": [
+      34.99943220963211,
+      -79.55770942732065
+    ],
+    "phone_number": "(778) 714-0184 x65937",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 1
+  },
+  {
+    "name": "April Hirthe-Shields",
+    "location": [
+      35.02897730632901,
+      -79.49545574919414
+    ],
+    "phone_number": "1-231-660-2114 x1663",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 3
+  },
+  {
+    "name": "Allen Bartoletti",
+    "location": [
+      34.982951352393016,
+      -79.49166019765842
+    ],
+    "phone_number": "500.625.9850 x245",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 4
+  },
+  {
+    "name": "Reginald Kub",
+    "location": [
+      35.04168650533137,
+      -79.50196417791378
+    ],
+    "phone_number": "300.700.6483 x421",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 2
+  },
+  {
+    "name": "Clifford Dare",
+    "location": [
+      35.00459801338226,
+      -79.55600034003265
+    ],
+    "phone_number": "(678) 517-6348 x7467",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 1
+  },
+  {
+    "name": "Garry Nitzsche",
+    "location": [
+      34.995658194559745,
+      -79.48412563357039
+    ],
+    "phone_number": "(604) 595-2041 x875",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 2
+  },
+  {
+    "name": "Myrtle Turcotte",
+    "location": [
+      34.98282635374038,
+      -79.50657453544028
+    ],
+    "phone_number": "1-230-921-3176 x669",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 4
+  },
+  {
+    "name": "Cecil Streich",
+    "location": [
+      35.008699044973746,
+      -79.56067077371844
+    ],
+    "phone_number": "(972) 972-1550 x63063",
+    "data_set": "Zachary's Karate Club",
+    "id_user_data": 2
+  }
+]
