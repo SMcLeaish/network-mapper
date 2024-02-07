@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import * as MyFunctions from './EventPageFunctions.js';
 import '../DetailsPage/DetailsPage.css';
 
-const placeholderImg = 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80';
+const placeholderImg = 'http://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80';
 
 const EventPage = ({ open, onClose, id }) => {
     const [event, setEvent] = useState([])
@@ -27,24 +27,24 @@ const EventPage = ({ open, onClose, id }) => {
 
     useEffect(() => {
         console.log(`This is the passed id: ${id}`)
-        fetch(`https://localhost:3001/event/${id}`)
+        fetch(`http://localhost:3001/event/${id}`)
             .then(res => res.json())
             .then(data => {setEvent(data);})
     }, [id, updateStatus])
 
     useEffect(() => {
-        fetch(`https://localhost:3001/narratives/event/${id}`)
+        fetch(`http://localhost:3001/narratives/event/${id}`)
             .then(res => res.json())
             .then(data => { setNarratives(data); console.log(data) })
     }, [id, updateStatus])
 
     useEffect(() => {
         let allData = []
-        fetch(`https://localhost:3001/individuals`)
+        fetch(`http://localhost:3001/individuals`)
             .then(res => res.json())
             .then(data => data.forEach(e => allData.push(e)))
             .then(() => {
-                fetch(`https://localhost:3001/organizations`)
+                fetch(`http://localhost:3001/organizations`)
                     .then(res => res.json())
                     .then(data => {
                         data.forEach(e => allData.push(e))

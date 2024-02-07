@@ -4,19 +4,30 @@ import Popper from '@mui/material/Popper';
 import Paper from '@mui/material/Paper';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Slider from '@mui/material/Slider';
-import { LayoutSettingsContext } from './GraphDialog';
-import { layoutDefaults } from './CytoScapeDefaults';
-export default function SettingsPopup() {
-  const [layoutSettings, setLayoutSettings] = useContext(LayoutSettingsContext);
+import { GraphContext } from './GraphDialog';
+
+function SettingsPopup() {
+  const {
+    layoutSettings,
+    setLayoutSettings,
+  } = useContext(GraphContext);
+
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
-    setAnchorEl(anchorEl ? null : event.currentTarget);
+    setAnchorEl(prevAnchorEl => prevAnchorEl ? null : event.currentTarget);
+  };
+
+  const handleSliderChange = (event, val) => {
+    setLayoutSettings(prevSettings => ({
+      ...prevSettings,
+      nodeRepulsion: val,
+    }));
   };
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popper' : undefined;
-  console.log('LAYOUT SETTINGS', layoutSettings)
+
   return (
     <div style={{ position: 'absolute', bottom: '10px', left: '10px' }}>
       <Button variant="contained" onClick={handleClick}>
@@ -32,13 +43,7 @@ export default function SettingsPopup() {
                 max={100000}
                 step={1000}
                 value={layoutSettings.nodeRepulsion || 4500}
-                onChange={(e, val) => {
-                  e.preventDefault();
-                  setLayoutSettings({
-                    ...layoutSettings,
-                    nodeRepulsion: val,
-                  });
-                }}
+                onChange={handleSliderChange}
               />
               {layoutSettings.nodeRepulsion || 4500}
             </div>
@@ -46,7 +51,7 @@ export default function SettingsPopup() {
         </Paper>
       </Popper>
     </div>
-
   );
 }
 
+export default SettingsPopup;

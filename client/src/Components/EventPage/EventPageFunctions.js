@@ -48,7 +48,7 @@ export const returnNarratives = (data) => {
 const handleOnChangeAttendie = (e, obj, setObj) => {
     let name = e.target.value
     let valueToAdd = { ...obj }
-    fetch(`https://localhost:3001/entity/${name}`)
+    fetch(`http://localhost:3001/entity/${name}`)
         .then(res => res.json())
         .then(data => {
             valueToAdd[e.target.name] = data[0].primary_entity_id
@@ -66,7 +66,7 @@ const handleOnSubmitAttendie = (e, obj, setUpdateStatus, updateStatus) => {
         },
         body: JSON.stringify(obj)
     }
-    fetch('https://localhost:3001/interaction', init)
+    fetch('http://localhost:3001/interaction', init)
         .then(res => res.json())
         .then(data => {alert(data.message); setUpdateStatus(!updateStatus)})
 }
@@ -151,7 +151,7 @@ const handleSubmitNarr = (e, narrToAdd, setUpdateStatus, updateStatus) => {
         },
         body: JSON.stringify(narrToAdd)
     } 
-    fetch('https://localhost:3001/narrative', init)
+    fetch('http://localhost:3001/narrative', init)
         .then(res => res.json())
         .then(data => {console.log(data.message); setUpdateStatus(!updateStatus)})
 }

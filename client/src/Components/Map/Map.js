@@ -47,7 +47,7 @@ function Map() {
     useEffect(() => {
 
         if (location.state) {
-            fetch("https://localhost:3001/cookietest", { credentials: "include" })
+            fetch("http://localhost:3001/cookietest", { credentials: "include" })
                 .then(res => res.json())
                 .then(data => {
 
@@ -109,7 +109,7 @@ function Map() {
     const [individualData, setIndividualData] = useState([])
 
     useEffect(() => {
-        fetch('https://localhost:3001/individuals')
+        fetch('http://localhost:3001/individuals')
             .then((res) => res.json())
             .then(data => {
                 setIndividualData2(data)
@@ -125,7 +125,7 @@ function Map() {
     const [OrganizationData, setOrganizationData] = useState([])
 
     useEffect(() => {
-        fetch('https://localhost:3001/organizations')
+        fetch('http://localhost:3001/organizations')
             .then((res) => res.json())
             .then(data => {
                 setOrganizationData2(data)
@@ -138,7 +138,7 @@ function Map() {
     const [EventData, setEventData] = useState([])
 
     useEffect(() => {
-        fetch('https://localhost:3001/events')
+        fetch('http://localhost:3001/events')
             .then((res) => res.json())
             .then(data => {
                 setEventData2(data)
@@ -229,7 +229,7 @@ function Map() {
 
     useEffect(() => {
         if (detailsSelect) {
-            fetch(`https://localhost:3001/entity/${detailsSelect}`)
+            fetch(`http://localhost:3001/entity/${detailsSelect}`)
                 .then((res) => res.json())
                 .then(data => {
                     setEntityConnect(data[0].primary_entity_id)

@@ -5,7 +5,7 @@ import { useEffect, useState, useContext } from 'react';
 import * as MyFunctions from './DetailsFunctions.js';
 import { UserContext } from '../../App';
 
-const placeholderImg = 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80';
+const placeholderImg = 'http://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80';
 
 const DetailsPage = ({ open, onClose, id }) => {
   const [associates, setAssociates] = useState([])
@@ -28,7 +28,7 @@ const DetailsPage = ({ open, onClose, id }) => {
   const [updateStatus, setUpdateStatus] = useState(true)
 
   useEffect(() => {
-    fetch(`https://localhost:3001/relationships/${id}`)
+    fetch(`http://localhost:3001/relationships/${id}`)
       .then(res => res.json())
       .then(data => { setAssociates(data); setAssociateToAdd({ ...associateToAdd, id_entity_1: id }); console.log(data) })
   }, [id, updateStatus])
@@ -36,18 +36,18 @@ const DetailsPage = ({ open, onClose, id }) => {
 
 
   useEffect(() => {
-    fetch(`https://localhost:3001/events`)
+    fetch(`http://localhost:3001/events`)
       .then(res => res.json())
       .then(data => { setEvents(data) })
   }, [])
 
   useEffect(() => {
     let allData = []
-    fetch(`https://localhost:3001/individuals`)
+    fetch(`http://localhost:3001/individuals`)
       .then(res => res.json())
       .then(data => data.forEach(e => allData.push(e)))
       .then(() => {
-        fetch(`https://localhost:3001/organizations`)
+        fetch(`http://localhost:3001/organizations`)
           .then(res => res.json())
           .then(data => {
             data.forEach(e => allData.push(e))
@@ -59,7 +59,7 @@ const DetailsPage = ({ open, onClose, id }) => {
 
   useEffect(() => {
     let narrativesToAdd = []
-    fetch(`https://localhost:3001/narratives/entity/${id}`)
+    fetch(`http://localhost:3001/narratives/entity/${id}`)
       .then(res => res.json())
       .then(data => {
         narrativesToAdd = data.filter(e => e.id_entity === parseInt(id))
@@ -68,10 +68,10 @@ const DetailsPage = ({ open, onClose, id }) => {
   }, [id, updateStatus])
 
   useEffect(() => {
-    fetch(`https://localhost:3001/entity/id/${id}`)
+    fetch(`http://localhost:3001/entity/id/${id}`)
       .then(res => res.json())
       .then(data => {
-        fetch(`https://localhost:3001/entity/${data[0].name}`)
+        fetch(`http://localhost:3001/entity/${data[0].name}`)
           .then(res => res.json())
           .then(data => {
             setEntity(data)
@@ -80,7 +80,7 @@ const DetailsPage = ({ open, onClose, id }) => {
   }, [id, updateStatus])
 
   useEffect(() => {
-    fetch(`https://localhost:3001/biography/${id}`)
+    fetch(`http://localhost:3001/biography/${id}`)
       .then(res => res.json())
       .then(data => setBiography(data))
   }, [id])
@@ -102,7 +102,7 @@ const DetailsPage = ({ open, onClose, id }) => {
       body: JSON.stringify(obj)
     }
 
-    fetch('https://localhost:3001/interaction', init)
+    fetch('http://localhost:3001/interaction', init)
       .then(res => res.json())
       .then(data => { alert(data.message); setUpdateStatus(!updateStatus); })
   }
@@ -112,7 +112,7 @@ const DetailsPage = ({ open, onClose, id }) => {
   }
 
   const handleChangeForFormEntity = (e) => {
-    fetch(`https://localhost:3001/entity/${e.target.value}`)
+    fetch(`http://localhost:3001/entity/${e.target.value}`)
       .then(res => res.json())
       .then(data => {
         console.log(data)
@@ -139,7 +139,7 @@ const DetailsPage = ({ open, onClose, id }) => {
       },
       body: JSON.stringify(associateToAdd)
     }
-    fetch('https://localhost:3001/interaction', init)
+    fetch('http://localhost:3001/interaction', init)
       .then(res => res.json())
       .then(data => { console.log(data); setUpdateStatus(!updateStatus) })
   }
@@ -170,7 +170,7 @@ const DetailsPage = ({ open, onClose, id }) => {
       },
       body: JSON.stringify(narrToAdd)
     }
-    fetch('https://localhost:3001/narrative', init)
+    fetch('http://localhost:3001/narrative', init)
       .then(res => res.json())
       .then(data => { console.log(data); setUpdateStatus(!updateStatus) })
   }
@@ -182,7 +182,7 @@ const DetailsPage = ({ open, onClose, id }) => {
         'Content-Type': 'application/json'
       },
     }
-    fetch(`https://localhost:3001/narrative/${e}`, init)
+    fetch(`http://localhost:3001/narrative/${e}`, init)
       .then(res => res.json())
       .then(data => { console.log(data); setUpdateStatus(!updateStatus) })
   }

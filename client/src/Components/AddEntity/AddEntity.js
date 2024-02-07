@@ -42,12 +42,12 @@ const AddEntity = () => {
 
 
     // FETCH association autocomplete options
-    // 'https://localhost:3001/individuals'
+    // 'http://localhost:3001/individuals'
 
 
 
     useEffect(() => {
-        fetch("https://localhost:3001/events", {
+        fetch("http://localhost:3001/events", {
             credentials: "include"
         })
             .then((response) => response.json())
@@ -97,7 +97,7 @@ const AddEntity = () => {
     const remainingCharacters = maxCharacters - narrative.length;
 
     const handleMulter = () => {
-        fetch('https://localhost:3001/images', {
+        fetch('http://localhost:3001/images', {
             credentials: "include",
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
@@ -110,7 +110,7 @@ const AddEntity = () => {
     const handleSubmit = async () => {
         console.log("This is your submiited image", image)
         // setLocation([Number(lat), Number(long)])
-        await fetch("https://localhost:3001/entity", {
+        await fetch("http://localhost:3001/entity", {
             credentials: "include",
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
@@ -291,7 +291,7 @@ const AddEntity = () => {
                 }} />
                 <Box className='entity-image'>
 
-                    <img src={`https://localhost:3000/individual/${image.name}`} alt='Img broken' style={{ height: "100%" }} />
+                    <img src={`http://localhost:3000/individual/${image.name}`} alt='Img broken' style={{ height: "100%" }} />
                 </Box> */}
 
                 <hr></hr>
