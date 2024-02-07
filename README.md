@@ -46,19 +46,23 @@ and the values changed to your own unique values inside of the server directory.
 
 ### Server:
 Navigate to the server directory
+
 `npm i`
 
 `npm start`
 
 ### Frontend:
 Navigate to the client directory
+
 `npm i`
 
 `npm start`
 
 ### Python service:
 Navigate to the python_services directory
+
 `pip install -r requirements.txt`
+
 `python server.py`
 
 *The client can now be reached at localhost:3000*
