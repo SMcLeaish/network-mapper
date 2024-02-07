@@ -58,4 +58,10 @@ and the values changed to your own unique values inside of the server directory.
 
 *The client can now be reached at localhost:3000*
 
+## Screenshots
+![image](https://github.com/SMcLeaish/network-mapper/assets/125446030/5339e4de-c273-4726-9c72-5badf87a395b)
+![image](https://github.com/SMcLeaish/network-mapper/assets/125446030/ae657c15-01be-414b-81ed-30589cea617a)
+![image](https://github.com/SMcLeaish/network-mapper/assets/125446030/66e4fb91-35d7-4cea-a1a0-ae64e3bc215a)
+
+
 
