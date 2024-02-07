@@ -70,7 +70,8 @@ Navigate to the python_services directory
 ## Screenshots
 ![image](https://github.com/SMcLeaish/network-mapper/assets/125446030/5339e4de-c273-4726-9c72-5badf87a395b)
 ![image](https://github.com/SMcLeaish/network-mapper/assets/125446030/ae657c15-01be-414b-81ed-30589cea617a)
-![image](https://github.com/SMcLeaish/network-mapper/assets/125446030/66e4fb91-35d7-4cea-a1a0-ae64e3bc215a)
+![image](https://github.com/SMcLeaish/network-mapper/assets/125446030/3c65d084-c0ce-422d-abe1-f36d58e2e0db)
+
 
 
 
