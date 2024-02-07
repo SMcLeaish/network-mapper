@@ -44,15 +44,20 @@ and the values changed to your own unique values inside of the server directory.
 
 * start the server 
 
-`cd server && npm start`
+### Server:
+Navigate to the server directory
+`npm i`
+
+`npm start`
 
 ### Frontend:
+Navigate to the client directory
+`npm i`
 
-`cd client && npm start`
+`npm start`
 
-### Python service
-
-`cd python services`
+### Python service:
+Navigate to the python_services directory
 `pip install -r requirements.txt`
 `python server.py`
 
