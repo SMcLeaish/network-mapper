@@ -13,6 +13,7 @@
 * [Cameron Wills](https://github.com/CTWills)
 * [Cadenw Kulp](https://github.com/cadensstudio)
 * [Cade Wied](https://github.com/Cade3031)
+* [Chris Raizk](https://github.com/craizk)
 
 ## Purpose
 
